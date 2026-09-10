@@ -7,6 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=nextdotjs)](https://nextjs.org/)
 [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?logo=vercel)](https://vercel.com/)
+[![Live Site](https://img.shields.io/badge/Live_Site-ruang-saku-peach-0052CC?logo=vercel)](https://ruang-saku-peach.vercel.app/)
 ![GitHub top language](https://img.shields.io/github/languages/top/yovie21/Ruang-Saku)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql)](https://www.mysql.com/)
@@ -26,7 +27,7 @@
 </p>
 
 <p align="center">
-  <a href="https://ruang-saku-gkb3sabsi-ymr4.vercel.app">Lihat Demo →</a>
+  <a href="https://ruang-saku-peach.vercel.app">Lihat Demo →</a>
 </p>
 
 ---
