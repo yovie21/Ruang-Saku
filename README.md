@@ -118,27 +118,88 @@
 
 ---
 
-## 📸 Screenshot
+## 📸 Screenshot Aplikasi
 
-### 🏠 Dashboard
+### 🏠 Dashboard — Beranda
 
-![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-dashboard.svg)
+![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-01-dashboard.png)
 
-### 📝 Transaksi
+### 📝 Daftar Transaksi
 
-![Transactions](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-transactions.svg)
+![Transactions](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-02-transactions.png)
 
-### 📊 Laporan & Analytics
+### ➕ Tambah Transaksi Baru
 
-![Analytics](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-analytics.svg)
+![Add Transaction](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-03-add-transaction.png)
 
-### 🔐 Login & Keamanan
+### 🏦 Kelola Akun
 
-![Login](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-login.svg)
+![Accounts](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-04-accounts.png)
+
+### 💸 Transfer Antar-Akun
+
+![Transfer](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-05-transfer.png)
+
+### 📅 Kalender Arus Kas
+
+![Calendar](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-06-calendar.png)
+
+### 🔍 Pencarian & Filter
+
+![Search](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-07-search.png)
+
+### 📊 Laporan Keuangan
+
+![Reports](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-08-reports.png)
 
 ### ⚙️ Pengaturan
 
-![Settings](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-settings.svg)
+![Settings](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-09-settings.png)
+
+---
+
+## 📖 Cara Penggunaan
+
+### 1️⃣ Login & Keamanan
+- Masuk dengan **Google OAuth** atau **PIN 4–6 digit**
+- Aktifkan **biometrik** (sidik jari/wajah) untuk akses cepat
+- Gunakan **Privacy Mode** untuk menyembunyikan nominal
+
+### 2️⃣ Dashboard
+- Lihat **saldo total**, pemasukan, dan pengeluaran
+- Periksa **tren 30 hari** untuk analisis keuangan
+- Pantau **anggaran** dan peringatan jebol budget
+
+### 3️⃣ Catat Transaksi
+- Klik **+** untuk menambah transaksi baru
+- Pilih tipe: **Pemasukan** atau **Pengeluaran**
+- Pilih **kategori**, **akun**, dan **tanggal**
+- Fitur **OCR Scan Struk** untuk baca struk otomatis
+
+### 4️⃣ Kelola Akun
+- Tambah **bank, e-wallet, atau tunai**
+- Set **saldo awal** dan catat perubahan saldo
+- Lihat **riwayat** semua akun di satu tempat
+
+### 5️⃣ Transfer & Split
+- Lakukan **transfer antar-akun** dengan catatan
+- Gunakan **split transaction** untuk membagi biaya
+- Lacak **siapa punya** dan **sudah dibayar**
+
+### 6️⃣ Kalender & Jadwal
+- Lihat arus kas per hari di **kalender interaktif**
+- Atur **jadwal rutin** (weekly, bulanan) untuk transaksi berulang
+- Catat **utang & piutang** dengan sisa cicilan
+
+### 7️⃣ Laporan & Analisis
+- Buat **laporan bulanan** dengan rekap pemasukan & pengeluaran
+- Ekspor ke **CSV** atau cetak sebagai **PDF**
+- Analisis kategori pengeluaran dengan **donut chart**
+
+### 8️⃣ Notifikasi & Privasi
+- Aktifkan **notifikasi browser** untuk budget jebol
+- Gunakan **Privacy Mode** untuk menyembunyikan angka
+- Setel **PIN** dan **biometrik** untuk keamanan ekstra
 
 ---
 
