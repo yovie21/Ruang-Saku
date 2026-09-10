@@ -122,87 +122,87 @@
 
 ### 1️⃣ Landing Page — Halaman Utama
 ![Landing Page](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-01-landing.png)
-*Brancing "Ruang Saku" dengan tagline "Setiap rupiah punya tempatnya"*
+*Tampilan utama aplikasi Ruang Saku dengan branding dan tombol Masuk*
 
 ### 2️⃣ Halaman Login
 ![Login](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-02-login.png)
-*Masuk dengan Google OAuth*
+*Form login dengan opsi Lanjutkan dengan Google*
 
 ### 3️⃣ Pilih Akun Google
 ![Google OAuth](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-03-google-oauth.png)
-*Pilih akun Google untuk autentikasi*
+*Pilih akun Google untuk proses autentikasi*
 
 ### 4️⃣ Dashboard Utama
 ![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-04-dashboard.png)
-*Saldo total, pemasukan, pengeluaran, chart arus 30 hari, kalender, akun, anggaran, target tabungan*
+*Ringkasan saldo total, pemasukan, pengeluaran, chart arus 30 hari, kalender, daftar akun, anggaran, dan target tabungan*
 
 ### 5️⃣ Tambah Akun Bank (Dialog)
 ![Add Account Dialog](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-05-add-account.png)
-*Isi nama bank, jenis, 4 digit akhir, saldo awal*
+*Dialog tambah akun bank dengan field nama bank, jenis, 4 digit akhir, dan saldo awal*
 
 ### 6️⃣ Tambah Akun Bank (Form Terisi)
 ![Add Account Fill](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-06-add-account-fill.png)
-*Contoh: Nama "yovie123", Jenis "Bank", Saldo awal 5.000.000*
+*Contoh form akun bank yang sudah diisi lengkap*
 
 ### 7️⃣ Pilih Jenis Transaksi
 ![Pilih Transaksi](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-07-pilih-transaksi.png)
-*Pilih Pemasukan (hijau) atau Pengeluaran (merah)*
+*Pilih Pemasukan (hijau) atau Pengeluaran (merah) untuk mencatat transaksi baru*
 
 ### 8️⃣ Catat Pemasukan
 ![Catat Pemasukan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-08-catat-pemasukan.png)
-*Isi judul "UANG PROJECT", akun, nominal 3.000.000, tanggal 10/09/2026*
+*Form pencatatan pemasukan dengan judul, kategori, akun, nominal, dan tanggal*
 
 ### 9️⃣ Catat Pengeluaran
 ![Catat Pengeluaran](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-09-catat-pengeluaran.png)
-*Isi judul "BELI PC", kategori "Belanja", akun "ajeng", nominal 4.000.000*
+*Form pencatatan pengeluaran dengan judul, kategori, akun, nominal, dan tanggal*
 
 ### 🔟 Transfer Antar-Akun
 ![Transfer](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-10-transfer.png)
-*Dari "yovie123" ke "ajeng", nominal 200.000, catatan "BELI PULSA"*
+*Form transfer uang antar akun dengan akun pengirim, penerima, nominal, tanggal, dan catatan*
 
 ### 1️⃣1️⃣ Dashboard dengan Data
 ![Dashboard Data](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-11-dashboard-data.png)
-*Saldo total Rp 9.000.000, chart, donut chart pengeluaran per kategori*
+*Dashboard setelah ada transaksi baru — saldo total diperbarui, chart arus, dan donut chart pengeluaran per kategori*
 
 ### 1️⃣2️⃣ Atur Batas Belanja (Budget)
 ![Budget](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-12-budget.png)
-*Kategori "Belanja", batas per bulan 3.000.000*
+*Form pengaturan batas belanja per kategori dengan nominal bulanan*
 
 ### 1️⃣3️⃣ Buat Target Tabungan
 ![Target Tabungan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-13-target-tabungan.png)
-*Target "BELI RUMAH", nominal 400.000.000, tenggat 10/01/2030*
+*Form buat target tabungan dengan nama, nominal target, dan tanggal tenggat*
 
 ### 1️⃣4️⃣ Kelola Dana Tabungan
 ![Kelola Dana](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-14-kelola-dana.png)
-*Progress BELI RUMAH: Rp 100.000 ditabung, fitur Nabung & Tarik*
+*Detail target tabungan dengan progress, fitur Nabung dan Tarik*
 
 ### 1️⃣5️⃣ Kelola Kategori
 ![Kategori](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-15-kategori.png)
-*Tab Pengeluaran & Pemasukan, kategori: Belanja, Hiburan, Kesehatan, dll*
+*Menu kelola kategori dengan tab Pengeluaran dan Pemasukan*
 
 ### 1️⃣6️⃣ Buat Transaksi Otomatis (Recurring)
 ![Recurring](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-16-recurring.png)
-*Gaji Bulanan, Pemasukan, 10.000.000, Frekuensi Bulanan, 01/09/2026 - 01/01/2028*
+*Form transaksi otomatis berulang dengan nama, tipe, kategori, akun, nominal, frekuensi, dan tanggal*
 
 ### 1️⃣7️⃣ Catat Utang / Piutang
 ![Utang](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-17-utang.png)
-*Nama "Yovie", nominal 5.000.000, Cicilan "Sekaliigs (lunas)", jatuh tempo 30/09/2026*
+*Form catat utang dengan nama, nominal, jenis cicilan, jatuh tempo, dan catatan*
 
 ### 1️⃣8️⃣ Aktivitas Terbaru & Pencarian
 ![Aktivitas](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-18-aktivitas.png)
-*Daftar transaksi terakhir dengan search dan filter*
+*Daftar aktivitas terbaru dengan fitur pencarian dan filter*
 
 ### 1️⃣9️⃣ Kalender Arus Kas
 ![Kalender](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-19-kalender.png)
-*September 2026, lihat transaksi per hari*
+*Kalender interaktif menampilkan arus kas per hari untuk bulan tertentu*
 
 ### 2️⃣0️⃣ Rekap Bulanan (Laporan)
 ![Rekap](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-20-rekap.png)
-*Rekap September 2026, pemasukan Rp 3.000.000, pengeluaran Rp 4.000.000*
+*Rekapitulasi keuangan bulanan dengan ringkasan pemasukan, pengeluaran, dan arus bersih*
 
 ### 2️⃣1️⃣ Print Preview / Logout
 ![Print/Logout](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-21-print.png)
-*Preview laporan PDF & logout*
+*Preview cetak laporan dan opsi logout*
 
 ---
 
@@ -222,11 +222,11 @@
 - Klik **Akun** untuk mengautentikasi dan masuk ke dashboard
 
 ### 4️⃣ Dashboard Utama
-- **Saldo Total**: Rp 9.000.000 — total semua akun digabung
-- **Pemasukan**: Rp 3.000.000 — total uang masuk
-- **Pengeluaran**: Rp 4.000.000 — total uang keluar
+- **Saldo Total**: total semua akun digabung
+- **Pemasukan**: total uang masuk
+- **Pengeluaran**: total uang keluar
 - **Chart Arus 30 Hari**: grafik batang income (hijau) & expense (merah) selama sebulan
-- **Kalender Arus Kas**: lihat transaksi per hari di kalender September 2026
+- **Kalender Arus Kas**: lihat transaksi per hari di kalender
 - **Akun Saya**: daftar semua akun yang sudah dibuat
 - **Anggaran**: atur batas pengeluaran per kategori
 - **Target Tabungan**: lihat progress target tabungan yang sudah ditetapkan
@@ -235,16 +235,11 @@
 
 ### 5️⃣ Tambah Akun Bank
 - Klik **+ Tambah Akun** → muncul dialog **"Tambah akun bank"**
-- Isi:
-  - **Nama**: `BCA` (nama bank)
-  - **Jenis**: `Bank`
-  - **4 digit akhir**: `5656` (nomor rekening terakhir)
-  - **Saldo awal**: `5.000.000`
+- Isi: **Nama** (nama bank), **Jenis** (Bank), **4 digit akhir** (nomor rekening terakhir), **Saldo awal**
 - Klik **Simpan** untuk menambahkan akun baru
 
 ### 6️⃣ Verifikasi Akun
 - Pastikan semua field sudah terisi dengan benar
-- Nama akun: `yovie123`, Jenis: `Bank`, Saldo awal: `5.000.000`
 - Klik **Simpan** → akun muncul di dashboard
 
 ### 7️⃣ Pilih Jenis Transaksi
@@ -253,56 +248,45 @@
 - Ini akan membuka form pencatatan sesuai tipe yang dipilih
 
 ### 8️⃣ Catat Pemasukan
-- **Judul**: `UANG PROJECT` — nama transaksi
-- **Kategori**: `Pemasukan`
-- **Akun**: `yovie123` — akun tujuan
-- **Nominal**: `3.000.000` — jumlah uang masuk
-- **Tanggal**: `10/09/2026` — tanggal transaksi
+- Isi **Judul** (nama transaksi), **Kategori**, **Akun** (tujuan), **Nominal** (jumlah uang masuk), **Tanggal**
 - Klik **Simpan** → transaksi masuk ke daftar
 
 ### 9️⃣ Catat Pengeluaran
-- **Judul**: `BELI PC` — nama transaksi
-- **Kategori**: `Belanja`
-- **Akun**: `ajeng` — akun sumber uang
-- **Nominal**: `4.000.000` — jumlah uang keluar
-- **Tanggal**: `10/09/2026` — tanggal transaksi
+- Isi **Judul** (nama transaksi), **Kategori**, **Akun** (sumber uang), **Nominal** (jumlah uang keluar), **Tanggal**
 - Klik **Simpan** → pengeluaran tercatat
 
 ### 🔟 Transfer Antar-Akun
-- **Dari akun**: `yovie123` — akun pengirim
-- **Ke akun**: `ajeng` — akun penerima
-- **Nominal transfer**: `200.000` — jumlah yang dipindahkan
-- **Tanggal**: `10/09/2026`
-- **Catatan**: `BELI PULSA` — keterangan tambahan
+- **Dari akun**: akun pengirim
+- **Ke akun**: akun penerima
+- **Nominal transfer**: jumlah yang dipindahkan
+- **Tanggal** dan **Catatan**: keterangan tambahan
 - Klik **Kirim** → transfer selesai, saldo kedua akun berubah
 
 ### 1️⃣1️⃣ Dashboard dengan Data
-- **Saldo Total**: Rp 9.000.000 — setelah transaksi baru
-- Chart menunjukkan: pemasukan Rp 3.000.000, pengeluaran Rp 4.000.000
+- **Saldo Total**: diperbarui setelah transaksi baru
+- **Chart**: menunjukkan pemasukan dan pengeluaran
 - **Donut Chart**: pengeluaran per kategori (Belanja, Makan, dll)
 - **Akun Saya**: menampilkan semua akun yang sudah dibuat
 - **Anggaran**: status per kategori (aman/warna/merah)
-- **Target Tabungan**: progress BELI RUMAH
+- **Target Tabungan**: progress target tabungan
 
 ### 1️⃣2️⃣ Atur Batas Belanja (Budget)
 - Masuk ke bagian **Anggaran**
-- Atur batas belanja per kategori:
-  - **Kategori**: `Belanja`
-  - **Batas per bulan**: `3.000.000`
+- Atur batas belanja per kategori: **Kategori** dan **Batas per bulan**
 - Klik **Simpan** → sistem akan memperingatkan jika pengeluaran mendekati atau melebihi batas
 - Status: ✅ **Aman** / ⚠️ **Warning** / ❌ **Jebol**
 
 ### 1️⃣3️⃣ Buat Target Tabungan
 - Masuk ke bagian **Target Tabungan**
 - Isi form **"Buat target tabungan"**:
-  - **Nama**: `BELI RUMAH` — nama target
-  - **Target nominal**: `400.000.000` — jumlah yang ditargetkan
-  - **Tenggat**: `10/01/2030` — deadline pencapaian
+  - **Nama**: nama target
+  - **Target nominal**: jumlah yang ditargetkan
+  - **Tenggat**: deadline pencapaian
 - Klik **Simpan** → target tabungan aktif
 
 ### 1️⃣4️⃣ Kelola Dana Tabungan
-- Masuk ke detail target `BELI RUMAH`
-- **Total ditabung**: Rp 100.000 (progress dari target Rp 400.000.000)
+- Masuk ke detail target tabungan
+- **Total ditabung**: progress dari target
 - **Progress bar**: visualisasi % pencapaian
 - Fitur:
   - **Nabung** — tambahkan dana ke target
@@ -311,33 +295,19 @@
 ### 1️⃣5️⃣ Kelola Kategori
 - Buka menu **Kategori**
 - Ada dua tab: **Pengeluaran** & **Pemasukan**
-- Kategori pengeluaran: `Belanja`, `Hiburan`, `Kesehatan`, `Lainnya`, `Makan & Minum`
 - Setiap kategori punya warna dan ikon khusus
 - Klik **+** untuk menambah kategori baru atau edit yang sudah ada
 
 ### 1️⃣6️⃣ Buat Transaksi Otomatis (Recurring)
 - Masuk ke bagian **Jadwal Rutin**
 - Klik **+ Buat transaksi otomatis**
-- Isi:
-  - **Nama**: `Gaji Bulanan`
-  - **Tipe**: `Pemasukan`
-  - **Kategori**: `Pemasukan`
-  - **Akun**: `yovie123`
-  - **Nominal**: `10.000.000`
-  - **Frekuensi**: `Bulanan` (pilihan: mingguan, bulanan, tahunan)
-  - **Mulai tanggal**: `01/09/2026`
-  - **Berakhir**: `01/01/2028`
+- Isi: **Nama**, **Tipe** (Pemasukan/Pengeluaran), **Kategori**, **Akun**, **Nominal**, **Frekuensi** (mingguan/bulanan/tahunan), **Mulai tanggal**, **Berakhir**
 - Sistem akan **otomatis membuat transaksi** setiap bulan sesuai jadwal
 
 ### 1️⃣7️⃣ Catat Utang / Piutang
 - Masuk ke bagian **Utang & Piutang**
 - Klik **+ Catat Utang**
-- Isi:
-  - **Nama**: `Yovie` — siapa yang berutang
-  - **Nominal**: `5.000.000` — total utang
-  - **Cicilan**: `Sekaliigs (lunas)` — pelunasan sekaligus atau cicilan
-  - **Jatuh tempo**: `30/09/2026` — deadline pelunasan
-  - **Catatan**: `buat bayar wisuda` — keterangan tambahan
+- Isi: **Nama** (siapa yang berutang), **Nominal** (total utang), **Cicilan** (sekaliigs/lunas atau cicilan), **Jatuh tempo** (deadline), **Catatan**
 - Klik **Simpan** → utang tercatat dan bisa dilacak
 
 ### 1️⃣8️⃣ Aktivitas Terbaru & Pencarian
@@ -348,21 +318,17 @@
 - Klik transaksi untuk **edit** atau **hapus**
 
 ### 1️⃣9️⃣ Kalender Arus Kas
-- Lihat **kalender interaktif** September 2026
+- Lihat **kalender interaktif** untuk bulan tertentu
 - Setiap hari menampilkan:
-  - **Rp 3.000.000 masuk** (pemasukan, warna hijau)
-  - **Rp 4.000.000 keluar** (pengeluaran, warna merah)
+  - **Masuk** (pemasukan, warna hijau)
+  - **Keluar** (pengeluaran, warna merah)
 - Klik hari tertentu → lihat detail transaksi hari tersebut
 - Navigasi: panah kiri/kanan untuk bulan sebelumnya/sesudahnya
 
 ### 2️⃣0️⃣ Rekap Bulanan (Laporan)
 - Masuk ke bagian **Laporan**
-- Pilih bulan: **September 2026**
-- Rekap menampilkan:
-  - **Pemasukan**: Rp 3.000.000
-  - **Pengeluaran**: Rp 4.000.000
-  - **Arus bersih**: -Rp 1.000.000
-  - **Total transaksi**: 2 entri
+- Pilih bulan yang diinginkan
+- Rekap menampilkan: **Pemasukan**, **Pengeluaran**, **Arus bersih**, **Total transaksi**
 - Fitur:
   - **Export CSV** — unduh sebagai spreadsheet
   - **Print/PDF** — cetak sebagai laporan PDF profesional
