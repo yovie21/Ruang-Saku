@@ -158,48 +158,197 @@
 
 ---
 
-## 📖 Cara Penggunaan
+## 📖 Cara Penggunaan (Lengkap 21 Langkah)
 
-### 1️⃣ Login & Keamanan
-- Masuk dengan **Google OAuth** atau **PIN 4–6 digit**
-- Aktifkan **biometrik** (sidik jari/wajah) untuk akses cepat
-- Gunakan **Privacy Mode** untuk menyembunyikan nominal
+### 1️⃣ Halaman Utama (Landing Page)
+- Buka aplikasi → halaman pertama menampilkan branding **"Ruang Saku"**
+- Tagline: *"Setiap rupiah punya tempatnya"*
+- Klik tombol **Masuk** untuk melanjutkan
 
-### 2️⃣ Dashboard
-- Lihat **saldo total**, pemasukan, dan pengeluaran
-- Periksa **tren 30 hari** untuk analisis keuangan
-- Pantau **anggaran** dan peringatan jebol budget
+### 2️⃣ Halaman Login
+- Masukkan **Google account** untuk masuk ke aplikasi
+- Klik **Lanjutkan dengan Google** → pilih akun Google Anda
 
-### 3️⃣ Catat Transaksi
-- Klik **+** untuk menambah transaksi baru
-- Pilih tipe: **Pemasukan** atau **Pengeluaran**
-- Pilih **kategori**, **akun**, dan **tanggal**
-- Fitur **OCR Scan Struk** untuk baca struk otomatis
+### 3️⃣ Pilih Akun Google
+- Pilih akun Google yang ingin digunakan (misal: `yovie@...` atau `agneja@...`)
+- Klik **Akun** untuk mengautentikasi dan masuk ke dashboard
 
-### 4️⃣ Kelola Akun
-- Tambah **bank, e-wallet, atau tunai**
-- Set **saldo awal** dan catat perubahan saldo
-- Lihat **riwayat** semua akun di satu tempat
+### 4️⃣ Dashboard Utama
+- **Saldo Total**: Rp 9.000.000 — total semua akun digabung
+- **Pemasukan**: Rp 3.000.000 — total uang masuk
+- **Pengeluaran**: Rp 4.000.000 — total uang keluar
+- **Chart Arus 30 Hari**: grafik batang income (hijau) & expense (merah) selama sebulan
+- **Kalender Arus Kas**: lihat transaksi per hari di kalender September 2026
+- **Akun Saya**: daftar semua akun yang sudah dibuat
+- **Anggaran**: atur batas pengeluaran per kategori
+- **Target Tabungan**: lihat progress target tabungan yang sudah ditetapkan
+- **Kategori**: semua kategori pengeluaran & pemasukan
+- **Jadwal Rutin**: transaksi berulang otomatis
 
-### 5️⃣ Transfer & Split
-- Lakukan **transfer antar-akun** dengan catatan
-- Gunakan **split transaction** untuk membagi biaya
-- Lacak **siapa punya** dan **sudah dibayar**
+### 5️⃣ Tambah Akun Bank
+- Klik **+ Tambah Akun** → muncul dialog **"Tambah akun bank"**
+- Isi:
+  - **Nama**: `BCA` (nama bank)
+  - **Jenis**: `Bank`
+  - **4 digit akhir**: `5656` (nomor rekening terakhir)
+  - **Saldo awal**: `5.000.000`
+- Klik **Simpan** untuk menambahkan akun baru
 
-### 6️⃣ Kalender & Jadwal
-- Lihat arus kas per hari di **kalender interaktif**
-- Atur **jadwal rutin** (weekly, bulanan) untuk transaksi berulang
-- Catat **utang & piutang** dengan sisa cicilan
+### 6️⃣ Verifikasi Akun
+- Pastikan semua field sudah terisi dengan benar
+- Nama akun: `yovie123`, Jenis: `Bank`, Saldo awal: `5.000.000`
+- Klik **Simpan** → akun muncul di dashboard
 
-### 7️⃣ Laporan & Analisis
-- Buat **laporan bulanan** dengan rekap pemasukan & pengeluaran
-- Ekspor ke **CSV** atau cetak sebagai **PDF**
-- Analisis kategori pengeluaran dengan **donut chart**
+### 7️⃣ Pilih Jenis Transaksi
+- Klik tombol **+** (tambah transaksi)
+- Pilih salah satu: **Pemasukan** (hijau) atau **Pengeluaran** (merah)
+- Ini akan membuka form pencatatan sesuai tipe yang dipilih
 
-### 8️⃣ Notifikasi & Privasi
-- Aktifkan **notifikasi browser** untuk budget jebol
-- Gunakan **Privacy Mode** untuk menyembunyikan angka
-- Setel **PIN** dan **biometrik** untuk keamanan ekstra
+### 8️⃣ Catat Pemasukan
+- **Judul**: `UANG PROJECT` — nama transaksi
+- **Kategori**: `Pemasukan`
+- **Akun**: `yovie123` — akun tujuan
+- **Nominal**: `3.000.000` — jumlah uang masuk
+- **Tanggal**: `10/09/2026` — tanggal transaksi
+- Klik **Simpan** → transaksi masuk ke daftar
+
+### 9️⃣ Catat Pengeluaran
+- **Judul**: `BELI PC` — nama transaksi
+- **Kategori**: `Belanja`
+- **Akun**: `ajeng` — akun sumber uang
+- **Nominal**: `4.000.000` — jumlah uang keluar
+- **Tanggal**: `10/09/2026` — tanggal transaksi
+- Klik **Simpan** → pengeluaran tercatat
+
+### 🔟 Transfer Antar-Akun
+- **Dari akun**: `yovie123` — akun pengirim
+- **Ke akun**: `ajeng` — akun penerima
+- **Nominal transfer**: `200.000` — jumlah yang dipindahkan
+- **Tanggal**: `10/09/2026`
+- **Catatan**: `BELI PULSA` — keterangan tambahan
+- Klik **Kirim** → transfer selesai, saldo kedua akun berubah
+
+### 1️⃣1️⃣ Dashboard dengan Data
+- **Saldo Total**: Rp 9.000.000 — setelah transaksi baru
+- Chart menunjukkan: pemasukan Rp 3.000.000, pengeluaran Rp 4.000.000
+- **Donut Chart**: pengeluaran per kategori (Belanja, Makan, dll)
+- **Akun Saya**: menampilkan semua akun yang sudah dibuat
+- **Anggaran**: status per kategori (aman/warna/merah)
+- **Target Tabungan**: progress BELI RUMAH
+
+### 1️⃣2️⃣ Atur Batas Belanja (Budget)
+- Masuk ke bagian **Anggaran**
+- Atur batas belanja per kategori:
+  - **Kategori**: `Belanja`
+  - **Batas per bulan**: `3.000.000`
+- Klik **Simpan** → sistem akan memperingatkan jika pengeluaran mendekati atau melebihi batas
+- Status: ✅ **Aman** / ⚠️ **Warning** / ❌ **Jebol**
+
+### 1️⃣3️⃣ Buat Target Tabungan
+- Masuk ke bagian **Target Tabungan**
+- Isi form **"Buat target tabungan"**:
+  - **Nama**: `BELI RUMAH` — nama target
+  - **Target nominal**: `400.000.000` — jumlah yang ditargetkan
+  - **Tenggat**: `10/01/2030` — deadline pencapaian
+- Klik **Simpan** → target tabungan aktif
+
+### 1️⃣4️⃣ Kelola Dana Tabungan
+- Masuk ke detail target `BELI RUMAH`
+- **Total ditabung**: Rp 100.000 (progress dari target Rp 400.000.000)
+- **Progress bar**: visualisasi % pencapaian
+- Fitur:
+  - **Nabung** — tambahkan dana ke target
+  - **Tarik** — tarik dana dari target (jika diperlukan)
+
+### 1️⃣5️⃣ Kelola Kategori
+- Buka menu **Kategori**
+- Ada dua tab: **Pengeluaran** & **Pemasukan**
+- Kategori pengeluaran: `Belanja`, `Hiburan`, `Kesehatan`, `Lainnya`, `Makan & Minum`
+- Setiap kategori punya warna dan ikon khusus
+- Klik **+** untuk menambah kategori baru atau edit yang sudah ada
+
+### 1️⃣6️⃣ Buat Transaksi Otomatis (Recurring)
+- Masuk ke bagian **Jadwal Rutin**
+- Klik **+ Buat transaksi otomatis**
+- Isi:
+  - **Nama**: `Gaji Bulanan`
+  - **Tipe**: `Pemasukan`
+  - **Kategori**: `Pemasukan`
+  - **Akun**: `yovie123`
+  - **Nominal**: `10.000.000`
+  - **Frekuensi**: `Bulanan` (pilihan: mingguan, bulanan, tahunan)
+  - **Mulai tanggal**: `01/09/2026`
+  - **Berakhir**: `01/01/2028`
+- Sistem akan **otomatis membuat transaksi** setiap bulan sesuai jadwal
+
+### 1️⃣7️⃣ Catat Utang / Piutang
+- Masuk ke bagian **Utang & Piutang**
+- Klik **+ Catat Utang**
+- Isi:
+  - **Nama**: `Yovie` — siapa yang berutang
+  - **Nominal**: `5.000.000` — total utang
+  - **Cicilan**: `Sekaliigs (lunas)` — pelunasan sekaligus atau cicilan
+  - **Jatuh tempo**: `30/09/2026` — deadline pelunasan
+  - **Catatan**: `buat bayar wisuda` — keterangan tambahan
+- Klik **Simpan** → utang tercatat dan bisa dilacak
+
+### 1️⃣8️⃣ Aktivitas Terbaru & Pencarian
+- **Aktivitas terbaru**: daftar semua transaksi terakhir
+- **Search**: cari transaksi berdasarkan nama/isi
+- **Filter**: filter berdasarkan tipe (pemasukan/pengeluaran/transfer)
+- **Tanggal**: filter berdasarkan periode waktu
+- Klik transaksi untuk **edit** atau **hapus**
+
+### 1️⃣9️⃣ Kalender Arus Kas
+- Lihat **kalender interaktif** September 2026
+- Setiap hari menampilkan:
+  - **Rp 3.000.000 masuk** (pemasukan, warna hijau)
+  - **Rp 4.000.000 keluar** (pengeluaran, warna merah)
+- Klik hari tertentu → lihat detail transaksi hari tersebut
+- Navigasi: panah kiri/kanan untuk bulan sebelumnya/sesudahnya
+
+### 2️⃣0️⃣ Rekap Bulanan (Laporan)
+- Masuk ke bagian **Laporan**
+- Pilih bulan: **September 2026**
+- Rekap menampilkan:
+  - **Pemasukan**: Rp 3.000.000
+  - **Pengeluaran**: Rp 4.000.000
+  - **Arus bersih**: -Rp 1.000.000
+  - **Total transaksi**: 2 entri
+- Fitur:
+  - **Export CSV** — unduh sebagai spreadsheet
+  - **Print/PDF** — cetak sebagai laporan PDF profesional
+  - **Donut Chart** — visualisasi pengeluaran per kategori
+
+### 2️⃣1️⃣ Logout
+- Klik **ikon profil** (pojok kanan atas)
+- Pilih **Logout** → keluar dari akun
+- Aplikasi kembali ke halaman login
+
+---
+
+## 📖 Quick Reference
+
+| No | Fitur | Tujuan |
+|----|-------|--------|
+| 1-3 | Login & Akun | Masuk dengan Google OAuth |
+| 4 | Dashboard | Overview keuangan |
+| 5-6 | Akun Bank | Kelola rekening bank |
+| 7-9 | Transaksi | Catat pemasukan & pengeluaran |
+| 10 | Transfer | Pindahkan uang antar-akun |
+| 11-12 | Budget | Atur batas pengeluaran |
+| 13-14 | Tabungan | Buat & kelola target simpanan |
+| 15 | Kategori | Atur klasifikasi transaksi |
+| 16 | Recurring | Transaksi otomatis berulang |
+| 17 | Utang & Piutang | Lacak pinjaman |
+| 18 | Cari & Filter | Temukan transaksi spesifik |
+| 19 | Kalender | Lihat arus kas per hari |
+| 20 | Laporan | Export & print laporan bulanan |
+| 21 | Logout | Keluar dari aplikasi |
+
+---
+
+## 🛠️ Teknologi
 
 ---
 
