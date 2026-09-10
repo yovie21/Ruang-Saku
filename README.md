@@ -118,43 +118,91 @@
 
 ---
 
-## 📸 Screenshot Aplikasi
+## 📸 Screenshot Aplikasi (21 Langkah)
 
-### 🏠 Dashboard — Beranda
+### 1️⃣ Landing Page — Halaman Utama
+![Landing Page](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-01-landing.png)
+*Brancing "Ruang Saku" dengan tagline "Setiap rupiah punya tempatnya"*
 
-![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-01-dashboard.png)
+### 2️⃣ Halaman Login
+![Login](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-02-login.png)
+*Masuk dengan Google OAuth*
 
-### 📝 Daftar Transaksi
+### 3️⃣ Pilih Akun Google
+![Google OAuth](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-03-google-oauth.png)
+*Pilih akun Google untuk autentikasi*
 
-![Transactions](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-02-transactions.png)
+### 4️⃣ Dashboard Utama
+![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-04-dashboard.png)
+*Saldo total, pemasukan, pengeluaran, chart arus 30 hari, kalender, akun, anggaran, target tabungan*
 
-### ➕ Tambah Transaksi Baru
+### 5️⃣ Tambah Akun Bank (Dialog)
+![Add Account Dialog](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-05-add-account.png)
+*Isi nama bank, jenis, 4 digit akhir, saldo awal*
 
-![Add Transaction](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-03-add-transaction.png)
+### 6️⃣ Tambah Akun Bank (Form Terisi)
+![Add Account Fill](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-06-add-account-fill.png)
+*Contoh: Nama "yovie123", Jenis "Bank", Saldo awal 5.000.000*
 
-### 🏦 Kelola Akun
+### 7️⃣ Pilih Jenis Transaksi
+![Pilih Transaksi](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-07-pilih-transaksi.png)
+*Pilih Pemasukan (hijau) atau Pengeluaran (merah)*
 
-![Accounts](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-04-accounts.png)
+### 8️⃣ Catat Pemasukan
+![Catat Pemasukan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-08-catat-pemasukan.png)
+*Isi judul "UANG PROJECT", akun, nominal 3.000.000, tanggal 10/09/2026*
 
-### 💸 Transfer Antar-Akun
+### 9️⃣ Catat Pengeluaran
+![Catat Pengeluaran](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-09-catat-pengeluaran.png)
+*Isi judul "BELI PC", kategori "Belanja", akun "ajeng", nominal 4.000.000*
 
-![Transfer](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-05-transfer.png)
+### 🔟 Transfer Antar-Akun
+![Transfer](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-10-transfer.png)
+*Dari "yovie123" ke "ajeng", nominal 200.000, catatan "BELI PULSA"*
 
-### 📅 Kalender Arus Kas
+### 1️⃣1️⃣ Dashboard dengan Data
+![Dashboard Data](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-11-dashboard-data.png)
+*Saldo total Rp 9.000.000, chart, donut chart pengeluaran per kategori*
 
-![Calendar](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-06-calendar.png)
+### 1️⃣2️⃣ Atur Batas Belanja (Budget)
+![Budget](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-12-budget.png)
+*Kategori "Belanja", batas per bulan 3.000.000*
 
-### 🔍 Pencarian & Filter
+### 1️⃣3️⃣ Buat Target Tabungan
+![Target Tabungan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-13-target-tabungan.png)
+*Target "BELI RUMAH", nominal 400.000.000, tenggat 10/01/2030*
 
-![Search](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-07-search.png)
+### 1️⃣4️⃣ Kelola Dana Tabungan
+![Kelola Dana](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-14-kelola-dana.png)
+*Progress BELI RUMAH: Rp 100.000 ditabung, fitur Nabung & Tarik*
 
-### 📊 Laporan Keuangan
+### 1️⃣5️⃣ Kelola Kategori
+![Kategori](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-15-kategori.png)
+*Tab Pengeluaran & Pemasukan, kategori: Belanja, Hiburan, Kesehatan, dll*
 
-![Reports](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-08-reports.png)
+### 1️⃣6️⃣ Buat Transaksi Otomatis (Recurring)
+![Recurring](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-16-recurring.png)
+*Gaji Bulanan, Pemasukan, 10.000.000, Frekuensi Bulanan, 01/09/2026 - 01/01/2028*
 
-### ⚙️ Pengaturan
+### 1️⃣7️⃣ Catat Utang / Piutang
+![Utang](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-17-utang.png)
+*Nama "Yovie", nominal 5.000.000, Cicilan "Sekaliigs (lunas)", jatuh tempo 30/09/2026*
 
-![Settings](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-09-settings.png)
+### 1️⃣8️⃣ Aktivitas Terbaru & Pencarian
+![Aktivitas](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-18-aktivitas.png)
+*Daftar transaksi terakhir dengan search dan filter*
+
+### 1️⃣9️⃣ Kalender Arus Kas
+![Kalender](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-19-kalender.png)
+*September 2026, lihat transaksi per hari*
+
+### 2️⃣0️⃣ Rekap Bulanan (Laporan)
+![Rekap](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-20-rekap.png)
+*Rekap September 2026, pemasukan Rp 3.000.000, pengeluaran Rp 4.000.000*
+
+### 2️⃣1️⃣ Print Preview / Logout
+![Print/Logout](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-21-print.png)
+*Preview laporan PDF & logout*
 
 ---
 
