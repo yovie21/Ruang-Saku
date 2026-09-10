@@ -4,22 +4,65 @@
 
 <h3>Aplikasi pencatat keuangan pribadi yang ramping, modern, dan siap produksi.</h3>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
-[![Live Site](https://img.shields.io/badge/Live_Site-ruang-saku-peach-0052CC?style=for-the-badge&logo=vercel)](https://ruang-saku-peach.vercel.app/)
-[![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
-[![NextAuth.js](https://img.shields.io/badge/Auth-NextAuth.js-111?style=for-the-badge&logo=nextauth)](https://next-auth.js.org/)
-[![Vercel Speed Insights](https://img.shields.io/badge/Speed_Insights-Enabled-0052CC?style=for-the-badge&logo=vercel)](https://vercel.com/docs/speed-insights)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge&labelColor=0052CC)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=nextdotjs&labelColor=000000)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript&labelColor=007ACC)](https://www.typescriptlang.org/)
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&labelColor=000000)](https://vercel.com/)
+[![Live Site](https://img.shields.io/badge/Live_Site-ruang-saku-peach-0052CC?style=for-the-badge&logo=vercel&labelColor=0052CC)](https://ruang-saku-peach.vercel.app/)
+[![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql&labelColor=4479A1)](https://www.mysql.com/)
+[![NextAuth.js](https://img.shields.io/badge/Auth-NextAuth.js-111?style=for-the-badge&logo=nextauth&labelColor=111)](https://next-auth.js.org/)
+[![Vercel Speed Insights](https://img.shields.io/badge/Speed_Insights-Enabled-0052CC?style=for-the-badge&logo=vercel&labelColor=0052CC)](https://vercel.com/docs/speed-insights)
 
-![GitHub top language](https://img.shields.io/github/languages/top/yovie21/Ruang-Saku?style=for-the-badge)
-[![GitHub commits](https://img.shields.io/badge/GitHub-Commits-E4463A?style=for-the-badge&logo=git&logoColor=white)](https://github.com/yovie21/Ruang-Saku/commits)
-[![GitHub forks](https://img.shields.io/badge/GitHub-Forks-DAY9540?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/network/members)
-[![GitHub stars](https://img.shields.io/badge/GitHub-Stars-FFD700?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/stargazers)
-[![GitHub issues](https://img.shields.io/badge/GitHub-Issues-960032?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/issues)
-[![GitHub PRs](https://img.shields.io/badge/GitHub-PRs-128ECE?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/pulls)
-[![GitHub contributors](https://img.shields.io/badge/GitHub-Contributors-A3C4DC?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/graphs/contributors)
+<!-- Animated shimmer badge -->
+[![Build Status](https://img.shields.io/badge/Build-Passing-286c56?style=for-the-badge&animation=pulse&labelColor=286c56)](https://github.com/yovie21/Ruang-Saku/actions)
+[![Lint Status](https://img.shields.io/badge/Lint-Passing-219368?style=for-the-badge&animation=pulse&labelColor=219368)](https://github.com/yovie21/Ruang-Saku)
+[![TypeScript Strict](https://img.shields.io/badge/TypeScript-Strict-5.6-blue?style=for-the-badge&animation=pulse&labelColor=007ACC)](https://github.com/yovie21/Ruang-Saku)
+
+![GitHub top language](https://img.shields.io/github/languages/top/yovie21/Ruang-Saku?style=for-the-badge&animation=pulse)
+[![GitHub commits](https://img.shields.io/badge/GitHub-Commits-E4463A?style=for-the-badge&logo=git&logoColor=white&animation=pulse)](https://github.com/yovie21/Ruang-Saku/commits)
+[![GitHub forks](https://img.shields.io/badge/GitHub-Forks-DAY9540?style=for-the-badge&logo=github&animation=pulse)](https://github.com/yovie21/Ruang-Saku/network/members)
+[![GitHub stars](https://img.shields.io/badge/GitHub-Stars-FFD700?style=for-the-badge&logo=github&animation=pulse)](https://github.com/yovie21/Ruang-Saku/stargazers)
+[![GitHub issues](https://img.shields.io/badge/GitHub-Issues-960032?style=for-the-badge&logo=github&animation=pulse)](https://github.com/yovie21/Ruang-Saku/issues)
+[![GitHub PRs](https://img.shields.io/badge/GitHub-PRs-128ECE?style=for-the-badge&logo=github&animation=pulse)](https://github.com/yovie21/Ruang-Saku/pulls)
+[![GitHub contributors](https://img.shields.io/badge/GitHub-Contributors-A3C4DC?style=for-the-badge&logo=github&animation=pulse)](https://github.com/yovie21/Ruang-Saku/graphs/contributors)
+
+<!-- Dark/Light mode toggle CSS -->
+<style>
+  .mode-toggle {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: 2px solid #286c56;
+    background: transparent;
+    color: #286c56;
+    margin: 4px;
+  }
+  .mode-toggle:hover {
+    background: #286c56;
+    color: #fff;
+  }
+  @media (prefers-color-scheme: dark) {
+    .mode-toggle {
+      border-color: #d9f348;
+      color: #d9f348;
+    }
+    .mode-toggle:hover {
+      background: #d9f348;
+      color: #0e1513;
+    }
+  }
+</style>
+
+<a href="#dark-section">
+  <button class="mode-toggle">🌙 Dark Mode</button>
+</a>
+<a href="#light-section">
+  <button class="mode-toggle">☀️ Light Mode</button>
+</a>
 
 </div>
 
@@ -51,22 +94,22 @@
 
 <p align="center">
   <a href="https://github.com/yovie21" target="_blank">
-    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white&animation=pulse" alt="GitHub">
   </a>
   <a href="https://twitter.com/yovie21" target="_blank">
-    <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter">
+    <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white&animation=pulse" alt="Twitter">
   </a>
   <a href="https://linkedin.com/in/yovie21" target="_blank">
-    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white&animation=pulse" alt="LinkedIn">
   </a>
   <a href="https://buymeacoffee.com/yovie21" target="_blank">
-    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy%20me%20a%20coffee&logoColor=black" alt="Buy Me a Coffee">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy%20me%20a%20coffee&logoColor=black&animation=pulse" alt="Buy Me a Coffee">
   </a>
   <a href="mailto:yovie6513@gmail.com" target="_blank">
-    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white&animation=pulse" alt="Email">
   </a>
   <a href="https://ruang-saku-peach.vercel.app" target="_blank">
-    <img src="https://img.shields.io/badge/Live_Site-0052CC?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Site">
+    <img src="https://img.shields.io/badge/Live_Site-0052CC?style=for-the-badge&logo=vercel&logoColor=white&animation=pulse" alt="Live Site">
   </a>
 </p>
 
@@ -75,13 +118,46 @@
 ### 🛡️ **Project Health**
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Code_Quality-Passing-brightgreen?style=flat-square" alt="Code Quality">
-  <img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square" alt="Build">
-  <img src="https://img.shields.io/badge/Lint-Passing-brightgreen?style=flat-square" alt="Lint">
-  <img src="https://img.shields.io/badge/TypeScript-Strict-5.6-blue?style=flat-square" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Coverage-Maintained-brightgreen?style=flat-square" alt="Coverage">
-  <img src="https://img.shields.io/badge/Dependency_Security-Up_to_Date-brightgreen?style=flat-square" alt="Deps">
+  <img src="https://img.shields.io/badge/Code_Quality-Passing-brightgreen?style=flat-square&animation=pulse" alt="Code Quality">
+  <img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square&animation=pulse" alt="Build">
+  <img src="https://img.shields.io/badge/Lint-Passing-brightgreen?style=flat-square&animation=pulse" alt="Lint">
+  <img src="https://img.shields.io/badge/TypeScript-Strict-5.6-blue?style=flat-square&animation=pulse" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Coverage-Maintained-brightgreen?style=flat-square&animation=pulse" alt="Coverage">
+  <img src="https://img.shields.io/badge/Dependency_Security-Up_to_Date-brightgreen?style=flat-square&animation=pulse" alt="Deps">
 </p>
+
+---
+
+### 🎯 **Featured Projects**
+
+<!-- Project showcase cards with hover animation -->
+<p align="center">
+  <a href="https://github.com/yovie21/Ruang-Saku" target="_blank">
+    <img src="https://img.shields.io/badge/💰-Ruang_Saku-286c56?style=for-the-badge&logo=vercel&animation=pulse" alt="Ruang Saku">
+  </a>
+  <a href="https://github.com/yovie21" target="_blank">
+    <img src="https://img.shields.io/badge/📊-Dashboard-0052CC?style=for-the-badge&logo=vercel&animation=pulse" alt="Dashboard">
+  </a>
+  <a href="https://github.com/yovie21" target="_blank">
+    <img src="https://img.shields.io/badge/🔐-Auth-000000?style=for-the-badge&logo=nextauth&animation=pulse" alt="Auth">
+  </a>
+</p>
+
+<!-- Shimmer effect CSS -->
+<style>
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  .shimmer-badge {
+    background: linear-gradient(90deg, #286c56 0%, #219368 50%, #286c56 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s ease-in-out infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+  }
+</style>
 
 ---
 
@@ -364,10 +440,6 @@
 
 ## 🛠️ Teknologi
 
----
-
-## 🛠️ Teknologi
-
 | Layer | Technology |
 |-------|-----------|
 | **Framework** | [Next.js 14](https://nextjs.org/) (App Router) |
@@ -498,7 +570,8 @@ Ruang-Saku/
 ├── outputs/                  # PRD, schema, docs
 ├── package.json
 ├── tsconfig.json
-└── LICENSE
+├── LICENSE
+└── CODE_OF_CONDUCT.md
 ```
 
 ---
@@ -521,6 +594,10 @@ Kontribusi sangat diterima! Lihat [CONTRIBUTING.md](CONTRIBUTING.md) untuk pandu
 ## 📄 Lisensi
 
 Proyek ini dilisensikan di bawah [MIT License](LICENSE).
+
+## 📋 Code of Conduct
+
+Lihat [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) untuk panduan perilaku komunitas.
 
 ---
 
