@@ -14,6 +14,7 @@
 [![Vercel Speed Insights](https://img.shields.io/badge/Speed_Insights-Enabled-0052CC?style=for-the-badge&logo=vercel&labelColor=0052CC)](https://vercel.com/docs/speed-insights)
 
 <!-- Animated shimmer badge -->
+
 [![Build Status](https://img.shields.io/badge/Build-Passing-286c56?style=for-the-badge&animation=pulse&labelColor=286c56)](https://github.com/yovie21/Ruang-Saku/actions)
 [![Lint Status](https://img.shields.io/badge/Lint-Passing-219368?style=for-the-badge&animation=pulse&labelColor=219368)](https://github.com/yovie21/Ruang-Saku)
 [![TypeScript Strict](https://img.shields.io/badge/TypeScript-Strict-5.6-blue?style=for-the-badge&animation=pulse&labelColor=007ACC)](https://github.com/yovie21/Ruang-Saku)
@@ -96,14 +97,8 @@
   <a href="https://github.com/yovie21" target="_blank">
     <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white&animation=pulse" alt="GitHub">
   </a>
-  <a href="https://twitter.com/yovie21" target="_blank">
-    <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white&animation=pulse" alt="Twitter">
-  </a>
   <a href="https://linkedin.com/in/yovie21" target="_blank">
     <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white&animation=pulse" alt="LinkedIn">
-  </a>
-  <a href="https://buymeacoffee.com/yovie21" target="_blank">
-    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy%20me%20a%20coffee&logoColor=black&animation=pulse" alt="Buy Me a Coffee">
   </a>
   <a href="mailto:yovie6513@gmail.com" target="_blank">
     <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white&animation=pulse" alt="Email">
@@ -166,12 +161,14 @@
 ## ✨ Fitur
 
 ### 🔐 **Keamanan & Privasi**
+
 - 🔑 **PIN 4–6 digit** untuk mengunci aplikasi setiap sesi
 - 🖐️ **Biometrik** (sidik jari / wajah / Windows Hello) dengan WebAuthn
 - 🛡️ **Privacy Mode** — sembunyikan nominal dengan satu tap
 - 🔒 **Google OAuth** dengan role-based access (admin/user)
 
 ### 💸 **Manajemen Keuangan Lengkap**
+
 - 📊 **Dashboard real-time** — saldo, pemasukan, pengeluaran, tren 30 hari
 - 📝 **Transaksi** — income, expense, transfer, dengan filter & pencarian
 - 🏦 **Multi-akun** — bank, e-wallet, tunai dengan saldo terbuka
@@ -186,6 +183,7 @@
 - 📸 **OCR Receipt Scanning** — baca struk via Tesseract.js
 
 ### 🎨 **UI/UX**
+
 - 🌙 **Light & Dark mode** — auto-detect & persistent theme
 - 📱 **PWA-ready** — installable, offline-capable, service worker
 - 🧭 **Navigation sidebar** — beranda, transaksi, akun
@@ -197,107 +195,132 @@
 ## 📸 Screenshot Aplikasi (21 Langkah)
 
 ### 1️⃣ Landing Page — Halaman Utama
+
 ![Landing Page](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-01-landing.png)
-*Tampilan utama aplikasi Ruang Saku dengan branding dan tombol Masuk*
+_Tampilan utama aplikasi Ruang Saku dengan branding dan tombol Masuk_
 
 ### 2️⃣ Halaman Login
-![Login](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-02-login.png)
-*Form login dengan opsi Lanjutkan dengan Google*
+
+![Login](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-19-login.png)
+_Form login dengan opsi Lanjutkan dengan Google_
 
 ### 3️⃣ Pilih Akun Google
-![Google OAuth](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-03-google-oauth.png)
-*Pilih akun Google untuk proses autentikasi*
+
+![Google OAuth](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-18-aktivitas.png)
+_Pilih akun Google untuk proses autentikasi_
 
 ### 4️⃣ Dashboard Utama
-![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-04-dashboard.png)
-*Ringkasan saldo total, pemasukan, pengeluaran, chart arus 30 hari, kalender, daftar akun, anggaran, dan target tabungan*
+
+![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-01-landing.png)
+_Ringkasan saldo total, pemasukan, pengeluaran, chart arus 30 hari, kalender, daftar akun, anggaran, dan target tabungan_
 
 ### 5️⃣ Tambah Akun Bank (Dialog)
-![Add Account Dialog](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-05-add-account.png)
-*Dialog tambah akun bank dengan field nama bank, jenis, 4 digit akhir, dan saldo awal*
+
+![Add Account Dialog](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-16-recuring.png)
+_Dialog tambah akun bank dengan field nama bank, jenis, 4 digit akhir, dan saldo awal_
 
 ### 6️⃣ Tambah Akun Bank (Form Terisi)
+
 ![Add Account Fill](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-06-add-account-fill.png)
-*Contoh form akun bank yang sudah diisi lengkap*
+_Contoh form akun bank yang sudah diisi lengkap_
 
 ### 7️⃣ Pilih Jenis Transaksi
+
 ![Pilih Transaksi](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-07-pilih-transaksi.png)
-*Pilih Pemasukan (hijau) atau Pengeluaran (merah) untuk mencatat transaksi baru*
+_Pilih Pemasukan (hijau) atau Pengeluaran (merah) untuk mencatat transaksi baru_
 
 ### 8️⃣ Catat Pemasukan
+
 ![Catat Pemasukan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-08-catat-pemasukan.png)
-*Form pencatatan pemasukan dengan judul, kategori, akun, nominal, dan tanggal*
+_Form pencatatan pemasukan dengan judul, kategori, akun, nominal, dan tanggal_
 
 ### 9️⃣ Catat Pengeluaran
+
 ![Catat Pengeluaran](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-09-catat-pengeluaran.png)
-*Form pencatatan pengeluaran dengan judul, kategori, akun, nominal, dan tanggal*
+_Form pencatatan pengeluaran dengan judul, kategori, akun, nominal, dan tanggal_
 
 ### 🔟 Transfer Antar-Akun
+
 ![Transfer](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-10-transfer.png)
-*Form transfer uang antar akun dengan akun pengirim, penerima, nominal, tanggal, dan catatan*
+_Form transfer uang antar akun dengan akun pengirim, penerima, nominal, tanggal, dan catatan_
 
 ### 1️⃣1️⃣ Dashboard dengan Data
+
 ![Dashboard Data](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-11-dashboard-data.png)
-*Dashboard setelah ada transaksi baru — saldo total diperbarui, chart arus, dan donut chart pengeluaran per kategori*
+_Dashboard setelah ada transaksi baru — saldo total diperbarui, chart arus, dan donut chart pengeluaran per kategori_
 
 ### 1️⃣2️⃣ Atur Batas Belanja (Budget)
+
 ![Budget](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-12-budget.png)
-*Form pengaturan batas belanja per kategori dengan nominal bulanan*
+_Form pengaturan batas belanja per kategori dengan nominal bulanan_
 
 ### 1️⃣3️⃣ Buat Target Tabungan
+
 ![Target Tabungan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-13-target-tabungan.png)
-*Form buat target tabungan dengan nama, nominal target, dan tanggal tenggat*
+_Form buat target tabungan dengan nama, nominal target, dan tanggal tenggat_
 
 ### 1️⃣4️⃣ Kelola Dana Tabungan
+
 ![Kelola Dana](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-14-kelola-dana.png)
-*Detail target tabungan dengan progress, fitur Nabung dan Tarik*
+_Detail target tabungan dengan progress, fitur Nabung dan Tarik_
 
 ### 1️⃣5️⃣ Kelola Kategori
+
 ![Kategori](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-15-kategori.png)
-*Menu kelola kategori dengan tab Pengeluaran dan Pemasukan*
+_Menu kelola kategori dengan tab Pengeluaran dan Pemasukan_
 
 ### 1️⃣6️⃣ Buat Transaksi Otomatis (Recurring)
+
 ![Recurring](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-16-recurring.png)
-*Form transaksi otomatis berulang dengan nama, tipe, kategori, akun, nominal, frekuensi, dan tanggal*
+_Form transaksi otomatis berulang dengan nama, tipe, kategori, akun, nominal, frekuensi, dan tanggal_
 
 ### 1️⃣7️⃣ Catat Utang / Piutang
+
 ![Utang](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-17-utang.png)
-*Form catat utang dengan nama, nominal, jenis cicilan, jatuh tempo, dan catatan*
+_Form catat utang dengan nama, nominal, jenis cicilan, jatuh tempo, dan catatan_
 
 ### 1️⃣8️⃣ Aktivitas Terbaru & Pencarian
+
 ![Aktivitas](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-18-aktivitas.png)
-*Daftar aktivitas terbaru dengan fitur pencarian dan filter*
+_Daftar aktivitas terbaru dengan fitur pencarian dan filter_
 
 ### 1️⃣9️⃣ Kalender Arus Kas
+
 ![Kalender](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-19-kalender.png)
-*Kalender interaktif menampilkan arus kas per hari untuk bulan tertentu*
+_Kalender interaktif menampilkan arus kas per hari untuk bulan tertentu_
 
 ### 2️⃣0️⃣ Rekap Bulanan (Laporan)
+
 ![Rekap](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-20-rekap.png)
-*Rekapitulasi keuangan bulanan dengan ringkasan pemasukan, pengeluaran, dan arus bersih*
+_Rekapitulasi keuangan bulanan dengan ringkasan pemasukan, pengeluaran, dan arus bersih_
 
 ### 2️⃣1️⃣ Print Preview / Logout
+
 ![Print/Logout](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-21-print.png)
-*Preview cetak laporan dan opsi logout*
+_Preview cetak laporan dan opsi logout_
 
 ---
 
 ## 📖 Cara Penggunaan (Lengkap 21 Langkah)
 
 ### 1️⃣ Halaman Utama (Landing Page)
+
 - Buka aplikasi → halaman pertama menampilkan branding **"Ruang Saku"**
-- Tagline: *"Setiap rupiah punya tempatnya"*
+- Tagline: _"Setiap rupiah punya tempatnya"_
 - Klik tombol **Masuk** untuk melanjutkan
 
 ### 2️⃣ Halaman Login
+
 - Masukkan **Google account** untuk masuk ke aplikasi
 - Klik **Lanjutkan dengan Google** → pilih akun Google Anda
 
 ### 3️⃣ Pilih Akun Google
+
 - Pilih akun Google yang ingin digunakan (misal: `yovie@...` atau `agneja@...`)
 - Klik **Akun** untuk mengautentikasi dan masuk ke dashboard
 
 ### 4️⃣ Dashboard Utama
+
 - **Saldo Total**: total semua akun digabung
 - **Pemasukan**: total uang masuk
 - **Pengeluaran**: total uang keluar
@@ -310,28 +333,34 @@
 - **Jadwal Rutin**: transaksi berulang otomatis
 
 ### 5️⃣ Tambah Akun Bank
+
 - Klik **+ Tambah Akun** → muncul dialog **"Tambah akun bank"**
 - Isi: **Nama** (nama bank), **Jenis** (Bank), **4 digit akhir** (nomor rekening terakhir), **Saldo awal**
 - Klik **Simpan** untuk menambahkan akun baru
 
 ### 6️⃣ Verifikasi Akun
+
 - Pastikan semua field sudah terisi dengan benar
 - Klik **Simpan** → akun muncul di dashboard
 
 ### 7️⃣ Pilih Jenis Transaksi
+
 - Klik tombol **+** (tambah transaksi)
 - Pilih salah satu: **Pemasukan** (hijau) atau **Pengeluaran** (merah)
 - Ini akan membuka form pencatatan sesuai tipe yang dipilih
 
 ### 8️⃣ Catat Pemasukan
+
 - Isi **Judul** (nama transaksi), **Kategori**, **Akun** (tujuan), **Nominal** (jumlah uang masuk), **Tanggal**
 - Klik **Simpan** → transaksi masuk ke daftar
 
 ### 9️⃣ Catat Pengeluaran
+
 - Isi **Judul** (nama transaksi), **Kategori**, **Akun** (sumber uang), **Nominal** (jumlah uang keluar), **Tanggal**
 - Klik **Simpan** → pengeluaran tercatat
 
 ### 🔟 Transfer Antar-Akun
+
 - **Dari akun**: akun pengirim
 - **Ke akun**: akun penerima
 - **Nominal transfer**: jumlah yang dipindahkan
@@ -339,6 +368,7 @@
 - Klik **Kirim** → transfer selesai, saldo kedua akun berubah
 
 ### 1️⃣1️⃣ Dashboard dengan Data
+
 - **Saldo Total**: diperbarui setelah transaksi baru
 - **Chart**: menunjukkan pemasukan dan pengeluaran
 - **Donut Chart**: pengeluaran per kategori (Belanja, Makan, dll)
@@ -347,12 +377,14 @@
 - **Target Tabungan**: progress target tabungan
 
 ### 1️⃣2️⃣ Atur Batas Belanja (Budget)
+
 - Masuk ke bagian **Anggaran**
 - Atur batas belanja per kategori: **Kategori** dan **Batas per bulan**
 - Klik **Simpan** → sistem akan memperingatkan jika pengeluaran mendekati atau melebihi batas
 - Status: ✅ **Aman** / ⚠️ **Warning** / ❌ **Jebol**
 
 ### 1️⃣3️⃣ Buat Target Tabungan
+
 - Masuk ke bagian **Target Tabungan**
 - Isi form **"Buat target tabungan"**:
   - **Nama**: nama target
@@ -361,6 +393,7 @@
 - Klik **Simpan** → target tabungan aktif
 
 ### 1️⃣4️⃣ Kelola Dana Tabungan
+
 - Masuk ke detail target tabungan
 - **Total ditabung**: progress dari target
 - **Progress bar**: visualisasi % pencapaian
@@ -369,24 +402,28 @@
   - **Tarik** — tarik dana dari target (jika diperlukan)
 
 ### 1️⃣5️⃣ Kelola Kategori
+
 - Buka menu **Kategori**
 - Ada dua tab: **Pengeluaran** & **Pemasukan**
 - Setiap kategori punya warna dan ikon khusus
 - Klik **+** untuk menambah kategori baru atau edit yang sudah ada
 
 ### 1️⃣6️⃣ Buat Transaksi Otomatis (Recurring)
+
 - Masuk ke bagian **Jadwal Rutin**
 - Klik **+ Buat transaksi otomatis**
 - Isi: **Nama**, **Tipe** (Pemasukan/Pengeluaran), **Kategori**, **Akun**, **Nominal**, **Frekuensi** (mingguan/bulanan/tahunan), **Mulai tanggal**, **Berakhir**
 - Sistem akan **otomatis membuat transaksi** setiap bulan sesuai jadwal
 
 ### 1️⃣7️⃣ Catat Utang / Piutang
+
 - Masuk ke bagian **Utang & Piutang**
 - Klik **+ Catat Utang**
 - Isi: **Nama** (siapa yang berutang), **Nominal** (total utang), **Cicilan** (sekaliigs/lunas atau cicilan), **Jatuh tempo** (deadline), **Catatan**
 - Klik **Simpan** → utang tercatat dan bisa dilacak
 
 ### 1️⃣8️⃣ Aktivitas Terbaru & Pencarian
+
 - **Aktivitas terbaru**: daftar semua transaksi terakhir
 - **Search**: cari transaksi berdasarkan nama/isi
 - **Filter**: filter berdasarkan tipe (pemasukan/pengeluaran/transfer)
@@ -394,6 +431,7 @@
 - Klik transaksi untuk **edit** atau **hapus**
 
 ### 1️⃣9️⃣ Kalender Arus Kas
+
 - Lihat **kalender interaktif** untuk bulan tertentu
 - Setiap hari menampilkan:
   - **Masuk** (pemasukan, warna hijau)
@@ -402,6 +440,7 @@
 - Navigasi: panah kiri/kanan untuk bulan sebelumnya/sesudahnya
 
 ### 2️⃣0️⃣ Rekap Bulanan (Laporan)
+
 - Masuk ke bagian **Laporan**
 - Pilih bulan yang diinginkan
 - Rekap menampilkan: **Pemasukan**, **Pengeluaran**, **Arus bersih**, **Total transaksi**
@@ -411,6 +450,7 @@
   - **Donut Chart** — visualisasi pengeluaran per kategori
 
 ### 2️⃣1️⃣ Logout
+
 - Klik **ikon profil** (pojok kanan atas)
 - Pilih **Logout** → keluar dari akun
 - Aplikasi kembali ke halaman login
@@ -419,39 +459,39 @@
 
 ## 📖 Quick Reference
 
-| No | Fitur | Tujuan |
-|----|-------|--------|
-| 1-3 | Login & Akun | Masuk dengan Google OAuth |
-| 4 | Dashboard | Overview keuangan |
-| 5-6 | Akun Bank | Kelola rekening bank |
-| 7-9 | Transaksi | Catat pemasukan & pengeluaran |
-| 10 | Transfer | Pindahkan uang antar-akun |
-| 11-12 | Budget | Atur batas pengeluaran |
-| 13-14 | Tabungan | Buat & kelola target simpanan |
-| 15 | Kategori | Atur klasifikasi transaksi |
-| 16 | Recurring | Transaksi otomatis berulang |
-| 17 | Utang & Piutang | Lacak pinjaman |
-| 18 | Cari & Filter | Temukan transaksi spesifik |
-| 19 | Kalender | Lihat arus kas per hari |
-| 20 | Laporan | Export & print laporan bulanan |
-| 21 | Logout | Keluar dari aplikasi |
+| No    | Fitur           | Tujuan                         |
+| ----- | --------------- | ------------------------------ |
+| 1-3   | Login & Akun    | Masuk dengan Google OAuth      |
+| 4     | Dashboard       | Overview keuangan              |
+| 5-6   | Akun Bank       | Kelola rekening bank           |
+| 7-9   | Transaksi       | Catat pemasukan & pengeluaran  |
+| 10    | Transfer        | Pindahkan uang antar-akun      |
+| 11-12 | Budget          | Atur batas pengeluaran         |
+| 13-14 | Tabungan        | Buat & kelola target simpanan  |
+| 15    | Kategori        | Atur klasifikasi transaksi     |
+| 16    | Recurring       | Transaksi otomatis berulang    |
+| 17    | Utang & Piutang | Lacak pinjaman                 |
+| 18    | Cari & Filter   | Temukan transaksi spesifik     |
+| 19    | Kalender        | Lihat arus kas per hari        |
+| 20    | Laporan         | Export & print laporan bulanan |
+| 21    | Logout          | Keluar dari aplikasi           |
 
 ---
 
 ## 🛠️ Teknologi
 
-| Layer | Technology |
-|-------|-----------|
-| **Framework** | [Next.js 14](https://nextjs.org/) (App Router) |
-| **Language** | [TypeScript](https://www.typescriptlang.org/) |
-| **Auth** | [NextAuth.js](https://next-auth.js.org/) + Google OAuth |
-| **Database** | [MySQL](https://www.mysql.com/) (cloud) |
-| **Styling** | Custom CSS + Tailwind-ready |
-| **OCR** | [Tesseract.js](https://github.com/naptha/tesseract.js) |
-| **PDF** | [jsPDF](https://github.com/parallax/jsPDF) |
-| **Hosting** | [Vercel](https://vercel.com/) |
+| Layer         | Technology                                                      |
+| ------------- | --------------------------------------------------------------- |
+| **Framework** | [Next.js 14](https://nextjs.org/) (App Router)                  |
+| **Language**  | [TypeScript](https://www.typescriptlang.org/)                   |
+| **Auth**      | [NextAuth.js](https://next-auth.js.org/) + Google OAuth         |
+| **Database**  | [MySQL](https://www.mysql.com/) (cloud)                         |
+| **Styling**   | Custom CSS + Tailwind-ready                                     |
+| **OCR**       | [Tesseract.js](https://github.com/naptha/tesseract.js)          |
+| **PDF**       | [jsPDF](https://github.com/parallax/jsPDF)                      |
+| **Hosting**   | [Vercel](https://vercel.com/)                                   |
 | **Analytics** | [Vercel Speed Insights](https://vercel.com/docs/speed-insights) |
-| **CI/CD** | GitHub Actions |
+| **CI/CD**     | GitHub Actions                                                  |
 
 ---
 
@@ -469,6 +509,7 @@ Monitoring performa otomatis via [Vercel Speed Insights](https://vercel.com/docs
 ## 🚀 Instalasi
 
 ### Prasyarat
+
 - [Node.js](https://nodejs.org/) ≥ 18
 - [MySQL](https://www.mysql.com/) database
 - [Google Cloud Console](https://console.cloud.google.com/) account (untuk OAuth)
@@ -581,6 +622,7 @@ Ruang-Saku/
 ![Build Status](https://github.com/yovie21/Ruang-Saku/actions/workflows/deploy.yml/badge.svg)
 
 GitHub Actions otomatis menjalankan:
+
 - **Lint & Typecheck** → setiap push/pull request
 - **Build Test** → verifikasi build berhasil
 - **Auto Deploy** → deploy ke Vercel setelah push ke `main`
