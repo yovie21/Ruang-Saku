@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0e1513"/>
+      <stop offset="100%" style="stop-color:#162220"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#286c56"/>
+      <stop offset="100%" style="stop-color:#219368"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a2f28"/>
+      <stop offset="100%" style="stop-color:#0e1513"/>
+    </linearGradient>
+  </defs>
+  
+  <rect width="800" height="500" fill="url(#bg)"/>
+  
+  <!-- Sidebar -->
+  <rect x="0" y="0" width="60" height="500" fill="#0a100d"/>
+  <rect x="0" y="0" width="60" height="60" fill="url(#accent)"/>
+  <text x="30" y="40" font-family="'Segoe UI', sans-serif" font-size="24" fill="#d9f348" text-anchor="middle">r</text>
+  <rect x="10" y="140" width="40" height="40" rx="8" fill="#286c56" opacity="0.3"/>
+  <rect x="20" y="152" width="20" height="3" rx="1.5" fill="#286c56"/>
+  <rect x="20" y="160" width="15" height="3" rx="1.5" fill="#286c56" opacity="0.6"/>
+  <rect x="20" y="168" width="18" height="3" rx="1.5" fill="#286c56" opacity="0.6"/>
+  
+  <!-- Top bar -->
+  <rect x="60" y="0" width="740" height="60" fill="#0a100d"/>
+  <text x="80" y="35" font-family="'Segoe UI', sans-serif" font-size="20" fill="#fbfcfa" font-weight="600">Laporan — Mei 2026</text>
+  <select x="600" y="85" width="140" height="25" rx="5" fill="#1a2f28"/>
+  <text x="615" y="102" font-family="'Segoe UI', sans-serif" font-size="12" fill="#8ca39e">Jun 2026 ▼</text>
+  
+  <!-- Summary Cards -->
+  <rect x="80" y="80" width="160" height="80" rx="12" fill="url(#cardGrad)" stroke="#1a2f28"/>
+  <text x="100" y="100" font-family="'Segoe UI', sans-serif" font-size="11" fill="#8ca39e">Masuk</text>
+  <text x="100" y="130" font-family="'Segoe UI', sans-serif" font-size="22" fill="#219368" font-weight="700">Rp 8.2M</text>
+  <text x="100" y="145" font-family="'Segoe UI', sans-serif" font-size="10" fill="#219368">↑ +12.5%</text>
+  
+  <rect x="256" y="80" width="160" height="80" rx="12" fill="url(#cardGrad)" stroke="#1a2f28"/>
+  <text x="276" y="100" font-family="'Segoe UI', sans-serif" font-size="11" fill="#8ca39e">Keluar</text>
+  <text x="276" y="130" font-family="'Segoe UI', sans-serif" font-size="22" fill="#ed705f" font-weight="700">Rp 5.7M</text>
+  <text x="276" y="145" font-family="'Segoe UI', sans-serif" font-size="10" fill="#ed705f">↓ -3.2%</text>
+  
+  <rect x="432" y="80" width="160" height="80" rx="12" fill="url(#cardGrad)" stroke="#1a2f28"/>
+  <text x="452" y="100" font-family="'Segoe UI', sans-serif" font-size="11" fill="#8ca39e">Bersih</text>
+  <text x="452" y="130" font-family="'Segoe UI', sans-serif" font-size="22" fill="#fbfcfa" font-weight="700">Rp 2.4M</text>
+  <text x="452" y="145" font-family="'Segoe UI', sans-serif" font-size="10" fill="#219368">↑ +15.8%</text>
+  
+  <rect x="608" y="80" width="112" height="80" rx="12" fill="url(#cardGrad)" stroke="#1a2f28"/>
+  <text x="628" y="100" font-family="'Segoe UI', sans-serif" font-size="11" fill="#8ca39e">Net Rate</text>
+  <text x="628" y="130" font-family="'Segoe UI', sans-serif" font-size="22" fill="#d9f348" font-weight="700">29.5%</text>
+  <text x="628" y="145" font-family="'Segoe UI', sans-serif" font-size="10" fill="#219368">↑ +5%</text>
+  
+  <!-- Donut Chart -->
+  <rect x="80" y="180" width="250" height="250" rx="12" fill="url(#cardGrad)" stroke="#1a2f28"/>
+  <text x="100" y="205" font-family="'Segoe UI', sans-serif" font-size="14" fill="#fbfcfa" font-weight="600">Pengeluaran per Kategori</text>
+  
+  <!-- Donut -->
+  <circle cx="205" cy="260" r="60" fill="none" stroke="#286c56" stroke-width="20" stroke-dasharray="120 380" stroke-dashoffset="0" transform="rotate(-90 205 260)"/>
+  <circle cx="205" cy="260" r="60" fill="none" stroke="#3e77cf" stroke-width="20" stroke-dasharray="80 380" stroke-dashoffset="-120" transform="rotate(-90 205 260)"/>
+  <circle cx="205" cy="260" r="60" fill="none" stroke="#ed705f" stroke-width="20" stroke-dasharray="60 380" stroke-dashoffset="-200" transform="rotate(-90 205 260)"/>
+  <circle cx="205" cy="260" r="60" fill="none" stroke="#c98a2d" stroke-width="20" stroke-dasharray="40 380" stroke-dashoffset="-260" transform="rotate(-90 205 260)"/>
+  <circle cx="205" cy="260" r="60" fill="none" stroke="#7c5cc9" stroke-width="20" stroke-dasharray="30 380" stroke-dashoffset="-300" transform="rotate(-90 205 260)"/>
+  <circle cx="205" cy="260" r="40" fill="#0e1513"/>
+  <text x="205" y="255" font-family="'Segoe UI', sans-serif" font-size="16" fill="#fbfcfa" text-anchor="middle" font-weight="700">Rp 5.7M</text>
+  <text x="205" y="275" font-family="'Segoe UI', sans-serif" font-size="10" fill="#8ca39e" text-anchor="middle">Total</text>
+  
+  <!-- Legend -->
+  <rect x="100" y="330" width="10" height="10" rx="2" fill="#286c56"/>
+  <text x="118" y="339" font-family="'Segoe UI', sans-serif" font-size="10" fill="#8ca39e">Makanan • 32%</text>
+  <rect x="180" y="330" width="10" height="10" rx="2" fill="#3e77cf"/>
+  <text x="198" y="339" font-family="'Segoe UI', sans-serif" font-size="10" fill="#8ca39e">Transport • 21%</text>
+  <rect x="280" y="330" width="10" height="10" rx="2" fill="#ed705f"/>
+  <text x="298" y="339" font-family="'Segoe UI', sans-serif" font-size="10" fill="#8ca39e">Hiburan • 16%</text>
+  
+  <!-- Bar Chart Area -->
+  <rect x="370" y="180" width="350" height="250" rx="12" fill="url(#cardGrad)" stroke="#1a2f28"/>
+  <text x="390" y="205" font-family="'Segoe UI', sans-serif" font-size="14" fill="#fbfcfa" font-weight="600">Tren Pendapatan 6 Bulan</text>
+  
+  <!-- Bar chart -->
+  <rect x="400" y="330" width="30" height="70" rx="4" fill="#219368" opacity="0.6"/>
+  <rect x="440" y="320" width="30" height="80" rx="4" fill="#219368" opacity="0.6"/>
+  <rect x="480" y="305" width="30" height="95" rx="4" fill="#219368" opacity="0.6"/>
+  <rect x="520" y="295" width="30" height="105" rx="4" fill="#219368" opacity="0.6"/>
+  <rect x="560" y="300" width="30" height="100" rx="4" fill="#219368" opacity="0.6"/>
+  <rect x="600" y="280" width="30" height="120" rx="4" fill="#219368" opacity="0.8"/>
+  
+  <rect x="405" y="350" width="30" height="50" rx="4" fill="#ed705f" opacity="0.4"/>
+  <rect x="445" y="345" width="30" height="55" rx="4" fill="#ed705f" opacity="0.4"/>
+  <rect x="485" y="335" width="30" height="65" rx="4" fill="#ed705f" opacity="0.4"/>
+  <rect x="525" y="325" width="30" height="75" rx="4" fill="#ed705f" opacity="0.4"/>
+  <rect x="565" y="330" width="30" height="70" rx="4" fill="#ed705f" opacity="0.4"/>
+  <rect x="605" y="315" width="30" height="85" rx="4" fill="#ed705f" opacity="0.4"/>
+  
+  <!-- Month labels -->
+  <text x="415" y="400" font-family="'Segoe UI', sans-serif" font-size="9" fill="#8ca39e" text-anchor="middle">Jan</text>
+  <text x="455" y="400" font-family="'Segoe UI', sans-serif" font-size="9" fill="#8ca39e" text-anchor="middle">Feb</text>
+  <text x="495" y="400" font-family="'Segoe UI', sans-serif" font-size="9" fill="#8ca39e" text-anchor="middle">Mar</text>
+  <text x="535" y="400" font-family="'Segoe UI', sans-serif" font-size="9" fill="#8ca39e" text-anchor="middle">Apr</text>
+  <text x="575" y="400" font-family="'Segoe UI', sans-serif" font-size="9" fill="#8ca39e" text-anchor="middle">Mei</text>
+  <text x="615" y="400" font-family="'Segoe UI', sans-serif" font-size="9" fill="#8ca39e" text-anchor="middle">Jun</text>
+  
+  <!-- Bottom info -->
+  <rect x="80" y="445" width="640" height="35" rx="8" fill="#1a2f28"/>
+  <text x="100" y="460" font-family="'Segoe UI', sans-serif" font-size="12" fill="#fbfcfa">📊 Rekonsiliasi: Saldo total = Rp 12.45M ✓ Terverifikasi</text>
+  <text x="500" y="460" font-family="'Segoe UI', sans-serif" font-size="12" fill="#219368">29.5% net rate • Baik</text>
+  
+  <!-- Footer -->
+  <text x="400" y="480" font-family="'Segoe UI', sans-serif" font-size="10" fill="#8ca39e" text-anchor="middle">Ruang Saku — Laporan • Data akurat per 31 Mei 2026</text>
+</svg>

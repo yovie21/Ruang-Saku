@@ -118,6 +118,30 @@
 
 ---
 
+## 📸 Screenshot
+
+### 🏠 Dashboard
+
+![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-dashboard.svg)
+
+### 📝 Transaksi
+
+![Transactions](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-transactions.svg)
+
+### 📊 Laporan & Analytics
+
+![Analytics](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-analytics.svg)
+
+### 🔐 Login & Keamanan
+
+![Login](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-login.svg)
+
+### ⚙️ Pengaturan
+
+![Settings](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-settings.svg)
+
+---
+
 ## 🛠️ Teknologi
 
 | Layer | Technology |
