@@ -1,0 +1,58 @@
+name: Bug Report
+description: Laporkan bug untuk memperbaiki aplikasi
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      description: |
+        Terima kasih sudah melaporkan bug! Pastikan deskripsi jelas dan langkah reproduksi lengkap.
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Langkah Reproduksi
+      description: |
+        Langkah-langkah untuk mereproduksi bug:
+      placeholder: |
+        1. Buka halaman ...
+        2. Klik ...
+        3. Masukkan ...
+        4. Lihat error ...
+      render: markdown
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Perilaku yang Diharapkan
+      description: Apa yang seharusnya terjadi
+      placeholder: "Halaman harus menampilkan ..."
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Perilaku Aktual
+      description: Apa yang sebenarnya terjadi
+      placeholder: "Error message: ..."
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot / Video
+      description: Jika ada, lampirkan screenshot atau video bug
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Browser, OS, dan informasi lain
+      placeholder: |
+        Browser: Chrome/Firefox/Safari
+        OS: Windows/Mac/Linux
+        Node: vXX.X.X
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informasi Tambahan
+      description: Hal lain yang relevan

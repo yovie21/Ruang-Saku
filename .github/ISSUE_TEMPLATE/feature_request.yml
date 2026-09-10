@@ -1,0 +1,35 @@
+name: Feature Request
+description: Ajukan fitur baru untuk Ruang Saku
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      description: |
+        Ceritakan fitur yang Anda inginkan dengan detail sekomprehensif mungkin.
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Mengapa Fitur Ini?
+      description: Jelaskan masalah yang akan dipecahkan oleh fitur ini
+      placeholder: "Saya ingin bisa ... karena ..."
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Deskripsi Fitur
+      description: Jelaskan fitur yang diinginkan secara detail
+      placeholder: "Fitur ini akan memungkinkan ..."
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatif Lain
+      description: Solusi lain yang pernah Anda pertimbangkan
+  - type: textarea
+    id: additional
+    attributes:
+      label: Informasi Tambahan
+      description: Screenshot, mockup, atau referensi lain

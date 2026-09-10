@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Butuh bantuan?
+    url: https://github.com/yovie21/Ruang-Saku/discussions
+    about: Gunakan Discussions untuk pertanyaan, bukan isu.
+  - name: 🐛 Lapor bug
+    url: https://github.com/yovie21/Ruang-Saku/issues/new?template=bug_report.yml
+    about: Bug yang terkonfirmasi, gunakan template ini.
+  - name: ✨ Ajukan fitur
+    url: https://github.com/yovie21/Ruang-Saku/issues/new?template=feature_request.yml
+    about: Saran fitur baru, gunakan template ini.
