@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Ruang Saku">
+  <defs>
+    <linearGradient id="rs-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1e5c46"/>
+      <stop offset="0.55" stop-color="#2e8f6b"/>
+      <stop offset="1" stop-color="#6a67e8"/>
+    </linearGradient>
+    <linearGradient id="rs-coin" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f2ff9e"/>
+      <stop offset="1" stop-color="#d9f348"/>
+    </linearGradient>
+  </defs>
+  <rect x="8" y="8" width="240" height="240" rx="58" fill="url(#rs-bg)"/>
+  <rect x="8" y="8" width="240" height="240" rx="58" fill="none" stroke="#ffffff" stroke-opacity="0.18" stroke-width="3"/>
+  <!-- Saku / dompet -->
+  <path d="M62 118 Q62 96 84 96 L110 96 L128 114 L146 96 L172 96 Q194 96 194 118 L194 176 Q194 198 172 198 L84 198 Q62 198 62 176 Z" fill="#ffffff" fill-opacity="0.16"/>
+  <path d="M62 124 L128 166 L194 124 L194 176 Q194 198 172 198 L84 198 Q62 198 62 176 Z" fill="#0e2a22" fill-opacity="0.28"/>
+  <!-- Koin Rp -->
+  <circle cx="128" cy="128" r="40" fill="url(#rs-coin)"/>
+  <circle cx="128" cy="128" r="40" fill="none" stroke="#1e5c46" stroke-opacity="0.25" stroke-width="3"/>
+  <circle cx="128" cy="128" r="31" fill="none" stroke="#1e5c46" stroke-opacity="0.35" stroke-width="2.5"/>
+  <text x="128" y="142" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-weight="700" font-size="38" fill="#1e5c46">R</text>
+  <!-- Kilau -->
+  <circle cx="180" cy="66" r="10" fill="#ffffff" fill-opacity="0.28"/>
+  <circle cx="200" cy="86" r="5" fill="#ffffff" fill-opacity="0.22"/>
+</svg>

@@ -1,0 +1,16 @@
+
+{
+  "name": "Ruang Saku — Keuangan Pribadi",
+  "short_name": "Ruang Saku",
+  "description": "Catat keuangan pribadi dengan lebih tenang.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e1513",
+  "theme_color": "#286c56",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
