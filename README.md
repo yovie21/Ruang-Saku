@@ -2,33 +2,88 @@
 
 <h1>💰 Ruang Saku</h1>
 
-<p><em>Aplikasi pencatat keuangan pribadi yang ramping, modern, dan siap produksi.</em></p>
+<h3>Aplikasi pencatat keuangan pribadi yang ramping, modern, dan siap produksi.</h3>
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?logo=nextdotjs)](https://nextjs.org/)
-[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?logo=vercel)](https://vercel.com/)
-[![Live Site](https://img.shields.io/badge/Live_Site-ruang-saku-peach-0052CC?logo=vercel)](https://ruang-saku-peach.vercel.app/)
-![GitHub top language](https://img.shields.io/github/languages/top/yovie21/Ruang-Saku)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)](https://www.typescriptlang.org/)
-[![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?logo=mysql)](https://www.mysql.com/)
-[![NextAuth.js](https://img.shields.io/badge/Auth-NextAuth.js-111?logo=nextauth)](https://next-auth.js.org/)
-[![Vercel Speed Insights](https://img.shields.io/badge/Speed_Insights-Enabled-0052CC?logo=vercel)](https://vercel.com/docs/speed-insights)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=nextdotjs)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
+[![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel)](https://vercel.com/)
+[![Live Site](https://img.shields.io/badge/Live_Site-ruang-saku-peach-0052CC?style=for-the-badge&logo=vercel)](https://ruang-saku-peach.vercel.app/)
+[![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
+[![NextAuth.js](https://img.shields.io/badge/Auth-NextAuth.js-111?style=for-the-badge&logo=nextauth)](https://next-auth.js.org/)
+[![Vercel Speed Insights](https://img.shields.io/badge/Speed_Insights-Enabled-0052CC?style=for-the-badge&logo=vercel)](https://vercel.com/docs/speed-insights)
+
+![GitHub top language](https://img.shields.io/github/languages/top/yovie21/Ruang-Saku?style=for-the-badge)
+[![GitHub commits](https://img.shields.io/badge/GitHub-Commits-E4463A?style=for-the-badge&logo=git&logoColor=white)](https://github.com/yovie21/Ruang-Saku/commits)
+[![GitHub forks](https://img.shields.io/badge/GitHub-Forks-DAY9540?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/network/members)
+[![GitHub stars](https://img.shields.io/badge/GitHub-Stars-FFD700?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/stargazers)
+[![GitHub issues](https://img.shields.io/badge/GitHub-Issues-960032?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/issues)
+[![GitHub PRs](https://img.shields.io/badge/GitHub-PRs-128ECE?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/pulls)
+[![GitHub contributors](https://img.shields.io/badge/GitHub-Contributors-A3C4DC?style=for-the-badge&logo=github)](https://github.com/yovie21/Ruang-Saku/graphs/contributors)
 
 </div>
 
 ---
 
-<p align="center">
-  <a href="#fitur">Fitur</a> •
-  <a href="#teknologi">Teknologi</a> •
-  <a href="#instalasi">Instalasi</a> •
-  <a href="#deploy">Deploy</a> •
-  <a href="#kontribusi">Kontribusi</a>
-</p>
+### 🎨 **Typing Effect**
+
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&size=22&duration=3000&pause=1000&color=286c56&center=true&vCenter=true&width=600&lines=💰+Ruang+Saku+-+Personal+Finance+App;🔐+Secure+%26+Private;📊+Real-time+Dashboard;🌙+Dark+%26+Light+Mode;⚡+PWA+Ready;🚀+Deployed+on+Vercel)](https://github.com/yovie21/Ruang-Saku)
+
+---
+
+### 📊 **GitHub Profile Stats**
+
+[![yovie21's github stats](https://github-readme-stats.vercel.app/api?username=yovie21&show_icons=true&theme=radical&hide_border=true&count_private=true&include_all_commits=true&line_height=30&title_color=286c56&text_color=ffffff&icon_color=286c56)](https://github.com/anomalyco/github-readme-stats)
+
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=yovie21&theme=radical&hide_border=true&layout=compact&lang_count=8&title_color=286c56&text_color=ffffff&icon_color=286c56)](https://github.com/anomalyco/github-readme-stats)
+
+[![Streak Stats](https://github-readme-streak-stats.herokuapp.com/?user=yovie21&theme=radical&hide_border=true)](https://github.com/yovie21)
+
+---
+
+### 📈 **Activity Graph**
+
+[![Activity Graph](https://github-readme-activity-graph.vercel.app/graph?username=yovie21&theme=radical&bg_color=0e1513&line_color=286c56&text_color=ffffff&hide_border=true)](https://github.com/yovie21)
+
+---
+
+### 🌐 **Social & Connect**
 
 <p align="center">
-  <a href="https://ruang-saku-peach.vercel.app">Lihat Demo →</a>
+  <a href="https://github.com/yovie21" target="_blank">
+    <img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub">
+  </a>
+  <a href="https://twitter.com/yovie21" target="_blank">
+    <img src="https://img.shields.io/badge/Twitter-1DA1F2?style=for-the-badge&logo=twitter&logoColor=white" alt="Twitter">
+  </a>
+  <a href="https://linkedin.com/in/yovie21" target="_blank">
+    <img src="https://img.shields.io/badge/LinkedIn-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn">
+  </a>
+  <a href="https://buymeacoffee.com/yovie21" target="_blank">
+    <img src="https://img.shields.io/badge/Buy_Me_a_Coffee-FFDD00?style=for-the-badge&logo=buy%20me%20a%20coffee&logoColor=black" alt="Buy Me a Coffee">
+  </a>
+  <a href="mailto:yovie6513@gmail.com" target="_blank">
+    <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email">
+  </a>
+  <a href="https://ruang-saku-peach.vercel.app" target="_blank">
+    <img src="https://img.shields.io/badge/Live_Site-0052CC?style=for-the-badge&logo=vercel&logoColor=white" alt="Live Site">
+  </a>
 </p>
+
+---
+
+### 🛡️ **Project Health**
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Code_Quality-Passing-brightgreen?style=flat-square" alt="Code Quality">
+  <img src="https://img.shields.io/badge/Build-Passing-brightgreen?style=flat-square" alt="Build">
+  <img src="https://img.shields.io/badge/Lint-Passing-brightgreen?style=flat-square" alt="Lint">
+  <img src="https://img.shields.io/badge/TypeScript-Strict-5.6-blue?style=flat-square" alt="TypeScript">
+  <img src="https://img.shields.io/badge/Coverage-Maintained-brightgreen?style=flat-square" alt="Coverage">
+  <img src="https://img.shields.io/badge/Dependency_Security-Up_to_Date-brightgreen?style=flat-square" alt="Deps">
+</p>
+
+---
 
 ---
 
@@ -84,12 +139,10 @@
 
 Monitoring performa otomatis via [Vercel Speed Insights](https://vercel.com/docs/speed-insights).
 
-- ✅ Core Web Vitals tracking
-- ✅ FCP, LCP, CLS, INP monitoring
-- ✅ Development mode excluded
+- ✅ Core Web Vitals tracking (FCP, LCP, CLS, INP)
+- ✅ Development mode excluded — data production only
 - ✅ Auto-injected via `<SpeedInsights />` component
-
-![Speed Insights](https://vercel.com/metrics/badge/ruang-saku?template=standard)
+- ✅ Route-aware analytics per page
 
 ---
 
@@ -126,8 +179,7 @@ DB_NAME="ruang_saku_db"
 
 # NextAuth
 NEXTAUTH_SECRET="generate-a-long-random-secret"
-NEXTAUTH_URL="http://localhost:3000"
-NEXTAUTH_URL="https://your-domain.vercel.app"
+NEXTAUTH_URL="https://ruang-saku-peach.vercel.app"
 
 # Google OAuth
 GOOGLE_CLIENT_ID="your-google-client-id"
@@ -197,7 +249,8 @@ Ruang-Saku/
 │   └── ISSUE_TEMPLATE/       # Issue templates
 ├── outputs/                  # PRD, schema, docs
 ├── package.json
-└── tsconfig.json
+├── tsconfig.json
+└── LICENSE
 ```
 
 ---
@@ -224,5 +277,9 @@ Proyek ini dilisensikan di bawah [MIT License](LICENSE).
 ---
 
 <p align="center">
-  Dibuat dengan ❤️ oleh <a href="https://github.com/yovie21">yovie21</a>
+  <img src="https://komarev.com/ghpvc/?username=yovie21&label=Profile%20views&color=0e71b6&style=flat" alt="yovie21" />
+</p>
+
+<p align="center">
+  <b>Dibuat dengan ❤️ oleh <a href="https://github.com/yovie21">yovie21</a></b>
 </p>

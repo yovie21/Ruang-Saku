@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0e1513"/>
+      <stop offset="100%" style="stop-color:#1a2f28"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#286c56"/>
+      <stop offset="100%" style="stop-color:#219368"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%">
+      <stop offset="0%" style="stop-color:#286c56;stop-opacity:0.3"/>
+      <stop offset="100%" style="stop-color:#286c56;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="800" cy="-100" r="400" fill="url(#glow)"/>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#bg)"/>
+  <rect x="0" y="0" width="6" height="630" fill="url(#accent)"/>
+  <text x="80" y="150" font-family="'Segoe UI', sans-serif" font-size="72" font-weight="700" fill="#fbfcfa">💰 Ruang Saku</text>
+  <text x="80" y="210" font-family="'Segoe UI', sans-serif" font-size="28" fill="#8ca39e">Personal Finance App</text>
+  <text x="80" y="250" font-family="'Segoe UI', sans-serif" font-size="18" fill="#286c56">Built with Next.js • TypeScript • Vercel</text>
+  <rect x="80" y="280" width="300" height="50" rx="25" fill="url(#accent)"/>
+  <text x="200" y="310" font-family="'Segoe UI', sans-serif" font-size="20" fill="#ffffff" text-anchor="middle">Live Demo</text>
+  <rect x="80" y="350" width="200" height="5" rx="2.5" fill="#286c56" opacity="0.3"/>
+  <rect x="80" y="360" width="150" height="5" rx="2.5" fill="#219368" opacity="0.5"/>
+  <circle cx="1120" cy="580" r="30" fill="none" stroke="#286c56" stroke-width="2" opacity="0.5"/>
+  <text x="1120" y="585" font-family="'Segoe UI', sans-serif" font-size="16" fill="#286c56" text-anchor="middle">→</text>
+  <text x="1080" y="540" font-family="'Segoe UI', sans-serif" font-size="14" fill="#8ca39e" text-anchor="middle">yovie21</text>
+</svg>

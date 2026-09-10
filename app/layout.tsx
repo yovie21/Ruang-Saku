@@ -17,6 +17,29 @@ export const metadata: Metadata = {
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" }
     ],
     apple: [{ url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" }]
+  },
+  openGraph: {
+    title: "Ruang Saku — Aplikasi Keuangan Pribadi",
+    description: "Catat keuangan pribadi dengan lebih tenang.",
+    type: "website",
+    url: "https://ruang-saku-peach.vercel.app",
+    images: [
+      {
+        url: "/og-image.svg",
+        width: 1200,
+        height: 630,
+        alt: "Ruang Saku",
+        type: "image/svg+xml"
+      }
+    ],
+    siteName: "Ruang Saku"
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@yovie21",
+    title: "Ruang Saku — Aplikasi Keuangan Pribadi",
+    description: "Catat keuangan pribadi dengan lebih tenang.",
+    images: ["/og-image.svg"]
   }
 };
 

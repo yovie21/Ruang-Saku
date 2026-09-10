@@ -1,3 +1,38 @@
 {
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "regions": ["iad1", "sfo1"],
+  "env": {
+    "NEXTAUTH_URL": "@NEXTAUTH_URL",
+    "DATABASE_URL": "@DATABASE_URL",
+    "VERCEL_SPEED_INSIGHTS_ID": "@VERCEL_SPEED_INSIGHTS_ID"
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-DNS-Prefetch-Control",
+          "value": "on"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=63072000; includeSubDomains; preload"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        }
+      ]
+    }
+  ],
+  "crons": [
+    {
+      "path": "/api/recurring/run",
+      "schedule": "0 0 6 * * *"
+    }
+  ]
 }
