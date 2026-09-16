@@ -294,6 +294,8 @@ export default function Home() {
   const [payDebtCategory, setPayDebtCategory] = useState("");
   const [payDebtAccount, setPayDebtAccount] = useState("");
   const [guideModal, setGuideModal] = useState(false);
+  const [revealed, setRevealed] = useState(false);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   async function shaPin(pin: string): Promise<string> {
     const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("ruang-saku:" + pin));
@@ -1367,6 +1369,21 @@ export default function Home() {
     }
     return out;
   }, [transactions, budgetProgress, goals, goalProgress]);
+
+  useEffect(() => {
+    if (loading) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    const els = document.querySelectorAll('.reveal');
+    els.forEach(el => observer.observe(el));
+    setRevealed(true);
+    return () => observer.disconnect();
+  }, [loading]);
 
   useEffect(() => {
     for (const b of budgetProgress) {
@@ -2948,7 +2965,7 @@ export default function Home() {
 
   const today = new Date().toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
-  return <main>
+   return <main ref={mainRef}>
     {menu && <div className="sidebar-backdrop" onClick={() => setMenu(false)} />}
     <aside className={menu ? "sidebar open" : "sidebar"}>
       <div className="brand"><img className="brand-mark-img" src="/logo.svg" alt="Ruang Saku" width={34} height={34} /><span>ruang<span>saku</span></span></div>
@@ -3013,7 +3030,7 @@ export default function Home() {
           </div>}
       </section>}
       <div className="mobile-add"><button className="add-button" onClick={openTransactionDialog}>＋ Catat transaksi</button><button className="transfer-button" onClick={openTransferModal}>⇄ Transfer</button><button className="transfer-button" onClick={() => setReportModal(true)}>▤ Laporan</button></div>
-      <section className="summary">
+      <section className="summary reveal">
         <div className="balance-card">
           <div className="balance-top"><span>Saldo total (semua waktu)</span></div>
           <h2>{maskRp(total)}</h2>
@@ -3028,10 +3045,10 @@ export default function Home() {
           <div><p>Pengeluaran (semua waktu)</p><h3>{maskRp(expense)}</h3></div>
         </div>
       </section>
-      <section className="content-grid">
+      <section className="content-grid reveal">
         <div className="main-column">
           <div className="insight-grid">
-            <div className="insight-card">
+            <div className="insight-card reveal reveal-delay-1">
               <div className="section-title">
                 <div><h2>Arus 30 hari</h2><p>Pemasukan vs pengeluaran harian</p></div>
               </div>
@@ -3046,7 +3063,7 @@ export default function Home() {
               </div>
               <div className="bar-labels"><span>{trend30[0]?.label}</span><span>{trend30[trend30.length - 1]?.label}</span></div>
             </div>
-            <div className="insight-card">
+            <div className="insight-card reveal reveal-delay-2">
               <div className="section-title">
                 <div><h2>Pengeluaran</h2><p>Berdasarkan kategori</p></div>
               </div>
@@ -3063,7 +3080,7 @@ export default function Home() {
               </>}
             </div>
           </div>
-          <div className="insight-card insight-wide">
+          <div className="insight-card insight-wide reveal reveal-delay-3">
             <div className="section-title">
               <div><h2>Kalender arus kas</h2><p>{calData.label} • masuk {maskRp(calData.mIn)} • keluar {maskRp(calData.mOut)}</p></div>
               <div className="cal-nav">
