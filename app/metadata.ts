@@ -15,10 +15,10 @@ export const metadata: Metadata = {
     description:
       "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi secara mudah di aplikasi Ruang Saku.",
     type: "website",
-    url: "https://ruang-saku-peach.vercel.app",
+    url: "https://ruangsakuapp.vercel.app",
     images: [
       {
-        url: "https://ruang-saku-peach.vercel.app/og-image.svg",
+        url: "https://ruangsakuapp.vercel.app/og-image.svg",
         width: 1200,
         height: 630,
         alt: "Ruang Saku",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     title: "Ruang Saku — Aplikasi Keuangan Pribadi",
     description:
       "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi.",
-    images: ["https://ruang-saku-peach.vercel.app/og-image.svg"],
+    images: ["https://ruangsakuapp.vercel.app/og-image.svg"],
   },
 };
 

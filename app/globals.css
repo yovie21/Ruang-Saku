@@ -1699,4 +1699,139 @@ nav a:hover{background:#f2f6fb;transform:none}
 [data-theme="dark"] .budget-item.warn{background:#302c21!important;border-color:#655638!important}
 [data-theme="dark"] .budget-item.over{background:#342725!important;border-color:#63463e!important}
 [data-theme="dark"] .goal-item.done{background:#203146!important;border-color:#3b5670!important}
- 
+
+/* Dashboard layout: keep cards readable across tablet and phone widths. */
+.workspace,.content-grid,.insight-grid,.summary,.right-column,.left-column{min-width:0}
+@media (min-width:901px) and (max-width:1180px){
+  .workspace{padding-inline:clamp(18px,2.5vw,32px)}
+  .summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:28px}
+  .balance-card{grid-column:1/-1}
+  .content-grid{grid-template-columns:minmax(0,1fr);gap:24px}
+  .right-column{border:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 14px}
+  .right-column>.section-title{grid-column:1/-1}
+  .insight-grid{grid-template-columns:minmax(0,1.2fr) minmax(250px,.8fr)}
+}
+@media (max-width:640px){
+  .workspace{max-width:100%;overflow-x:clip}
+  .content-grid,.insight-grid,.summary{min-width:0}
+  .insight-grid{grid-template-columns:minmax(0,1fr)}
+  .insight-card,.transaction-list,.accounts,.right-column>*{min-width:0;max-width:100%}
+  .right-column{display:grid;grid-template-columns:minmax(0,1fr);gap:18px}
+  .cal-grid{grid-template-columns:repeat(7,minmax(0,1fr))}
+  .mobile-nav{padding-left:max(12px,env(safe-area-inset-left));padding-right:max(12px,env(safe-area-inset-right))}
+}
+@media (max-width:360px){
+  .workspace{padding-left:10px;padding-right:10px}
+  .summary{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .balance-card{grid-column:1/-1}
+  .stat-card{padding:11px 9px}
+  .stat-card div h3{font-size:clamp(12px,3.8vw,14px)}
+  .balance-card h2{font-size:clamp(19px,6vw,24px)}
+}
+@media (prefers-reduced-motion:reduce){.sidebar,.workspace *{scroll-behavior:auto}}
+
+/* Ruang Saku direction: editorial finance, forest green and warm paper. */
+header h1{font-family:Fraunces,Georgia,serif;font-size:clamp(27px,2.7vw,36px);font-weight:650;letter-spacing:-1.15px;color:#20392e}
+header .eyebrow{font-size:10px;letter-spacing:.12em;color:#718178}
+.header-actions .add-button,.mobile-add .add-button{background:#174d3c!important;color:#fff;border-radius:11px;box-shadow:none;font-size:13px;min-height:46px;padding:0 18px}
+.header-actions .add-button:hover,.mobile-add .add-button:hover{background:#103d2f!important;box-shadow:0 5px 14px rgba(23,77,60,.16)}
+.header-actions .transfer-button,.mobile-add .transfer-button{background:#f6f4ec;border-color:#e4e1d7;color:#41564a;border-radius:11px;min-height:44px;box-shadow:none}
+.mobile-add{position:static;gap:10px;margin:0 0 22px}
+.mobile-add .add-button{grid-column:auto}
+.balance-card{background:#174d3c!important;border-radius:19px;box-shadow:0 10px 22px rgba(23,77,60,.12);border:0}
+.balance-card::before,.balance-card::after{display:none}
+.stat-card{border-radius:15px;box-shadow:none}
+.insight-card{border-radius:16px;box-shadow:0 2px 10px rgba(35,53,43,.035)}
+@media(max-width:640px){
+  header{align-items:flex-start;padding-top:4px}
+  header h1{font-size:clamp(23px,6vw,29px)!important;letter-spacing:-.7px;line-height:1.12}
+  header .eyebrow{font-size:9px}
+  .header-actions{margin-top:0}
+  .mobile-add{grid-template-columns:1.35fr 1fr 1fr;gap:8px;margin:4px 0 20px}
+  .mobile-add .add-button,.mobile-add .transfer-button{min-height:46px;padding:8px 5px;font-size:11px}
+  .balance-card{border-radius:17px}
+  .insight-card{border-radius:15px}
+}
+@media(max-width:360px){.mobile-add{grid-template-columns:1fr 1fr}.mobile-add .add-button{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){.balance-card,.balance-card *{animation:none!important;transition:none!important}}
+
+/* Dashboard polish: consistent rhythm, quieter surfaces, aligned summaries. */
+@media(max-width:1320px){.content-grid{grid-template-columns:minmax(0,1fr)!important;gap:24px!important}.right-column{display:flex!important;flex-direction:column;gap:18px!important}.right-column>.section-title{grid-column:auto;margin-bottom:0!important}.right-column>.section-title[style]{margin-top:8px!important}}
+@media(max-width:1320px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}.balance-card{grid-column:1/-1}}
+@media(max-width:640px){.right-column{display:flex!important;flex-direction:column;gap:20px!important;padding-top:22px!important}.right-column>.section-title{margin-bottom:0!important}.right-column>.section-title[style]{margin-top:0!important}}
+
+.workspace{padding-top:30px;padding-bottom:48px;background:#faf9f5}
+.workspace::before,.workspace::after,body::before,body::after{display:none}
+.summary{gap:12px;margin-bottom:28px}
+.balance-card{min-height:146px;padding:22px 24px;box-shadow:none!important}
+.stat-card{min-height:146px;align-items:center;padding:20px;border-radius:16px}
+.content-grid{gap:20px}
+.insight-grid{gap:12px;margin-bottom:22px}
+.insight-card{padding:20px;border-radius:16px;box-shadow:none}
+.chart-month-summary{gap:8px;margin-bottom:14px}
+.chart-month-summary>div{padding:12px;border-radius:12px;background:#f5f4ee;border-color:#e9e6dc}
+.chart-month-summary .positive{color:#174d3c}
+@media(max-width:900px){.workspace{padding-top:24px}.summary{margin-bottom:22px}}
+@media(max-width:640px){
+  .workspace{padding:18px 16px 32px}
+  header{margin-bottom:20px}
+  .summary{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:20px}
+  .balance-card{grid-column:1/-1;min-height:128px;padding:20px}
+  .stat-card{min-height:112px;padding:14px 12px;gap:10px}
+  .stat-icon{width:38px;height:38px;border-radius:11px;font-size:18px}
+  .stat-card div h3{font-size:clamp(14px,4vw,19px)}
+  .content-grid{gap:18px}
+  .insight-grid{gap:10px;margin-bottom:18px}
+  .insight-card{padding:16px}
+  .chart-month-summary>div{padding:10px 8px}
+}
+@media(max-width:360px){.workspace{padding-inline:12px}.stat-card{align-items:flex-start;flex-direction:column;gap:7px}}
+[data-theme="dark"] .workspace{background:#111b29}
+[data-theme="dark"] .chart-month-summary>div{background:#1c2939;border-color:#3a4b60}
+[data-theme="dark"] .chart-month-summary .positive{color:#b5d9f6}
+@media(prefers-reduced-motion:reduce){.workspace *{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+
+/* Quiet luxury: warm paper, deep forest, restrained brass details. */
+.workspace{background:#f7f5ee}
+header{margin-bottom:32px}
+header h1{color:#193b2e}
+header .eyebrow{color:#81765f;letter-spacing:.16em}
+.balance-card{background:linear-gradient(145deg,#153f32 0%,#1d5942 100%)!important;border:1px solid rgba(217,190,126,.28);border-radius:20px;position:relative}
+.balance-card:after{content:"";display:block!important;position:absolute;inset:12px;border:1px solid rgba(228,205,153,.16);border-radius:13px;pointer-events:none}
+.balance-card h2{font-family:Fraunces,Georgia,serif;font-size:clamp(27px,3vw,34px);letter-spacing:-.7px;text-shadow:none}
+.balance-top{color:#d9d0b8}
+.balance-footer>span{background:#d7c18a;color:#193b2e}
+.stat-card{background:#fffefa;border-color:#e9e2d2;box-shadow:0 5px 18px rgba(48,54,39,.035)}
+.stat-card.income{background:#f1f5ef;border-color:#dce6d8}
+.stat-card.expense{background:#fbf2ee;border-color:#eadbd1}
+.stat-icon{box-shadow:none}
+.insight-card{background:#fffefa;border-color:#e9e2d2;box-shadow:0 5px 18px rgba(48,54,39,.035)}
+.section-title h2{color:#203a2e}
+.section-title p{color:#7c8277}
+.chart-month-summary>div{background:#f2f0e7;border-color:#e6e1d3}
+.chart-month-summary .positive{color:#1b6046}
+.right-column{border-color:#e5dfd1}
+.account,.budget-item,.goal-item,.debt-item{background:#fffefa;border-color:#e9e2d2;box-shadow:0 4px 14px rgba(48,54,39,.035)}
+.round-add{background:#eee9da;color:#315b43;border:1px solid #e3dac4}
+.round-add:hover{background:#e5dcc4;color:#173e30}
+.budget-bar span{background:#a78a4b}
+.budget-bar.goal span{background:#315b43}
+@media(max-width:640px){
+  header{margin-bottom:22px}
+  .balance-card{border-radius:18px}
+  .stat-card{border-radius:14px}
+  .insight-card{border-radius:16px}
+  .right-column{border-top-color:#e5dfd1}
+}
+[data-theme="dark"] .workspace{background:#111a16}
+[data-theme="dark"] header h1,[data-theme="dark"] .section-title h2{color:#f1ead8}
+[data-theme="dark"] header .eyebrow{color:#c5b98f}
+[data-theme="dark"] .insight-card,[data-theme="dark"] .stat-card,[data-theme="dark"] .account,[data-theme="dark"] .budget-item,[data-theme="dark"] .goal-item,[data-theme="dark"] .debt-item{background:#1a2821!important;border-color:#34483b!important}
+[data-theme="dark"] .stat-card.income{background:#1c3025!important}
+[data-theme="dark"] .stat-card.expense{background:#332722!important}
+[data-theme="dark"] .chart-month-summary>div{background:#1a2821;border-color:#34483b}
+[data-theme="dark"] .chart-month-summary .positive{color:#c7d8a8}
+[data-theme="dark"] .round-add{background:#29372d;border-color:#485542;color:#e3d3a6}
+[data-theme="dark"] .right-column{border-color:#34483b}
+@media(prefers-reduced-motion:reduce){.balance-card:after{transition:none}}
+

@@ -2,6 +2,22 @@ import { NextResponse } from "next/server";
 import { query, execute, uuid } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 
+// Convert DD-MM-YYYY → YYYY-MM-DD
+function parseDateInput(ddmmyyyy: string): string {
+  const match = String(ddmmyyyy).match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (!match) throw new Error("Format tanggal harus DD-MM-YYYY");
+  const [, day, month, year] = match;
+  const formatted = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  if (Number.isNaN(Date.parse(`${formatted}T00:00:00Z`))) throw new Error("Tanggal tidak valid");
+  return formatted;
+}
+
+// Convert YYYY-MM-DD → DD-MM-YYYY
+function formatDateOutput(yyyymmdd: string): string {
+  const [year, month, day] = String(yyyymmdd).split("-");
+  return `${day}-${month}-${year}`;
+}
+
 async function ensureTable() {
   await execute(`CREATE TABLE IF NOT EXISTS bills (
     id CHAR(36) NOT NULL PRIMARY KEY,
@@ -21,10 +37,12 @@ export async function GET() {
   try {
     const userId = await requireUser();
     await ensureTable();
-    return NextResponse.json(await query(
+    const rows = await query(
       `SELECT id, title, amount, due_date, is_paid, paid_at FROM bills WHERE user_id = ? ORDER BY is_paid ASC, due_date ASC LIMIT 200`,
       [userId]
-    ));
+    );
+    // Convert due_date from YYYY-MM-DD → DD-MM-YYYY
+    return NextResponse.json(rows.map((r: any) => ({ ...r, due_date: formatDateOutput(r.due_date) })));
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 401 });
   }
@@ -37,13 +55,22 @@ export async function POST(req: Request) {
     const body = await req.json();
     const title = String(body.title || "").trim().slice(0, 160);
     const amount = Number(body.amount);
-    const dueDate = String(body.due_date || "");
+    const dueDateInput = String(body.due_date || "");
+    
     if (!title) return NextResponse.json({ error: "Nama tagihan wajib diisi" }, { status: 400 });
-    if (!Number.isFinite(amount) || amount <= 0 || amount > 999999999999999) return NextResponse.json({ error: "Nominal tagihan tidak valid" }, { status: 400 });
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(dueDate) || Number.isNaN(Date.parse(`${dueDate}T00:00:00Z`))) return NextResponse.json({ error: "Tanggal jatuh tempo tidak valid" }, { status: 400 });
+    if (!Number.isFinite(amount) || amount <= 0 || amount > 999999999999999) 
+      return NextResponse.json({ error: "Nominal tagihan tidak valid" }, { status: 400 });
+    
+    let dueDate: string;
+    try {
+      dueDate = parseDateInput(dueDateInput); // Convert DD-MM-YYYY → YYYY-MM-DD
+    } catch (e) {
+      return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    }
+    
     const id = uuid();
     await execute("INSERT INTO bills (id,user_id,title,amount,due_date) VALUES (?,?,?,?,?)", [id, userId, title, amount, dueDate]);
-    return NextResponse.json({ id }, { status: 201 });
+    return NextResponse.json({ id, due_date: dueDateInput }, { status: 201 });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 400 });
   }

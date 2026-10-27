@@ -1,10 +1,11 @@
-<!-- public/robots.txt -->
 User-agent: *
 Allow: /
 Disallow: /admin
+Disallow: /app
+Disallow: /login
 Disallow: /api/auth
 
-Sitemap: https://ruang-saku-peach.vercel.app/sitemap.xml
+Sitemap: https://ruangsakuapp.vercel.app/sitemap.xml
 
-Host: https://ruang-saku-peach.vercel.app
+Host: https://ruangsakuapp.vercel.app
 Crawl-delay: 10
