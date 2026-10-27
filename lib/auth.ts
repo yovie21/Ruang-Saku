@@ -82,26 +82,40 @@ export const authOptions: NextAuthOptions = {
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID ?? "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? ""
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? "",
+      authorization: {
+        params: {
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     })
   ],
   callbacks: {
     async jwt({ token, profile }) {
       if (profile) {
-        const p = profile as unknown as GoogleProfile;
-        const role = await syncUser({
-          email: p.email ?? token.email ?? "",
-          name: p.name,
-          picture: p.picture,
-          sub: p.sub
-        });
-        token.role = role;
-        token.email = p.email ?? token.email;
+        try {
+          const p = profile as unknown as GoogleProfile;
+          const role = await syncUser({
+            email: p.email ?? token.email ?? "",
+            name: p.name,
+            picture: p.picture,
+            sub: p.sub
+          });
+          token.role = role;
+          token.email = p.email ?? token.email;
+          delete (token as Record<string, unknown>).error;
+        } catch (err) {
+          console.error("[syncUser Error]", err);
+          return { ...token, error: "Callback" } as { [key: string]: unknown };
+        }
       }
       return token;
     },
-    session({ session, token }) {
-      if (session.user) session.user.role = token.role === "admin" ? "admin" : "user";
+    async session({ session, token }) {
+      if (session.user) {
+        session.user.role = (token.role === "admin" ? "admin" : "user") as "admin" | "user";
+      }
       return session;
     }
   },

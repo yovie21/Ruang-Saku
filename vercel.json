@@ -1,11 +1,5 @@
 {
   "framework": "nextjs",
-  "regions": ["iad1", "sfo1"],
-  "env": {
-    "NEXTAUTH_URL": "@NEXTAUTH_URL",
-    "DATABASE_URL": "@DATABASE_URL",
-    "VERCEL_SPEED_INSIGHTS_ID": "@VERCEL_SPEED_INSIGHTS_ID"
-  },
   "headers": [
     {
       "source": "/(.*)",
@@ -32,7 +26,11 @@
   "crons": [
     {
       "path": "/api/recurring/run",
-      "schedule": "0 0 6 * * *"
+      "schedule": "0 6 * * *"
+    },
+    {
+      "path": "/api/bills/notify",
+      "schedule": "0 0 * * *"
     }
   ]
 }

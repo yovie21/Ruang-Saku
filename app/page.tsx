@@ -13,6 +13,7 @@ type Budget = { id: string; budget: number; month_start: string; category_id: st
 type Goal = { id: string; name: string; target_amount: number; deadline: string | null; saved: number; deposits: number };
 type GoalAllocation = { id: string; amount: number; allocation_date: string; note: string | null; account: string | null };
 type Recurring = { id: string; title: string; type: "income" | "expense"; amount: number; frequency: string; start_date: string; next_run_date: string; end_date: string | null; is_active: number | boolean; note: string | null; category: string | null; account: string | null; category_id: string | null; account_id: string | null };
+type Bill = { id: string; title: string; amount: number; due_date: string; is_paid: number | boolean };
 type SplitMember = { id: string; name: string; share_amount: number; paid_amount: number };
 type Split = { id: string; title: string; total_amount: number; split_date: string; note: string | null; account: string | null; members: SplitMember[]; shared: number; paid: number; remaining: number };
 type Debt = { id: string; kind: "debt" | "receivable"; person: string; amount: number; paid: number; remaining: number; due_date: string | null; note: string | null; created_at: string; updated_at?: string; installments?: number | null; installments_paid?: number | null };
@@ -168,6 +169,11 @@ export default function Home() {
   const [newCategoryColor, setNewCategoryColor] = useState("#286c56");
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [recurring, setRecurring] = useState<Recurring[]>([]);
+  const [bills, setBills] = useState<Bill[]>([]);
+  const [billTitle, setBillTitle] = useState("");
+  const [billAmount, setBillAmount] = useState("");
+  const [billDueDate, setBillDueDate] = useState("");
+  const [billFormOpen, setBillFormOpen] = useState(false);
   const [recurringModal, setRecurringModal] = useState(false);
   const [recTitle, setRecTitle] = useState("");
   const [recType, setRecType] = useState<"income" | "expense">("expense");
@@ -222,6 +228,11 @@ export default function Home() {
     const d = new Date();
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
   });
+  const [chartMonth, setChartMonth] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  });
+  const [showChartPeriod, setShowChartPeriod] = useState(false);
   const [selectedDay, setSelectedDay] = useState("");
   const [privacyHide, setPrivacyHide] = useState(() => {
     try { return localStorage.getItem("ruang-saku-privacy") === "1"; } catch { return false; }
@@ -347,22 +358,21 @@ export default function Home() {
   }
 
   async function enablePush() {
-    if (typeof Notification === "undefined") {
-      pushToast("error", "Tidak didukung", "Browser ini tidak mendukung notifikasi.");
-      return;
+    if (typeof Notification === "undefined" || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+      pushToast("error", "Tidak didukung", "Notifikasi push perlu browser modern dan situs terpasang/HTTPS."); return;
     }
-    if (Notification.permission === "granted") {
-      setPushOn(true);
-      pushToast("success", "Pengingat aktif", "Notifikasi browser menyala untuk hal penting.");
-      return;
-    }
-    const perm = await Notification.requestPermission().catch(() => "denied" as NotificationPermission);
-    if (perm === "granted") {
-      setPushOn(true);
-      pushToast("success", "Pengingat aktif", "Kamu akan diberi tahu soal anggaran jebol & jadwal.");
-    } else {
-      pushToast("warning", "Izin ditolak", "Aktifkan izin notifikasi di pengaturan browser bila berubah pikiran.");
-    }
+    const permission = Notification.permission === "granted" ? "granted" : await Notification.requestPermission().catch(() => "denied" as NotificationPermission);
+    if (permission !== "granted") { pushToast("warning", "Izin ditolak", "Aktifkan notifikasi di pengaturan browser."); return; }
+    try {
+      const { key } = await (await fetch("/api/bills/subscribe")).json();
+      if (!key) { pushToast("error", "Push belum dikonfigurasi", "VAPID public key belum disetel di server."); return; }
+      const registration = await navigator.serviceWorker.register("/sw.js");
+      let subscription = await registration.pushManager.getSubscription();
+      if (!subscription) subscription = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: Uint8Array.from(atob(key.replace(/-/g, "+").replace(/_/g, "/")), c => c.charCodeAt(0)) });
+      const saved = await fetch("/api/bills/subscribe", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ subscription }) });
+      if (!saved.ok) throw new Error("Gagal menyimpan langganan push");
+      setPushOn(true); pushToast("success", "Pengingat aktif", "Notifikasi tagihan bisa masuk saat aplikasi tertutup.");
+    } catch (error) { pushToast("error", "Push gagal diaktifkan", error instanceof Error ? error.message : "Coba lagi."); }
   }
 
   function pushToast(kind: "success" | "error" | "warning", title: string, message?: string) {
@@ -383,15 +393,36 @@ export default function Home() {
     }
   }
 
+  async function saveBill(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const res = await fetch("/api/bills", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ title: billTitle, amount: parseRibuan(billAmount), due_date: billDueDate }) });
+    const data = await res.json();
+    if (!res.ok) { pushToast("error", "Tagihan gagal disimpan", data.error || "Coba lagi."); return; }
+    setBillTitle(""); setBillAmount(""); setBillDueDate(""); setBillFormOpen(false); await loadData();
+    pushToast("success", "Tagihan tersimpan", "Pengingat akan dikirim 3 hari sebelum dan saat jatuh tempo.");
+  }
+
+  async function toggleBill(bill: Bill) {
+    const res = await fetch("/api/bills", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: bill.id, is_paid: !bill.is_paid }) });
+    if (!res.ok) { pushToast("error", "Status gagal diperbarui"); return; }
+    await loadData();
+  }
+
+  async function deleteBill(id: string) {
+    const res = await fetch(`/api/bills?id=${encodeURIComponent(id)}`, { method: "DELETE" });
+    if (!res.ok) { pushToast("error", "Tagihan gagal dihapus"); return; }
+    await loadData();
+  }
+
   async function loadData() {
     const nowD = new Date();
     const monthStart = `${nowD.getFullYear()}-${String(nowD.getMonth() + 1).padStart(2, "0")}-01`;
     const prevD = new Date(nowD.getFullYear(), nowD.getMonth() - 1, 1);
     const prevStart = `${prevD.getFullYear()}-${String(prevD.getMonth() + 1).padStart(2, "0")}-01`;
-    const [accRes, txRes, catRes, budRes, prevBudRes, goalRes, recRes, splitRes, debtRes, debtHistRes] = await Promise.all([
+    const [accRes, txRes, catRes, budRes, prevBudRes, goalRes, recRes, splitRes, debtRes, debtHistRes, billRes] = await Promise.all([
       fetch("/api/accounts"), fetch("/api/transactions"), fetch("/api/categories?usage=1"),
       fetch(`/api/budgets?month=${monthStart}`), fetch(`/api/budgets?month=${prevStart}`),
-      fetch("/api/goals"), fetch("/api/recurring"), fetch("/api/splits"), fetch("/api/debts"), fetch("/api/debts?history=1")
+      fetch("/api/goals"), fetch("/api/recurring"), fetch("/api/splits"), fetch("/api/debts"), fetch("/api/debts?history=1"), fetch("/api/bills")
     ]);
     const accs = await accRes.json();
     const txs = await txRes.json();
@@ -403,6 +434,7 @@ export default function Home() {
     const spl = await splitRes.json();
     const dbs = await debtRes.json().catch(() => []);
     const dhist = await debtHistRes.json().catch(() => []);
+    const bls = await billRes.json().catch(() => []);
     setAccounts(Array.isArray(accs) ? accs : []); setTransactions(Array.isArray(txs) ? txs : []); setCategories(Array.isArray(cats) ? cats : []);
     setBudgets(Array.isArray(buds) ? buds : []);
     setPrevBudgets(Array.isArray(prevBuds) ? prevBuds : []);
@@ -411,7 +443,8 @@ export default function Home() {
     setSplits(Array.isArray(spl) ? spl : []);
     setDebts(Array.isArray(dbs) ? dbs : []);
     setDebtHistory(Array.isArray(dhist) ? dhist : []);
-    setLoading(false);
+        setBills(Array.isArray(bls) ? bls : []);
+        setLoading(false);
   }
 
   useEffect(() => { loadData(); }, []);
@@ -569,11 +602,12 @@ export default function Home() {
   }
 
   const trend30 = useMemo(() => {
+    const [year, month] = chartMonth.split("-").map(Number);
+    const daysInMonth = new Date(year, month, 0).getDate();
     const days: { key: string; label: string; income: number; expense: number }[] = [];
-    for (let i = 29; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const key = d.toISOString().slice(0, 10);
+    for (let dayNumber = 1; dayNumber <= daysInMonth; dayNumber++) {
+      const d = new Date(year, month - 1, dayNumber);
+      const key = `${chartMonth}-${String(dayNumber).padStart(2, "0")}`;
       days.push({
         key,
         label: d.toLocaleDateString("id-ID", { day: "numeric", month: "short" }),
@@ -589,7 +623,7 @@ export default function Home() {
       else if (t.type === "expense") day.expense += Number(t.amount);
     }
     return days;
-  }, [transactions]);
+  }, [transactions, chartMonth]);
   const trendMax = Math.max(1, ...trend30.map(d => Math.max(d.income, d.expense)));
 
   const categoryColor = useMemo(() => {
@@ -603,17 +637,25 @@ export default function Home() {
   const expenseByCategory = useMemo(() => {
     const sum = new Map<string, number>();
     for (const t of transactions) {
-      if (t.type !== "expense") continue;
+      if (t.type !== "expense" || String(t.transaction_date).slice(0, 7) !== chartMonth) continue;
       const name = t.category || "Lainnya";
       sum.set(name, (sum.get(name) ?? 0) + Number(t.amount));
     }
     const totalExp = [...sum.values()].reduce((s, v) => s + v, 0) || 1;
-    const palette = ["#286c56", "#3e77cf", "#ed705f", "#c98a2d", "#7c5cc9", "#2aa5a0", "#8ca39e"];
+    const palette = ["#315f91", "#4f84b8", "#bd655c", "#c2a35e", "#747fa3", "#4f89a8", "#8293a5"];
     return [...sum.entries()]
       .sort((a, b) => b[1] - a[1])
       .slice(0, 6)
       .map(([name, value], i) => ({ name, value, pct: (value / totalExp) * 100, color: categoryColor.get(`expense:${name}`) ?? palette[i % palette.length] }));
-  }, [transactions, categoryColor]);
+  }, [transactions, categoryColor, chartMonth]);
+  const chartExpense = expenseByCategory.reduce((sum, item) => sum + item.value, 0);
+  const chartMonthLabel = new Date(Number(chartMonth.slice(0, 4)), Number(chartMonth.slice(5, 7)) - 1).toLocaleDateString("id-ID", { month: "long", year: "numeric" });
+  const chartTotals = useMemo(() => trend30.reduce((totals, day) => ({ income: totals.income + day.income, expense: totals.expense + day.expense }), { income: 0, expense: 0 }), [trend30]);
+  const setChartMonthOffset = (offset: number) => {
+    const [year, month] = chartMonth.split("-").map(Number);
+    const next = new Date(year, month - 1 + offset, 1);
+    setChartMonth(`${next.getFullYear()}-${String(next.getMonth() + 1).padStart(2, "0")}`);
+  };
   const donutSegments = useMemo(() => {
     let acc = 0;
     return expenseByCategory.map(s => {
@@ -1407,6 +1449,13 @@ export default function Home() {
       if (b.status === "over") items.push({ id: `bud-over-${b.id}`, kind: "error", title: `Anggaran ${b.category} jebol`, detail: `${b.pct.toFixed(0)}% • ${rupiah(b.spent)} dari ${rupiah(b.limit)}`, action: "BUAT_ANGGARAN" });
       else if (b.status === "warn") items.push({ id: `bud-warn-${b.id}`, kind: "warning", title: `Anggaran ${b.category} menipis`, detail: `${b.pct.toFixed(0)}% • sisa ${rupiah(Math.max(0, b.limit - b.spent))}`, action: "BUAT_ANGGARAN" });
     }
+    for (const bill of bills) {
+      if (bill.is_paid) continue;
+      const due = String(bill.due_date).slice(0, 10);
+      const daysLeft = Math.ceil((new Date(`${due}T00:00:00`).getTime() - new Date(`${today}T00:00:00`).getTime()) / 86400000);
+      if (daysLeft < 0) items.push({ id: `bill-over-${bill.id}`, kind: "error", title: `Tagihan ${bill.title} terlambat`, detail: `${rupiah(Number(bill.amount))} • jatuh tempo ${due}` });
+      else if (daysLeft <= 3) items.push({ id: `bill-due-${bill.id}`, kind: "warning", title: `Tagihan ${bill.title} ${daysLeft === 0 ? "jatuh tempo hari ini" : `${daysLeft} hari lagi`}`, detail: `${rupiah(Number(bill.amount))} • jatuh tempo ${due}` });
+    }
     for (const r of recurring) {
       if (!r.is_active) continue;
       const next = String(r.next_run_date).slice(0, 10);
@@ -1447,7 +1496,7 @@ export default function Home() {
     }
     const rank: Record<string, number> = { error: 0, warning: 1, info: 2, success: 3 };
     return items.sort((a, b) => rank[a.kind] - rank[b.kind]).slice(0, 30);
-  }, [budgetProgress, recurring, goalProgress, splits, debts, insights]);
+  }, [budgetProgress, recurring, bills, goalProgress, splits, debts, insights]);
 
   const unreadCount = notifItems.filter(n => !readIds.includes(n.id)).length;
 
@@ -2987,8 +3036,15 @@ export default function Home() {
           <button type="button" className="logout-btn" onClick={() => signOut({ callbackUrl: "/login" })} title="Keluar dari akun">⏻ <span>Keluar</span></button>
         </div>
       </div>
-    </aside>
-    <section className="workspace" id="beranda">
+     </aside>
+     <nav className="mobile-nav" aria-label="Navigasi utama">
+       <a className={activeNav === "beranda" ? "active" : ""} href="#beranda" onClick={e => { e.preventDefault(); scrollToSection("beranda"); }}><span>⌂</span><small>Beranda</small></a>
+       <a className={activeNav === "transaksi" ? "active" : ""} href="#transaksi" onClick={e => { e.preventDefault(); scrollToSection("transaksi"); }}><span>⇄</span><small>Transaksi</small></a>
+       <button type="button" className="mobile-nav-add" onClick={openTransactionDialog} aria-label="Catat transaksi">＋</button>
+       <a className={activeNav === "akun" ? "active" : ""} href="#akun" onClick={e => { e.preventDefault(); scrollToSection("akun"); }}><span>▣</span><small>Akun</small></a>
+       <button type="button" onClick={() => setMenu(true)}><span>☰</span><small>Lainnya</small></button>
+     </nav>
+     <section className="workspace" id="beranda">
       <header>
         <button className="mobile-menu" onClick={() => setMenu(!menu)}>☰</button>
         <div>
@@ -3047,11 +3103,32 @@ export default function Home() {
       </section>
       <section className="content-grid reveal">
         <div className="main-column">
+
+          <div className="chart-month-summary" aria-label={`Ringkasan ${chartMonthLabel}`}>
+            <div><small>Pemasukan</small><b>{maskRp(chartTotals.income)}</b></div>
+            <div><small>Pengeluaran</small><b>{maskRp(chartTotals.expense)}</b></div>
+            <div><small>Selisih</small><b className={chartTotals.income - chartTotals.expense >= 0 ? "positive" : "negative"}>{maskRp(chartTotals.income - chartTotals.expense)}</b></div>
+          </div>
           <div className="insight-grid">
             <div className="insight-card reveal reveal-delay-1">
-              <div className="section-title">
-                <div><h2>Arus 30 hari</h2><p>Pemasukan vs pengeluaran harian</p></div>
+              <div className="section-title chart-card-title">
+                <div><h2>Arus kas</h2><p>{chartMonthLabel} • pemasukan vs pengeluaran</p></div>
+                <button type="button" className="round-add chart-calendar-button" aria-label={showChartPeriod ? "Tutup filter bulan" : "Pilih bulan grafik"} title="Pilih bulan grafik" onClick={() => setShowChartPeriod(value => !value)}><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 10h16"/></svg></button>
               </div>
+              {showChartPeriod && <div className="chart-month-filter">
+                <div className="chart-period-picker">
+                  <button type="button" className="chart-month-arrow" aria-label="Bulan sebelumnya" onClick={() => setChartMonthOffset(-1)}>‹</button>
+                  <label className="chart-period-current" htmlFor="chart-month">
+                    <small>PERIODE GRAFIK</small>
+                    <input id="chart-month" type="month" value={chartMonth} onChange={e => e.target.value && setChartMonth(e.target.value)} />
+                  </label>
+                  <button type="button" className="chart-month-arrow" aria-label="Bulan berikutnya" onClick={() => setChartMonthOffset(1)}>›</button>
+                </div>
+                <div className="chart-month-shortcuts">
+                  <button type="button" className={chartMonth === monthKey ? "chart-month-quick active" : "chart-month-quick"} onClick={() => setChartMonth(monthKey)}>Bulan ini</button>
+                  <button type="button" className="chart-month-quick" onClick={() => setChartMonthOffset(-1)}>Bulan lalu</button>
+                </div>
+              </div>} 
               <div className="chart-legend"><span><i className="dot in" /> Pemasukan</span><span><i className="dot out" /> Pengeluaran</span></div>
               <div className="bar-chart">
                 {trend30.map(d => <div key={d.key} className="bar-group" title={`${d.label}: +${rupiah(d.income)} / -${rupiah(d.expense)}`}>
@@ -3067,9 +3144,9 @@ export default function Home() {
               <div className="section-title">
                 <div><h2>Pengeluaran</h2><p>Berdasarkan kategori</p></div>
               </div>
-              {expenseByCategory.length === 0 ? <p style={{ color: "#9aa5a2", fontSize: 13 }}>Belum ada pengeluaran tercatat.</p> : <>
+              {expenseByCategory.length === 0 ? <p style={{ color: "#9aa5a2", fontSize: 13 }}>Belum ada pengeluaran tercatat pada {chartMonthLabel}.</p> : <>
                 <div className="donut-wrap">
-                  <div className="donut" style={{ background: donutBackground }}><div className="donut-center"><b>{maskRp(expense)}</b><small>total keluar</small></div></div>
+                  <div className="donut" style={{ background: donutBackground }}><div className="donut-center"><b>{maskRp(chartExpense)}</b><small>keluar bulan ini</small></div></div>
                 </div>
                 <div className="category-legend">
                   {expenseByCategory.map(c => <div key={c.name} className="category-row">
@@ -3214,7 +3291,7 @@ export default function Home() {
                     <button type="button" className="budget-delete" onClick={() => deleteBudget(b.id, b.category)} title="Hapus anggaran">×</button>
                   </div>
                 </div>
-                <div className="budget-numbers"><span>{maskRp(b.spent)}</span><small>dari {maskRp(b.limit)} • {b.pct.toFixed(0)}%</small></div>
+                 <div className="budget-numbers"><span>{maskRp(b.spent)}</span><small>dari {maskRp(b.limit)} • {b.pct.toFixed(0)}%</small><b className={"budget-percent " + b.status}>Sisa {Math.max(0, 100 - b.pct).toFixed(0)}%</b></div>
                 <div className="budget-bar"><span style={{ width: `${Math.min(100, b.pct)}%` }} /></div>
                 {b.status === "over"
                   ? <small className="budget-note over">Jebol {maskRp(b.spent - b.limit)} — kurangi belanja kategori ini.</small>
@@ -3321,6 +3398,27 @@ export default function Home() {
                   })}
                 </div>;
               })}
+          </div>
+          <div className="section-title" style={{ marginTop: 26 }} id="tagihan">
+            <div><h2>Tagihan mendatang</h2><p>{bills.filter(b => !b.is_paid).length} belum dibayar</p></div>
+            <button type="button" className="round-add" onClick={() => setBillFormOpen(v => !v)}>＋</button>
+          </div>
+          {billFormOpen && <form className="goal-item" onSubmit={saveBill} style={{ marginBottom: 12 }}>
+            <label className="field-label">Nama tagihan<input required maxLength={160} value={billTitle} onChange={e => setBillTitle(e.target.value)} placeholder="Contoh: WiFi, listrik" /></label>
+            <label className="field-label">Nominal<input required inputMode="numeric" value={billAmount} onChange={e => setBillAmount(formatRibuan(e.target.value))} placeholder="Rp 0" /></label>
+            <label className="field-label">Jatuh tempo<input required type="date" value={billDueDate} onChange={e => setBillDueDate(e.target.value)} /></label>
+            <button className="goal-cta" type="submit">Simpan tagihan</button>
+          </form>}
+          <div className="goals">
+            {bills.length === 0 ? <p style={{ color: "#9aa5a2", fontSize: 12, padding: "6px 0" }}>Belum ada tagihan. Tekan ＋ untuk menambah.</p> : bills.map(b => {
+              const due = String(b.due_date).slice(0, 10);
+              const days = Math.ceil((new Date(`${due}T00:00:00`).getTime() - new Date(`${todayStr()}T00:00:00`).getTime()) / 86400000);
+              return <div key={b.id} className={`goal-item ${b.is_paid ? "done" : ""}`}>
+                <div className="budget-head"><b>{b.is_paid ? "✓ " : ""}{b.title}</b><button type="button" className="budget-delete" onClick={() => deleteBill(b.id)} title="Hapus">×</button></div>
+                <div className="budget-numbers"><span>{maskRp(Number(b.amount))}</span><small>{b.is_paid ? "Lunas" : days < 0 ? `Terlambat ${Math.abs(days)} hari` : days === 0 ? "Jatuh tempo hari ini" : `Jatuh tempo ${due} • ${days} hari lagi`}</small></div>
+                {!b.is_paid && <button type="button" className="goal-cta" onClick={() => toggleBill(b)}>Tandai lunas</button>}
+              </div>;
+            })}
           </div>
           <div className="section-title" style={{ marginTop: 26 }} id="utang">
             <div><h2>Utang & Piutang</h2><p>{debts.length > 0 ? `${debts.length} belum lunas` : "Catat pinjaman & tagihan"}</p></div>

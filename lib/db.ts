@@ -8,7 +8,6 @@ export function getPool(): Pool {
   const url = process.env.DATABASE_URL;
   if (!url) throw new Error("DATABASE_URL is not set");
 
-  // Parse mysql://user}:{password}@{host}:{port}/{db}
   const match = url.match(/^mysql:\/\/([^:]+):([^@]*)@([^:]+):(\d+)\/(.+)$/);
   if (!match) throw new Error("Invalid DATABASE_URL format");
   const [, user, password, host, port, database] = match;

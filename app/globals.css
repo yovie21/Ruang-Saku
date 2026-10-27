@@ -14,8 +14,8 @@
   --gradient-amber:linear-gradient(135deg,#ffd84d,#f0609a);
   --gradient-cyan:linear-gradient(135deg,#2bb5a0,#3e77cf);
   --gradient-dark:linear-gradient(135deg,#1a2e2b,#2e5e54);
-  --radius-sm:8px;--radius-md:14px;--radius-lg:20px;--radius-xl:28px;
-  --space-1:4px;--space-2:8px;--space-3:12px;--space-4:16px;--space-5:20px;--space-6:24px;--space-8:32px;--space-10:40px;
+  --radius-sm:8px;--radius-md:16px;--radius-lg:24px;--radius-xl:32px;
+  --space-1:6px;--space-2:10px;--space-3:16px;--space-4:24px;--space-5:32px;--space-6:40px;--space-8:48px;--space-10:56px;
   --transition-fast:0.15s cubic-bezier(0.4,0,0.2,1);
   --transition-normal:0.25s cubic-bezier(0.4,0,0.2,1);
   --transition-bounce:0.35s cubic-bezier(0.34,1.56,0.64,1);
@@ -152,7 +152,7 @@ header h1 span{background:linear-gradient(135deg,var(--green),var(--teal));-webk
 .stat-card:hover{transform:translateY(-3px);box-shadow:var(--card-shadow-hover);border-color:rgba(26,138,107,0.15)}
 .stat-card.income{background:linear-gradient(180deg,#f0fbf3,#ffffff 70%);border-color:#bfe6cd}
 .stat-card.expense{background:linear-gradient(180deg,#fff3f1,#ffffff 70%);border-color:#f5c4bc}
-.stat-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:18px;flex:none;box-shadow:0 4px 10px rgba(0,0,0,0.1)}
+.stat-icon{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:22px;flex:none;box-shadow:0 6px 14px rgba(0,0,0,0.1)}
 .stat-icon{background:#e4f6ea;color:#159354}
 .expense .stat-icon{background:#ffe3de;color:#e85f4c}
 .stat-card div p{font-size:12px;font-weight:500;color:var(--muted);margin:0}
@@ -194,7 +194,7 @@ header h1 span{background:linear-gradient(135deg,var(--green),var(--teal));-webk
 .transaction-list{display:grid;gap:10px}
 .transaction{background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 20px;display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;transition:all var(--transition-normal);animation:slideInLeft 0.3s ease both}
 .transaction:hover{background:#f6faf6;border-color:rgba(26,138,107,0.15);box-shadow:0 4px 16px rgba(26,138,107,0.06);transform:translateX(3px)}
-.transaction-icon{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:16px;font-weight:bold;flex:none;transition:all var(--transition-bounce)}
+.transaction-icon{width:46px;height:46px;border-radius:16px;display:grid;place-items:center;font-size:20px;font-weight:bold;flex:none;transition:all var(--transition-bounce)}
 .transaction-icon.income{background:linear-gradient(135deg,#d8f7e3,#a9e8c4);color:#0d7a44;box-shadow:0 4px 10px rgba(21,147,84,0.2)}
 .transaction-icon.expense{background:linear-gradient(135deg,#ffe4dc,#ffc9b8);color:#c64437;box-shadow:0 4px 10px rgba(232,95,76,0.15)}
 .transaction-icon.transfer{background:linear-gradient(135deg,#dfe9ff,#cdc2ff);color:#4a3fd4;box-shadow:0 4px 10px rgba(62,119,207,0.2)}
@@ -241,16 +241,32 @@ header h1 span{background:linear-gradient(135deg,var(--green),var(--teal));-webk
 .accounts{display:grid;gap:10px}
 .account{border:1px solid var(--line);border-radius:var(--radius-lg);padding:14px 16px;transition:all var(--transition-normal);display:grid;grid-template-columns:auto 1fr auto auto;gap:12px;align-items:center;animation:slideUp 0.4s ease both}
 .account:hover{background:#f4f8f4;border-color:rgba(26,138,107,0.15);box-shadow:0 4px 16px rgba(26,138,107,0.06);transform:translateX(2px)}
-.bank-icon{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;font-size:14px;font-weight:bold;color:#fff;flex:none;transition:all var(--transition-bounce)}
-.bank-icon.blue{background:linear-gradient(135deg,#3e77cf,#7c6cf0);box-shadow:0 4px 10px rgba(62,119,207,0.25)}
+.bank-icon{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;font-size:18px;font-weight:800;color:#fff!important;flex:none;transition:all var(--transition-bounce);text-shadow:0 1px 2px rgba(0,0,0,.25);border:2px solid rgba(255,255,255,.9);box-shadow:0 5px 14px rgba(25,55,45,.2)}
+.bank-icon.blue{background:linear-gradient(135deg,#2456b8,#5840c8);box-shadow:0 5px 14px rgba(62,91,207,.35)}
+.bank-icon:hover{transform:scale(1.06)}
+.account{grid-template-columns:44px minmax(0,1fr) auto auto;gap:10px;padding:14px 12px;opacity:1;visibility:visible;animation:none;min-width:0}
+.bank-icon{width:44px;height:44px;opacity:1;visibility:visible;animation:none;transform:none;flex-shrink:0}
+.account>div:nth-child(2){min-width:0}
+.accounts .account b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#1a2e2b}
+.account strong{font-size:12px;white-space:nowrap}
+.account .tx-actions{display:flex;gap:4px;margin-left:0}
+.account .tx-edit,.account .tx-delete{width:30px;min-width:30px;height:30px;min-height:30px;padding:0;display:grid;place-items:center;border-radius:9px;font-size:16px;opacity:1}
+.account .tx-edit{color:#315f4c;background:#eaf4ee}
+.account .tx-delete{color:#b34437;background:#fff0ed} 
+[data-theme="dark"] .accounts .account b{color:#e7f1ec}
+@media(max-width:640px){.bank-icon{width:46px;height:46px;font-size:18px;border-radius:14px}.account{gap:14px;padding:15px 14px}.account strong{font-size:13px}} 
+@media(max-width:380px){.bank-icon{width:42px;height:42px;font-size:16px}.account{gap:11px;padding:13px 11px}} 
 .accounts .account:nth-child(2n) .bank-icon{background:linear-gradient(135deg,#f08c4e,#f0609a);box-shadow:0 4px 10px rgba(240,140,78,0.25)}
 .accounts .account:nth-child(3n) .bank-icon{background:linear-gradient(135deg,#2bb5a0,#3e77cf);box-shadow:0 4px 10px rgba(43,181,160,0.25)}
 .accounts .account:nth-child(4n) .bank-icon{background:linear-gradient(135deg,#7c6cf0,#f0609a);box-shadow:0 4px 10px rgba(124,108,240,0.25)}
 .account strong{font-size:14px}
 .account small{color:var(--muted);font-size:11px;display:block;margin-top:2px}
-.account .tx-actions{opacity:0;transition:all var(--transition-fast);margin-left:8px}
-.account:hover .tx-actions,.account:focus-within .tx-actions{opacity:1}
-.account .tx-edit,.account .tx-delete{opacity:1}
+.account .tx-actions{opacity:1;transition:all var(--transition-fast);margin-left:8px}
+.account .tx-edit,.account .tx-delete{opacity:1;min-width:38px;min-height:38px;display:grid;place-items:center;border-radius:10px}
+.account .tx-edit{color:#315f4c;background:#eaf4ee}
+.account .tx-delete{color:#b34437;background:#fff0ed}
+.account .tx-edit:hover,.account .tx-edit:focus-visible{color:#174d37;background:#d6ecdf}
+.account .tx-delete:hover,.account .tx-delete:focus-visible{color:#8f251c;background:#ffddd6}
 
 /* === BUDGET === */
 .budgets{display:grid;gap:12px;margin-top:16px}
@@ -265,6 +281,9 @@ header h1 span{background:linear-gradient(135deg,var(--green),var(--teal));-webk
 .budget-numbers{display:flex;justify-content:space-between;align-items:baseline;margin:10px 0}
 .budget-numbers span{font-size:14px;font-weight:800}
 .budget-numbers small{color:var(--muted);font-size:11px}
+.budget-percent{font-size:10px;color:#3d7a5e;white-space:nowrap}
+.budget-percent.warn{color:#9a6b0f}
+.budget-percent.over{color:#b3372b}
 .budget-bar{height:8px;border-radius:6px;background:#edf2ee;overflow:hidden}
 .budget-bar span{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#159354,#d9f348);transition:width 0.8s cubic-bezier(0.4,0,0.2,1);animation:barGrow 1s ease both}
 .budget-item.warn .budget-bar span{background:linear-gradient(90deg,#d69a1f,#ffd84d)}
@@ -756,6 +775,72 @@ main{overflow-x:clip}
 @media(max-width:380px){.summary{grid-template-columns:1fr}.balance-card{grid-column:auto}.mobile-add{grid-template-columns:1fr}h1{font-size:20px !important}.balance-card h2{font-size:21px}.stat-card h3{font-size:13px}.bar{width:3px}}
 @media(prefers-reduced-motion:reduce){*{animation:none !important;transition:none !important;scroll-behavior:auto !important}}
 
+/* === SMALL-SCREEN HARDENING === */
+@media(max-width:900px){
+  .sidebar-backdrop{display:block;position:fixed;inset:0;background:rgba(13,20,18,.38);backdrop-filter:blur(2px);z-index:3}
+  .workspace{width:100%;max-width:100vw}
+  .header-actions{min-width:0}
+  .notif-panel{right:0;max-width:calc(100vw - 24px)}
+}
+@media(max-width:640px){
+  body{min-width:0}
+  header{align-items:flex-start;margin-bottom:20px;gap:10px}
+  header>div:first-of-type{min-width:0;flex:1}
+  header h1{font-size:clamp(20px,6vw,25px) !important;line-height:1.15}
+  .mobile-menu{flex:none;margin:0;padding:7px 5px}
+  .header-actions{width:auto;max-width:48%;justify-content:flex-end;gap:5px}
+  .header-actions .install-button,.header-actions .theme-toggle:not(.notif-bell){display:none}
+  .theme-toggle,.notif-bell{width:36px;height:36px;padding:0;display:grid;place-items:center}
+  .mobile-add{margin:0 0 20px}
+  .mobile-add button{min-height:44px;padding:9px 8px;line-height:1.2}
+  .balance-top{gap:8px;align-items:flex-start}
+  .balance-top span,.balance-footer small{overflow-wrap:anywhere}
+  .stat-card{min-width:0;padding:13px}
+  .stat-card div{min-width:0}
+  .stat-card div p{font-size:11px;line-height:1.35}
+  .stat-card div h3{font-size:clamp(14px,4vw,18px);overflow-wrap:anywhere}
+  .section-title{gap:10px;flex-wrap:wrap}
+  .section-title>div:first-child{min-width:0}
+  .section-title h2{font-size:19px}
+  .cal-nav{width:100%;display:grid;grid-template-columns:40px minmax(0,1fr) 40px;gap:6px}
+  .cal-nav input{min-width:0;width:100%}
+  .cal-grid{gap:4px}
+  .cal-cell{min-width:0;min-height:50px;padding:6px 2px;font-size:11px}
+  .cal-cell small{font-size:8px}
+  .cal-detail-head{gap:8px;flex-wrap:wrap}
+  .transaction{grid-template-columns:auto minmax(0,1fr) auto;gap:9px;padding:12px}
+  .transaction-value{grid-column:3;grid-row:1;max-width:35vw}
+  .transaction-info{grid-column:2;grid-row:1}
+  .transaction-info b{font-size:13px}
+  .transaction-value b{font-size:12px;overflow-wrap:anywhere}
+  .transaction-value small{font-size:10px}
+  .transaction .tx-actions{grid-column:2 / -1;grid-row:2;justify-content:flex-end}
+  .transaction .tx-edit,.transaction .tx-delete{opacity:1}
+  .account{grid-template-columns:auto minmax(0,1fr) auto;gap:8px;padding:12px}
+  .account .tx-actions{grid-column:2 / -1;grid-row:2;justify-content:flex-end;margin-left:0}
+  .account strong,.account small{overflow-wrap:anywhere}
+  .right-column{padding-top:24px}
+  .modal-layer{padding:12px;align-items:end}
+  .modal{width:min(100%,560px);max-height:calc(100dvh - 24px);overflow-y:auto;padding:22px 18px;border-radius:22px}
+  .transaction-type-modal{width:min(100%,560px)}
+  .modal-grid,.form-grid{grid-template-columns:1fr !important}
+  .modal-actions{position:sticky;bottom:-22px;padding:12px 0 0;background:inherit}
+  .notif-panel{position:fixed;top:68px;left:12px;right:12px;width:auto;max-width:none;max-height:calc(100dvh - 84px);overflow-y:auto}
+  .notif-head{align-items:flex-start;gap:8px;flex-wrap:wrap}
+  .notif-head-actions{width:100%;justify-content:flex-start;flex-wrap:wrap}
+  .category-add{grid-template-columns:minmax(0,1fr) 42px 42px}
+  .category-add .submit{padding:8px}
+  .table-wrap,.report-table-wrap{max-width:100%;overflow-x:auto}
+}
+@media(max-width:380px){
+  .header-actions{max-width:42%}
+  .mobile-add{grid-template-columns:1fr}
+  .mobile-add button{width:100%}
+  .summary{grid-template-columns:1fr}
+  .balance-card{grid-column:auto}
+  .cal-cell{min-height:44px}
+}
+
 /* === PLAYFUL THEME === */
 :root{--play-purple:#7c6cf0;--play-pink:#f0609a;--play-orange:#f08c4e;--play-yellow:#ffd84d;--play-teal:#2bb5a0;--play-blue:#3e77cf;--play-green:#159354;--card-shadow:0 14px 34px rgba(24,60,45,0.14);--card-shadow-hover:0 20px 44px rgba(24,60,45,0.22)}
 body{background:radial-gradient(700px 260px at 12% -60px,rgba(217,243,72,0.1),transparent 70%),radial-gradient(640px 260px at 88% -40px,rgba(124,108,240,0.08),transparent 70%),radial-gradient(560px 300px at 50% 110%,rgba(240,96,154,0.07),transparent 70%),linear-gradient(180deg,#f0f7f4,#fbfcf9,#f5f9f7)}
@@ -822,3 +907,796 @@ nav a.active{background:linear-gradient(90deg,#e7f6ec,#efeaff);border-color:rgba
 .brand-mark-img{width:34px;height:34px;border-radius:10px;box-shadow:0 8px 18px rgba(26,138,107,0.4);transform:rotate(-8deg);transition:transform var(--transition-bounce)}
 .brand:hover .brand-mark-img{transform:rotate(8deg) scale(1.08)}
 .brand-mark-img.lock-logo{width:46px;height:46px;border-radius:12px}
+
+/* === MOBILE APP SHELL === */
+.mobile-nav{display:none}
+@media(max-width:640px){
+  body{background:#f6f8f5}
+  body::before,body::after,.workspace::before,.workspace::after{display:none}
+  .workspace{padding:14px 16px calc(92px + env(safe-area-inset-bottom));}
+  header{background:transparent;margin:0 -2px 18px;padding:2px 0;align-items:center}
+  header .eyebrow{margin-bottom:5px;color:#84918b;letter-spacing:1.4px}
+  header h1{font-family:"DM Sans",sans-serif;font-weight:800;letter-spacing:-.7px;color:#14231e}
+  .mobile-menu{display:none}
+  .header-actions{max-width:none;gap:6px}
+  .header-actions .notif-bell{display:grid;background:#fff;border-color:#e0e7e2;border-radius:12px;box-shadow:0 3px 10px rgba(30,70,50,.06)}
+  .mobile-add{position:static;display:grid;grid-template-columns:1.35fr 1fr 1fr;gap:7px;margin:0 0 18px}
+  .mobile-add .add-button,.mobile-add .transfer-button{min-height:42px;border-radius:12px;font-size:11px;padding:8px 5px;box-shadow:none}
+  .mobile-add .add-button{background:#173f32}
+  .mobile-add .transfer-button{background:#fff;border-color:#dce6df;color:#315d4c}
+  .summary{gap:8px;margin-bottom:22px}
+  .balance-card{padding:20px;border-radius:20px;background:linear-gradient(135deg,#173f32,#1c8064);box-shadow:0 12px 26px rgba(23,63,50,.2)}
+  .balance-card h2{font-size:27px;margin:15px 0 14px}
+  .balance-footer{font-size:11px}
+  .stat-card{padding:14px 12px;border-radius:16px;gap:8px;box-shadow:0 3px 12px rgba(25,57,42,.05)}
+  .stat-icon{width:28px;height:28px;font-size:14px;border-radius:9px}
+  .stat-card div p{font-size:10px;color:#718079}
+  .stat-card div h3{font-size:14px;margin-top:5px}
+  .content-grid{gap:26px}
+  .insight-grid{gap:12px;margin-bottom:20px}
+  .insight-card{padding:18px 16px;border-radius:18px;box-shadow:0 4px 14px rgba(25,57,42,.05);border-color:#e4ebe6}
+  .section-title{margin-bottom:13px}
+  .section-title h2{font-family:"DM Sans",sans-serif;font-size:17px;font-weight:800;letter-spacing:-.3px}
+  .section-title p{font-size:11px;margin-top:3px}
+  .chart-legend{margin:8px 0 12px;font-size:10px}
+  .bar-chart{height:116px}
+  .donut{width:132px;height:132px}
+  .donut-center{width:86px;height:86px}
+  .insight-wide{padding:18px 12px}
+  .insight-wide .section-title{padding:0 4px}
+  .transaction-list{gap:8px}
+  .transaction{border-radius:15px;border-color:#e4ebe6;background:#fff;box-shadow:0 2px 9px rgba(25,57,42,.04)}
+  .transaction:hover{transform:none}
+  .transaction-icon{width:34px;height:34px;border-radius:10px}
+  .transaction-info p{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .section-actions{display:flex;gap:5px}
+  .section-actions .export-button{font-size:10px;padding:7px 8px}
+  .filters{margin-top:10px}
+  .filters button{padding:8px 13px;font-size:11px}
+  .search-box{border-radius:12px}
+  .date-filters input[type=date]{flex:1;min-width:0;font-size:12px;padding:9px 7px}
+  .right-column{padding-top:26px;border-top:1px solid #dce6df}
+  .right-column>.section-title{margin-top:0 !important}
+  .account,.budget-item,.goal-item,.debt-item{border-radius:15px;box-shadow:0 2px 9px rgba(25,57,42,.04)}
+  .budget-item,.goal-item,.debt-item{padding:14px}
+  .budget-head b{font-size:13px;min-width:0;overflow-wrap:anywhere}
+  .mobile-nav{position:fixed;display:grid;grid-template-columns:repeat(5,1fr);align-items:end;left:0;right:0;bottom:0;z-index:20;padding:9px 12px calc(9px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);border-top:1px solid #e0e8e3;box-shadow:0 -8px 24px rgba(23,63,50,.08);backdrop-filter:blur(16px)}
+  .mobile-nav a,.mobile-nav button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;background:none;color:#82908a;text-decoration:none;font-size:19px;padding:2px;border-radius:12px}
+  .mobile-nav a.active,.mobile-nav button:hover{color:#1a8a6b}
+  .mobile-nav small{font-size:9px;font-weight:700}
+  .mobile-nav-add{width:46px;height:46px;margin:-18px auto 0;border-radius:16px !important;background:#173f32 !important;color:#d9f348 !important;font-size:27px !important;box-shadow:0 8px 18px rgba(23,63,50,.28)}
+  .mobile-nav-add small{display:none}
+  .toast-stack{right:12px;bottom:80px;width:calc(100vw - 24px)}
+}
+@media(max-width:380px){
+  .workspace{padding:12px 10px calc(88px + env(safe-area-inset-bottom));}
+  header{margin-bottom:14px;gap:6px}
+  header .eyebrow{font-size:8px;letter-spacing:1px}
+  header h1{font-size:17px !important;letter-spacing:-.4px}
+  .header-actions .notif-bell{width:32px;height:32px}
+  .mobile-add{grid-template-columns:1fr 1fr}
+  .mobile-add .add-button{grid-column:1 / -1}
+  .mobile-add .add-button,.mobile-add .transfer-button{min-height:38px;font-size:10px;padding:6px 4px}
+  .summary{grid-template-columns:1fr 1fr}
+  .balance-card{grid-column:1 / -1}
+  .balance-card{padding:16px;border-radius:16px}
+  .balance-card h2{font-size:23px;margin:11px 0 9px}
+  .balance-top span{font-size:10px}
+  .balance-footer small{font-size:9px}
+  .stat-card{padding:11px 9px;border-radius:13px}
+  .stat-card div p{font-size:9px}
+  .stat-card div h3{font-size:12px}
+  .insight-card{padding:14px 12px;border-radius:15px}
+  .section-title{margin-bottom:9px}
+  .section-title h2{font-size:15px}
+  .section-title p{font-size:9px}
+  .chart-legend{font-size:9px;gap:8px;margin:6px 0 8px}
+  .bar-chart{height:78px;gap:2px}
+  .bar-pair{height:68px}
+  .bar{width:4px}
+  .bar-labels{font-size:8px;margin-top:4px}
+  .donut-wrap{margin:2px 0 8px}
+  .donut{width:108px;height:108px}
+  .donut-center{width:72px;height:72px}
+  .donut-center b{font-size:9px}
+  .donut-center small{font-size:8px}
+  .category-legend{gap:4px}
+  .category-row{font-size:9px;padding:4px 0;gap:4px}
+  .category-row b{font-size:9px}
+  .category-row small{font-size:8px}
+  .insight-wide{padding:14px 10px}
+  .cal-grid{gap:3px}
+  .cal-cell{min-height:38px;padding:4px 1px;font-size:9px;border-radius:9px}
+  .cal-cell small{font-size:7px}
+  .cal-grid.cal-head span{font-size:8px}
+  .transaction-list{gap:6px}
+  .transaction{padding:9px;border-radius:12px;gap:7px}
+  .transaction-icon{width:29px;height:29px;border-radius:8px;font-size:13px}
+  .transaction-info b{font-size:11px}
+  .transaction-info p{font-size:9px;margin-top:2px}
+  .transaction-value b{font-size:10px}
+  .transaction-value small{font-size:8px}
+  .transaction .tx-actions button{font-size:14px;padding:4px}
+  .filters{margin-top:7px;gap:4px}
+  .filters button{padding:6px 9px;font-size:9px}
+  .search-box input{font-size:11px;padding:10px 0}
+  .date-filters{gap:4px}
+  .date-filters input[type=date]{font-size:9px;padding:7px 4px}
+  .right-column{padding-top:20px}
+  .right-column>.section-title[style]{margin-top:18px !important}
+  .account,.budget-item,.goal-item,.debt-item{padding:11px;border-radius:12px}
+  .account strong{font-size:11px}
+  .account small,.budget-note{font-size:9px}
+  .budget-head b{font-size:11px}
+  .budget-numbers{margin:7px 0}
+  .budget-numbers span{font-size:11px}
+  .budget-numbers small{font-size:8px}
+  .budget-bar{height:6px}
+  .goal-cta{padding:8px;font-size:10px;margin-top:8px}
+}
+
+/* === DESKTOP FRAME + DARK SURFACE FIXES === */
+@media(min-width:1400px){
+  .workspace{width:calc(100vw - 264px);max-width:1528px;margin-left:264px;margin-right:0;padding-left:clamp(32px,3.4vw,65px);padding-right:clamp(32px,3.4vw,65px)}
+}
+[data-theme="dark"] .transaction,
+[data-theme="dark"] .account,
+[data-theme="dark"] .debt-item,
+[data-theme="dark"] .carry-box .category-row,
+[data-theme="dark"] .import-preview .category-row{
+  background:#121b19;
+  border-color:var(--line);
+}
+[data-theme="dark"] .transaction:hover,[data-theme="dark"] .account:hover{background:#16241f}
+[data-theme="dark"] .transaction-value b.income{color:#4ade9e}
+[data-theme="dark"] .transaction-value b.expense{color:#f08270}
+[data-theme="dark"] .account strong,[data-theme="dark"] .budget-numbers span{color:#e9f1ed}
+[data-theme="dark"] .mobile-nav{background:rgba(14,21,19,.95);border-color:var(--line)}
+[data-theme="dark"] .mobile-nav a,[data-theme="dark"] .mobile-nav button{color:#8fa19b}
+[data-theme="dark"] .mobile-nav a.active,[data-theme="dark"] .mobile-nav button:hover{color:#7fd6a8}
+[data-theme="dark"] .mobile-nav-add{background:#173f32 !important;color:#d9f348 !important}
+
+/* === MOBILE HEADER CONTROLS + BUDGET COLORS === */
+@media(max-width:768px){
+  .header-actions .theme-toggle:not(.notif-bell){display:grid}
+  .header-actions .theme-toggle,.header-actions .notif-bell{width:36px;height:36px;padding:0;place-items:center;flex:none}
+  .header-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+  header{flex-wrap:wrap}
+  header>div:first-of-type{flex:1 1 100%;max-width:100%}
+  .header-actions{flex:1 1 100%;width:100%;max-width:none;justify-content:flex-start;margin-top:4px}
+  .notif-panel{top:112px;left:12px;right:12px;margin:0;padding:16px;border-radius:18px;max-height:calc(100dvh - 190px)}
+  .notif-head{margin-bottom:10px}
+  .notif-head-actions{width:100%;justify-content:flex-start;flex-wrap:wrap}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 1){background:#f1f8ff;border-color:#c8def4}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 1) .budget-bar span{background:linear-gradient(90deg,#3e77cf,#73b8ed)}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 2){background:#f5f1ff;border-color:#d9cdf7}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 2) .budget-bar span{background:linear-gradient(90deg,#7c6cf0,#b99cff)}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 3){background:#fff8ed;border-color:#f4d8a8}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 3) .budget-bar span{background:linear-gradient(90deg,#f08c4e,#ffd84d)}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 4){background:#fff1f6;border-color:#f2c8d9}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 4) .budget-bar span{background:linear-gradient(90deg,#f0609a,#f5a1bd)}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 5){background:#effaf7;border-color:#bfe6dc}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n + 5) .budget-bar span{background:linear-gradient(90deg,#2bb5a0,#7bd8bd)}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n){background:#f8f4ee;border-color:#e9d7bb}
+  .budgets .budget-item:not(.warn):not(.over):nth-child(6n) .budget-bar span{background:linear-gradient(90deg,#b9854d,#e7c27b)}
+}
+@media(max-width:420px){
+  header{align-items:flex-start;flex-wrap:wrap}
+  header>div:first-of-type{flex:1 1 100%;max-width:100%}
+  .header-actions{flex:1 1 100%;width:100%;max-width:none;justify-content:flex-end;margin-top:4px}
+  .header-actions .theme-toggle,.header-actions .notif-bell{width:34px;height:34px}
+}
+
+@media(max-width:600px){
+  .notif-panel{position:static !important;top:auto;left:auto;right:auto;width:100%;max-width:none;max-height:none;overflow:visible;margin:0 0 10px;padding:10px;border-radius:13px}
+  .notif-panel .notif-list{max-height:142px;overflow-y:auto;gap:5px}
+  .notif-panel .notif-head{margin-bottom:6px}
+  .notif-panel .notif-head b{font-size:12px}
+  .notif-panel .notif-head small{font-size:9px}
+  .notif-panel .notif-head-actions{gap:5px}
+  .notif-panel .clear-filter{font-size:9px;padding:6px 9px}
+  .notif-panel .notif-item{gap:7px;padding:7px 8px;border-radius:9px}
+  .notif-panel .insight-emoji{width:22px;height:22px;font-size:10px}
+  .notif-panel .notif-text b{font-size:10px}
+  .notif-panel .notif-text small{font-size:9px;line-height:1.3;margin-top:2px}
+  .notif-panel .close{font-size:16px;padding:3px 6px}
+  .notif-panel .close{position:static !important;margin-left:auto}
+  .transaction{grid-template-columns:34px minmax(0,1fr) minmax(0,auto) !important;gap:8px;padding:10px 12px}
+  .transaction-icon{grid-column:1;grid-row:1;align-self:start}
+  .transaction-info{grid-column:2;grid-row:1;min-width:0}
+  .transaction-value{grid-column:3;grid-row:1;max-width:34vw;text-align:right;padding-top:0}
+  .transaction-value small{display:block;margin-left:0}
+  .transaction .tx-actions{grid-column:2 / -1;grid-row:2;justify-content:flex-end}
+  .transaction .tx-actions button{opacity:1;padding:4px 6px}
+  .account{grid-template-columns:34px minmax(0,1fr) !important;gap:8px;padding:11px 12px}
+  .account>div:nth-child(2){grid-column:2;grid-row:1}
+  .account strong{grid-column:2;grid-row:2;max-width:none;text-align:left;margin-top:2px}
+  .account .tx-actions{grid-column:2;grid-row:3;justify-content:flex-start}
+  .section-title{gap:8px}
+  .section-title h2{font-size:17px}
+  .section-title p{font-size:10px}
+}
+
+/* === MOBILE NO-OVERLAP GUARANTEE === */
+@media(max-width:768px){
+  html,body,main{width:100%;max-width:100%;overflow-x:hidden}
+  .workspace,.content-grid,.main-column,.right-column,.insight-grid,.insight-card,.transaction-list,.accounts,.budgets,.goals{min-width:0;max-width:100%}
+  .workspace{margin-left:0 !important}
+  .content-grid,.insight-grid{grid-template-columns:minmax(0,1fr) !important}
+  .summary{grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important}
+  .balance-card{grid-column:1 / -1 !important}
+  header,.section-title,.budget-head,.carry-head,.cal-detail-head{min-width:0;max-width:100%}
+  header>div,.section-title>div,.budget-head>div,.carry-head>div{min-width:0}
+  .section-title{align-items:flex-start;flex-wrap:wrap}
+  .section-title>div:first-child{flex:1 1 150px}
+  .section-actions,.section-title>div:last-child{max-width:100%;display:flex;flex-wrap:wrap;gap:5px}
+  .section-title .round-add{flex:none}
+  .budget-head{align-items:flex-start;gap:8px}
+  .budget-head b,.transaction-info b,.account b{overflow-wrap:anywhere;word-break:break-word}
+  .budget-head .tx-actions{flex:none}
+  .budget-numbers{gap:4px 10px;flex-wrap:wrap}
+  .budget-numbers small{max-width:100%;overflow-wrap:anywhere}
+  .budget-percent{margin-left:auto;font-size:9px}
+  .category-row{min-width:0;align-items:flex-start;flex-wrap:wrap}
+  .category-row>span:first-child{min-width:0;flex:1 1 100px;overflow-wrap:anywhere}
+  .category-row>span:last-child{max-width:100%;text-align:right;overflow-wrap:anywhere}
+  .carry-head{align-items:flex-start;flex-wrap:wrap}
+  .carry-head button{flex:none}
+  .transaction{grid-template-columns:34px minmax(0,1fr) minmax(0,auto) !important}
+  .transaction-icon{grid-column:1;grid-row:1;align-self:start}
+  .transaction-info{grid-column:2;grid-row:1;min-width:0}
+  .transaction-value{grid-column:3;grid-row:1;min-width:0;max-width:34vw}
+  .transaction-value b{display:block;overflow-wrap:anywhere;word-break:break-word}
+  .transaction .tx-actions{grid-column:2 / -1;grid-row:2;min-width:0;justify-content:flex-end;flex-wrap:wrap}
+  .account{grid-template-columns:34px minmax(0,1fr) minmax(0,auto) !important}
+  .account>div:nth-child(2){min-width:0}
+  .account strong{min-width:0;max-width:34vw;overflow-wrap:anywhere;text-align:right}
+  .account .tx-actions{grid-column:2 / -1;grid-row:2;min-width:0;justify-content:flex-end;flex-wrap:wrap}
+  .cal-nav{min-width:0}
+  .cal-detail-head span{max-width:100%;text-align:left;overflow-wrap:anywhere}
+  .modal-layer{z-index:100}
+  .sidebar.open{z-index:40;max-height:100dvh;overflow-y:auto;padding-bottom:calc(110px + env(safe-area-inset-bottom))}
+  .sidebar-backdrop{z-index:30}
+  .mobile-nav{z-index:20}
+  .sidebar.open .sidebar-bottom{display:block;padding-bottom:12px}
+  .sidebar.open .profile{margin-bottom:8px;padding-bottom:12px}
+  .sidebar.open .logout-btn{display:flex;align-items:center;justify-content:center;min-height:38px;opacity:1}
+  header{width:100%;overflow:visible}
+  header>div:first-of-type{min-width:0;max-width:calc(100% - 42px)}
+  .header-actions{flex:0 0 auto;min-width:0;max-width:48vw;overflow:visible}
+}
+@media(max-width:420px){
+  .summary{gap:6px}
+  .stat-card{min-width:0}
+  .stat-card div h3{font-size:clamp(11px,3.2vw,14px)}
+  .transaction{grid-template-columns:30px minmax(0,1fr) !important}
+  .transaction-value{grid-column:2;grid-row:2;max-width:none;text-align:left;padding-top:2px}
+  .transaction-value small{display:inline;margin-left:6px}
+  .transaction .tx-actions{grid-column:2;grid-row:3;justify-content:flex-start}
+  .account{grid-template-columns:30px minmax(0,1fr) !important}
+  .account strong{grid-column:2;grid-row:2;max-width:none;text-align:left;margin-top:2px}
+  .account .tx-actions{grid-column:2;grid-row:3;justify-content:flex-start}
+  .section-actions .export-button{font-size:9px;padding:6px}
+  header>div:first-of-type{max-width:calc(100% - 38px)}
+  .header-actions{max-width:40vw}
+}
+
+/* Polished mobile account rows: keep icon, details, balance and actions aligned. */
+@media(max-width:640px){
+  .accounts{gap:12px}
+  .account{
+    grid-template-columns:44px minmax(0,1fr) auto !important;
+    grid-template-areas:"icon details balance" "icon details actions";
+    align-items:center;
+    gap:4px 12px;
+    padding:13px 12px;
+    border:1px solid #e2e9e5;
+    border-radius:18px;
+    background:#fff;
+    box-shadow:0 3px 12px rgba(26,46,43,.06);
+    transform:none;
+  }
+  .account>.bank-icon{grid-area:icon;width:44px;height:44px}
+  .account>div:nth-child(2){grid-area:details;align-self:center}
+  .account>strong{grid-area:balance;max-width:none;text-align:right;font-size:13px}
+  .account>.tx-actions{grid-area:actions;justify-content:flex-end;gap:6px;margin:0}
+  .account .tx-edit,.account .tx-delete{width:32px;height:32px;min-width:32px;min-height:32px}
+  .account:hover{transform:none;box-shadow:0 3px 12px rgba(26,46,43,.06)}
+}
+@media(max-width:380px){
+  .account{grid-template-columns:40px minmax(0,1fr) auto !important;gap:4px 9px;padding:12px 10px}
+  .account>.bank-icon{width:40px;height:40px}
+  .account>strong{font-size:12px}
+}
+
+/* Stage 1 — shared premium, accessible visual foundation across all screens. */
+:root{
+  --ink:#18342b;--muted:#63766e;--line:#e1e9e4;--soft:#f5f8f5;
+  --green:#176b50;--teal:#25866a;--card-bg:#fff;
+  --card-shadow:0 6px 20px rgba(25,57,42,.07);
+  --card-shadow-hover:0 10px 28px rgba(25,57,42,.11);
+  --radius-md:14px;--radius-lg:20px;--radius-xl:24px;
+}
+body{background:#f5f7f4;color:var(--ink);line-height:1.55}
+.workspace{padding-top:36px;padding-bottom:48px}
+header{margin-bottom:32px}
+.content-grid{gap:30px}
+.summary{gap:16px;margin-bottom:34px}
+.insight-grid{gap:16px;margin-bottom:28px}
+.insight-card,.stat-card,.account,.budget-item,.goal-item,.debt-item,.transaction{
+  border-color:#e3ebe5;box-shadow:0 3px 12px rgba(24,52,43,.045);transition:box-shadow .18s ease,border-color .18s ease,transform .18s ease;
+}
+.insight-card,.budget-item,.goal-item,.debt-item{padding:22px}
+.account{padding:16px 18px}
+.transaction{padding:16px 18px;gap:16px}
+.section-title{align-items:center;margin-bottom:18px}
+.section-title h2{font-size:21px;color:var(--ink)}
+.section-title p,.eyebrow{color:#697b73}
+button:not(.mobile-nav-add){transition:background-color .16s ease,color .16s ease,border-color .16s ease,box-shadow .16s ease,transform .16s ease}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(23,107,80,.35);outline-offset:2px}
+.round-add{width:42px;height:42px;min-width:42px;border-radius:14px;background:#e9f3ed;color:#176b50;font-size:23px;font-weight:600;box-shadow:none}
+.round-add:hover{background:#dcece2;transform:translateY(-1px)}
+.add-button,.modal .submit{background:#176b50;box-shadow:0 5px 14px rgba(23,107,80,.18)}
+.add-button:hover,.modal .submit:hover{background:#12563f;filter:none;box-shadow:0 7px 18px rgba(23,107,80,.24)}
+.filters .selected{animation:none;background:#176b50;box-shadow:none}
+.filters button{min-height:40px}
+.search-box,.date-filters input[type=date],input,select{min-height:44px}
+.bank-icon,.stat-icon,.transaction-icon{opacity:1;visibility:visible;animation:none}
+@media(max-width:640px){
+  body{background:#f5f7f4}
+  .workspace{padding:18px 16px calc(104px + env(safe-area-inset-bottom))}
+  header{margin-bottom:22px}
+  .summary{gap:10px;margin-bottom:26px}
+  .content-grid{gap:28px}
+  .insight-grid{gap:12px;margin-bottom:22px}
+  .insight-card,.budget-item,.goal-item,.debt-item{padding:18px 16px}
+  .section-title{margin-bottom:14px}
+  .section-title h2{font-size:18px}
+  .transaction-list,.accounts,.budgets{gap:10px}
+  .mobile-nav{padding-left:16px;padding-right:16px}
+  .mobile-nav a,.mobile-nav button{min-height:44px}
+  .mobile-nav-add{min-width:48px;min-height:48px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+/* Polished mobile account rows: keep icon, details, balance and actions aligned. */
+@media(max-width:640px){
+  .accounts{gap:12px}
+  .account{
+    grid-template-columns:44px minmax(0,1fr) auto !important;
+    grid-template-areas:"icon details balance" "icon details actions";
+    align-items:center;gap:4px 12px;padding:13px 12px;
+    border:1px solid #e2e9e5;border-radius:18px;background:#fff;
+    box-shadow:0 3px 12px rgba(26,46,43,.06);transform:none;
+  }
+  .account>.bank-icon{grid-area:icon;width:44px;height:44px}
+  .account>div:nth-child(2){grid-area:details;align-self:center}
+  .account>strong{grid-area:balance;max-width:none;text-align:right;font-size:13px}
+  .account>.tx-actions{grid-area:actions;justify-content:flex-end;gap:6px;margin:0}
+  .account .tx-edit,.account .tx-delete{width:32px;height:32px;min-width:32px;min-height:32px}
+  .account:hover{transform:none;box-shadow:0 3px 12px rgba(26,46,43,.06)}
+}
+@media(max-width:380px){
+  .account{grid-template-columns:40px minmax(0,1fr) auto !important;gap:4px 9px;padding:12px 10px}
+  .account>.bank-icon{width:40px;height:40px}
+  .account>strong{font-size:12px}
+}
+
+/* Stage 2 — clearer, touch-friendly mobile navigation. */
+@media(max-width:640px){
+  .mobile-nav{
+    grid-template-columns:repeat(5,minmax(0,1fr));align-items:center;
+    padding:8px 14px calc(8px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.96);border-top:1px solid #e4ebe6;
+    box-shadow:0 -6px 24px rgba(23,63,50,.08);backdrop-filter:blur(18px);
+  }
+  .mobile-nav a,.mobile-nav>button:not(.mobile-nav-add){
+    min-width:48px;min-height:48px;gap:4px;padding:5px 2px;border-radius:14px;
+    color:#718078;font-size:19px;transition:background .16s ease,color .16s ease;
+  }
+  .mobile-nav a.active{background:#eaf3ed;color:#176b50}
+  .mobile-nav a.active span{font-weight:700}
+  .mobile-nav small{font-size:10px;line-height:1.2;font-weight:650;letter-spacing:.05px}
+  .mobile-nav-add{
+    width:50px;height:50px;min-width:50px;min-height:50px;margin:-14px auto 0;
+    border:4px solid #f5f7f4;border-radius:18px!important;background:#176b50!important;
+    color:#fff!important;font-size:28px!important;font-weight:400;
+    box-shadow:0 5px 14px rgba(23,107,80,.25);
+  }
+  .mobile-nav-add:active{transform:scale(.96)}
+}
+[data-theme="dark"] .mobile-nav{background:rgba(14,21,19,.97);border-color:#26332e}
+[data-theme="dark"] .mobile-nav a.active{background:#20372d;color:#8be0ae}
+[data-theme="dark"] .mobile-nav-add{border-color:#101714;background:#25866a!important;color:#fff!important}
+@media(prefers-reduced-motion:reduce){.mobile-nav a,.mobile-nav button{transition:none!important}}
+
+/* Stage 3 — calmer hierarchy for the dashboard's key financial figures. */
+.balance-card{
+  background:linear-gradient(135deg,#174d3c 0%,#176b50 100%);
+  border:1px solid rgba(255,255,255,.12);border-radius:24px;
+  box-shadow:0 12px 28px rgba(23,77,60,.18);animation:none;
+}
+.balance-card::before,.balance-card::after{animation:none;opacity:.35}
+.balance-card::before{background:radial-gradient(circle,#a9d7b8 0%,transparent 70%)}
+.balance-card::after{background:radial-gradient(circle,#75b995 0%,transparent 70%)}
+.balance-card h2{text-shadow:none;letter-spacing:-.7px;font-variant-numeric:tabular-nums}
+.balance-top{color:#d0e5d9}
+.balance-footer small{color:#d0e5d9}
+.stat-card.income{background:#f3faf5;border-color:#d8eadc}
+.stat-card.expense{background:#fff7f5;border-color:#f0dfdb}
+.stat-card div h3{font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.insight-card{box-shadow:0 4px 16px rgba(24,52,43,.045)}
+.insight-card:hover{transform:none;box-shadow:var(--card-shadow)}
+.bar.in{background:#2c9a70}.bar.out{background:#db7967}
+@media(max-width:640px){
+  .balance-card{padding:20px;border-radius:21px;min-height:146px}
+  .balance-card h2{font-size:clamp(21px,6vw,27px);overflow-wrap:anywhere}
+  .stat-card{border-radius:17px}
+  .stat-icon{width:42px;height:42px;border-radius:13px}
+  .stat-card div h3{font-size:clamp(12px,3.5vw,17px)}
+  .insight-card{border-radius:19px}
+}
+
+/* Stage 4 — transaction list: clear reading order and visible actions. */
+.transaction-list{gap:9px}
+.transaction{
+  grid-template-columns:44px minmax(0,1fr) auto auto;gap:13px;
+  padding:15px 16px;border-radius:17px;background:#fff;
+  box-shadow:0 2px 8px rgba(24,52,43,.035);animation:none;
+}
+.transaction:hover{background:#fff;border-color:#dce7df;box-shadow:0 5px 15px rgba(24,52,43,.07);transform:none}
+.transaction-icon{width:42px;height:42px;border-radius:14px;box-shadow:none!important}
+.transaction-info b{font-size:14px;line-height:1.35}
+.transaction-info p{font-size:11px;line-height:1.4;margin-top:4px}
+.transaction-value b{font-variant-numeric:tabular-nums;font-size:14px}
+.transaction-value small{margin-top:3px}
+.transaction .tx-actions{gap:4px}
+.transaction .tx-edit,.transaction .tx-delete{
+  width:36px;height:36px;min-width:36px;min-height:36px;padding:0;
+  display:grid;place-items:center;border-radius:11px;opacity:1;
+}
+.transaction .tx-edit{color:#315f4c;background:#edf5ef}
+.transaction .tx-delete{color:#a44339;background:#fff1ee}
+.transaction .tx-edit:hover{color:#174d37;background:#dcece1}
+.transaction .tx-delete:hover{color:#8f251c;background:#ffe3de}
+[data-theme="dark"] .transaction{background:#18221e;border-color:#2d3b34;box-shadow:none}
+[data-theme="dark"] .transaction:hover{background:#1c2923;border-color:#3b5247}
+[data-theme="dark"] .transaction-info b{color:#e9f1ed}
+[data-theme="dark"] .transaction .tx-edit{background:#24382d;color:#a8d9b7}
+[data-theme="dark"] .transaction .tx-delete{background:#3a2825;color:#f0aaa0}
+@media(max-width:640px){
+  .transaction{grid-template-columns:40px minmax(0,1fr) auto;gap:9px 10px;padding:12px;border-radius:16px}
+  .transaction-icon{grid-column:1;grid-row:1;width:40px;height:40px}
+  .transaction-info{grid-column:2;grid-row:1;align-self:center}
+  .transaction-value{grid-column:3;grid-row:1;max-width:38vw}
+  .transaction-value b{font-size:12px}
+  .transaction .tx-actions{grid-column:2 / -1;grid-row:2;justify-content:flex-end}
+  .transaction .tx-edit,.transaction .tx-delete{width:34px;height:34px;min-width:34px;min-height:34px}
+}
+
+/* Stage 5 — budget and savings goal cards, clearer progress and actions. */
+.budgets,.goals{gap:12px}
+.budget-item,.goal-item{
+  padding:18px;border-radius:18px;border-color:#e2eae4;
+  box-shadow:0 3px 12px rgba(24,52,43,.04);transform:none;
+}
+.budget-item:hover,.goal-item:hover{transform:none;box-shadow:0 5px 16px rgba(24,52,43,.07);border-color:#d4e4d9}
+.budget-item.warn{background:#fffaf0;border-color:#f0dfb6}
+.budget-item.over{background:#fff5f3;border-color:#f0d1cb}
+.budget-head{gap:10px}
+.budget-head b{font-size:14px;line-height:1.4}
+.budget-delete{width:36px;height:36px;min-width:36px;color:#78877f;background:#f5f7f5;font-size:20px}
+.budget-numbers{gap:8px;margin:13px 0 10px;flex-wrap:wrap}
+.budget-numbers span{font-size:15px;font-variant-numeric:tabular-nums}
+.budget-numbers small{font-size:11px}
+.budget-percent{font-size:11px;font-weight:700}
+.budget-bar{height:9px;background:#edf2ee}
+.budget-bar span{background:#2d936d;animation:none}
+.budget-item.warn .budget-bar span{background:#d79a30}
+.budget-item.over .budget-bar span{background:#d25f50}
+.budget-note{margin-top:9px;font-size:11px;line-height:1.5}
+.goal-item{background:#fff}
+.goal-item.done{background:#f2f8f3;border-color:#d5e8da}
+.goal-item.paused{opacity:.85;background:#f8f9f8}
+.budget-bar.goal span{background:#6484bd}
+.goal-item.done .budget-bar.goal span{background:#2d936d}
+.goal-cta{min-height:44px;margin-top:14px;border-color:#d6e4db;background:#f7faf7;border-radius:12px;color:#176b50}
+.goal-cta:hover{background:#eaf3ed;border-color:#c2d9ca;transform:none}
+[data-theme="dark"] .budget-item,[data-theme="dark"] .goal-item{background:#18221e;border-color:#2d3b34;box-shadow:none}
+[data-theme="dark"] .budget-item.warn{background:#2a2518;border-color:#534426}
+[data-theme="dark"] .budget-item.over{background:#2c1d1b;border-color:#56332e}
+[data-theme="dark"] .goal-item.done{background:#1b2b22;border-color:#345741}
+[data-theme="dark"] .goal-cta{background:#22352c;border-color:#3a5546;color:#a8d9b7}
+@media(max-width:640px){
+  .budgets,.goals{gap:10px;margin-top:12px}
+  .budget-item,.goal-item{padding:16px;border-radius:16px}
+  .budget-numbers{margin:11px 0 9px}
+}
+
+/* Stage 6 — consistent, accessible forms and dialogs. */
+.modal-layer{background:rgba(14,27,21,.62);backdrop-filter:blur(5px)}
+.modal{border-radius:22px;border-color:#e4ebe6;box-shadow:0 24px 70px rgba(12,36,25,.2)}
+.modal .eyebrow{background:#edf5ef;animation:none}
+.modal-description{line-height:1.6}
+.modal label{color:#344b40;font-size:12px;letter-spacing:.1px}
+.modal input,.modal select{
+  min-height:48px;border-color:#dce6df;border-radius:12px;background:#fff;
+  transition:border-color .16s ease,box-shadow .16s ease;
+}
+.modal input:focus,.modal select:focus{border-color:#398266;box-shadow:0 0 0 3px rgba(23,107,80,.12)}
+.modal .submit{min-height:48px;border-radius:13px;animation:none}
+.modal .submit:hover{transform:none;box-shadow:0 7px 16px rgba(23,107,80,.2)}
+.modal .close{width:40px;height:40px;display:grid;place-items:center;top:14px;right:14px}
+.transaction-type-options{gap:12px}
+.transaction-type{min-height:132px;border-radius:17px;box-shadow:0 2px 8px rgba(24,52,43,.04)}
+.transaction-type:hover{transform:none;box-shadow:0 5px 14px rgba(24,52,43,.08)}
+.confirm-card{border-radius:22px;box-shadow:0 20px 60px rgba(12,36,25,.22)}
+.confirm-actions button{min-height:46px;border-radius:12px}
+.confirm-ok{background:#176b50;box-shadow:none}
+.confirm-ok:hover{transform:none;filter:none;background:#12563f}
+.confirm-ok.danger{background:#b94438}
+[data-theme="dark"] .modal{background:#17211c;border-color:#304039;color:#e7f1ec}
+[data-theme="dark"] .modal label{color:#cedbd3}
+[data-theme="dark"] .modal input,[data-theme="dark"] .modal select{background:#101814;border-color:#3a4b41;color:#e7f1ec}
+[data-theme="dark"] .modal .eyebrow{background:#22352b;color:#9ed9b2}
+[data-theme="dark"] .confirm-card{background:#17211c;border-color:#304039;color:#e7f1ec}
+[data-theme="dark"] .confirm-card p{color:#bbc9c1}
+[data-theme="dark"] .confirm-cancel{background:#202d26;border-color:#3a4b41;color:#d4e0d8}
+@media(max-width:640px){
+  .modal-layer{padding:10px!important}
+  .modal{width:100%;max-height:min(88dvh,760px);padding:24px 18px;border-radius:22px 22px 16px 16px}
+  .modal h2{font-size:22px;padding-right:34px}
+  .modal .close{top:10px;right:10px}
+  .modal label{margin-bottom:7px}
+  .modal input,.modal select{font-size:16px;min-height:48px}
+  .transaction-type-options{gap:9px}
+  .transaction-type{min-height:120px;padding:17px 12px;border-radius:15px}
+  .confirm-card{padding:24px 18px 18px}
+  .confirm-actions{gap:9px}
+}
+@media(prefers-reduced-motion:reduce){.modal,.confirm-card,.transaction-type{animation:none!important;transition:none!important}}
+
+/* Stage 7 — calendar, report cards, and data tables. */
+.cal-nav input[type=month]{min-height:44px;border-radius:12px}
+.cal-grid{gap:5px}
+.cal-grid.cal-head span{font-size:10px;letter-spacing:.2px}
+.cal-cell{min-height:58px;border-radius:12px;background:#fff;gap:3px}
+.cal-cell:hover{transform:none;box-shadow:0 2px 8px rgba(24,52,43,.06)}
+.cal-cell.sel{outline:2px solid #398266;outline-offset:-2px}
+.cal-cell.today b{text-decoration:none;color:#176b50}
+.report-controls input[type=month]{min-height:44px;border-radius:12px}
+.report-buttons button{min-height:42px}
+.report-grid{gap:10px}
+.report-card{border-radius:17px;box-shadow:0 2px 8px rgba(24,52,43,.035)}
+.report-card:hover{transform:none;box-shadow:0 5px 14px rgba(24,52,43,.07)}
+.report-card b{font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.report-table-wrap{border:1px solid #e3ebe5;border-radius:14px;overflow-x:auto}
+.report-table{margin:0;min-width:560px}
+.report-table th{background:#f5f8f5}
+.report-table th,.report-table td{padding:11px 12px}
+.report-table .num{font-variant-numeric:tabular-nums}
+[data-theme="dark"] .report-card{background:#18221e;border-color:#2d3b34}
+[data-theme="dark"] .report-card.recon{background:#1a2a21;border-color:#345741}
+[data-theme="dark"] .report-table-wrap{border-color:#2d3b34}
+[data-theme="dark"] .report-table th{background:#202d26}
+@media(max-width:640px){
+  .cal-grid{gap:3px}
+  .cal-cell{min-height:48px;padding:5px 1px;border-radius:9px}
+  .cal-cell b{font-size:11px}
+  .cal-cell small{font-size:8px}
+  .report-grid{grid-template-columns:1fr;gap:9px}
+  .report-card{padding:15px}
+  .report-card b{font-size:16px}
+  .report-cols{grid-template-columns:1fr;gap:14px}
+  .report-controls{align-items:stretch}
+  .report-controls input[type=month]{width:100%}
+  .report-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%}
+  .report-buttons button{min-width:0}
+  .report-table{min-width:540px}
+}
+@media(prefers-reduced-motion:reduce){.cal-cell,.report-card{transition:none!important}}
+
+/* Stage 8 — debt, category, and admin lists share the same clean card language. */
+.debt-item{padding:18px;border-radius:18px;border-color:#e2eae4;box-shadow:0 3px 12px rgba(24,52,43,.04)}
+.debt-item:hover{transform:none;box-shadow:0 5px 16px rgba(24,52,43,.07)}
+.category-row{gap:12px;min-height:40px}
+.category-row b{font-variant-numeric:tabular-nums}
+.admin-table-wrap{border-radius:18px;box-shadow:0 4px 16px rgba(24,52,43,.05)}
+.admin-table th{background:#f5f8f5}
+[data-theme="dark"] .debt-item{background:#18221e;border-color:#2d3b34;box-shadow:none}
+[data-theme="dark"] .admin-table th{background:#202d26}
+@media(max-width:640px){
+  .debt-item{padding:16px;border-radius:16px}
+  .category-row{align-items:flex-start;flex-wrap:wrap;padding:9px 0}
+  .admin-table-wrap{border-radius:15px}
+}
+@media(prefers-reduced-motion:reduce){.debt-item{transition:none!important}}
+
+/* Mobile lower-dashboard spacing: separate modules, not just their cards. */
+@media(max-width:640px){
+  .right-column{display:flex;flex-direction:column;gap:36px;padding-top:30px}
+  .right-column>.section-title,.right-column>section,.right-column>div{margin-top:0!important}
+  .right-column>.section-title{margin-bottom:-20px!important}
+  .right-column .section-title{gap:12px;margin-bottom:18px}
+  .budgets,.goals{gap:14px;margin-top:16px}
+  .budget-item,.goal-item,.debt-item{padding:19px 17px;border-radius:18px}
+  .carry-box{margin-top:18px;padding:17px;gap:12px}
+  .carry-box .category-row{padding:11px 13px}
+  .category-legend{gap:11px}
+  .category-row{min-height:44px;padding:10px 0}
+  .cal-detail{gap:13px;padding-top:17px}
+  .cal-detail-head{gap:10px}
+  .mobile-add{margin-bottom:25px}
+}
+@media(max-width:380px){
+  .right-column{gap:30px}
+  .budget-item,.goal-item,.debt-item{padding:17px 15px}
+}
+
+/* Mobile transaction icon: inset from screen edge, never clipped. */
+@media(max-width:600px){
+  .transaction{grid-template-columns:40px minmax(0,1fr) minmax(0,auto)!important;padding-left:16px!important;padding-right:12px!important;column-gap:10px}
+  .transaction-icon{grid-column:1;justify-self:center;margin-left:0}
+}
+@media(max-width:380px){
+  .transaction{padding-left:14px!important;column-gap:8px}
+}
+
+/* Calm unified palette: premium navy and soft blue. */
+
+/* Calm unified palette: premium navy and soft blue. */
+:root{
+  --ink:#24364b;--muted:#687d93;--line:#e0e8f1;--soft:#f2f6fb;
+  --green:#315f91;--lime:#c9dcf2;--red:#bd655c;--blue:#4f84b8;
+  --purple:#747fa3;--pink:#bd8191;--teal:#4f89a8;--orange:#c88767;--yellow:#d4b66e;
+  --card-bg:#fff;--card-shadow:0 6px 22px rgba(34,63,94,.07);
+  --card-shadow-hover:0 10px 28px rgba(34,63,94,.11);
+  --gradient-green:linear-gradient(135deg,#284c73,#5488b8);
+  --gradient-warm:linear-gradient(135deg,#c88767,#bd8191);
+  --gradient-purple:linear-gradient(135deg,#747fa3,#4f84b8);
+  --gradient-yellow:linear-gradient(135deg,#d4b66e,#c88767);
+  --gradient-amber:linear-gradient(135deg,#d4b66e,#bd8191);
+  --gradient-cyan:linear-gradient(135deg,#4f89a8,#4f84b8);
+  --gradient-dark:linear-gradient(135deg,#24364b,#355b82);
+}
+body{background:#f3f7fc;color:#24364b}
+body::before{background:radial-gradient(circle,rgba(79,132,184,.09) 0%,transparent 70%);animation:none}
+body::after{background:radial-gradient(circle,rgba(116,127,163,.05) 0%,transparent 70%);animation:none}
+.workspace::before,.workspace::after{animation:none;opacity:.4}
+.sidebar{background:#fff;box-shadow:3px 0 20px rgba(34,63,94,.045)}
+nav a.active{background:#eaf1fa;color:#315f91;border-color:#d8e5f4;box-shadow:inset 3px 0 #315f91}
+nav a:hover{background:#f2f6fb;transform:none}
+.balance-card{background:linear-gradient(135deg,#203d5b,#315f91);box-shadow:0 12px 28px rgba(38,75,115,.18)}
+.stat-card.income{background:#f0f6fb;border-color:#dce8f3}
+.stat-card.expense{background:#fbf3f1;border-color:#eedfda}
+.stat-icon,.income .stat-icon{background:#e1edf8;color:#315f91;box-shadow:none}
+.expense .stat-icon{background:#f5e7e3;color:#a75d55}
+.transaction-icon.income{background:#e1edf8;color:#315f91}
+.transaction-icon.expense{background:#f5e7e3;color:#a75d55}
+.transaction-icon.transfer{background:#e6edf6;color:#597597}
+.transaction-value b.income,.report-card.in b{color:#315f91}
+.transaction-value b.expense,.report-card.out b{color:#a75d55}
+.transaction-value b.transfer{color:#597597}
+.bar.in{background:#5488b8}.bar.out{background:#c88778}
+.budget-bar span{background:#5488b8}
+.budget-bar.goal span{background:#778bac}
+.budget-item.warn{background:#faf6eb;border-color:#e9dfbf}
+.budget-item.over{background:#fbf1ef;border-color:#ebd8d3}
+.budget-item.warn .budget-bar span{background:#c2a35e}
+.budget-item.over .budget-bar span{background:#bd655c}
+.round-add{background:#e8f0f9;color:#315f91}
+.add-button,.modal .submit,.mobile-nav-add{background:#315f91!important}
+.add-button:hover,.modal .submit:hover{background:#264c75!important}
+.mobile-nav a.active{background:#eaf1fa;color:#315f91}
+.mobile-nav-add{color:#fff!important;box-shadow:0 5px 14px rgba(49,95,145,.24)}
+.account .tx-edit,.transaction .tx-edit{color:#315f91;background:#eaf1fa}
+.account .tx-delete,.transaction .tx-delete{color:#a75d55;background:#f8eeeb}
+.goal-item.done{background:#eff5fb;border-color:#d7e4f1}
+.carry-box{background:#f0f5fa;border-color:#cbd9e8}
+.report-card.in b,.report-cols b.income{color:#315f91}
+.report-card.out b,.report-cols b.expense{color:#a75d55}
+[data-theme="dark"]{
+  --ink:#e9f0f8;--muted:#b1c1d2;--line:#34465b;--soft:#192536;
+  --green:#86b5e5;--lime:#bbd6f1;--red:#e59a8e;--blue:#9bc5ed;
+  --purple:#b0b8d3;--pink:#daa4b2;--teal:#8fc0d4;--orange:#daa889;--yellow:#e1cc8d;
+  --card-bg:#1c2939;--card-shadow:0 6px 22px rgba(0,0,0,.18);--card-shadow-hover:0 10px 28px rgba(0,0,0,.25);
+}
+[data-theme="dark"] body{background:#111b29;color:#e9f0f8}
+[data-theme="dark"] .sidebar,[data-theme="dark"] .insight-card,[data-theme="dark"] .stat-card,[data-theme="dark"] .account,[data-theme="dark"] .transaction{background:#1b293a;border-color:#34465b}
+[data-theme="dark"] .balance-card{background:linear-gradient(135deg,#1d3855,#2b5682)}
+[data-theme="dark"] .mobile-nav a.active{background:#263b55;color:#b9d8f5}
+[data-theme="dark"] .mobile-nav-add{background:#356b9e!important;border-color:#111b29}
+[data-theme="dark"] .stat-card.income{background:#1e3043;border-color:#354b63}
+[data-theme="dark"] .stat-card.expense{background:#332827;border-color:#55403c}
+[data-theme="dark"] .budget-item.warn{background:#302c21;border-color:#655638}
+[data-theme="dark"] .budget-item.over{background:#342725;border-color:#63463e}
+[data-theme="dark"] .goal-item.done{background:#203146;border-color:#3b5670}
+[data-theme="dark"] .carry-box{background:#1c2b3d;border-color:#3d5670}
+
+/* Monthly selector for dashboard charts. */
+.chart-month-filter{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 0 14px;padding:12px 14px;border:1px solid #e0e8f1;border-radius:16px;background:#fff;box-shadow:0 3px 12px rgba(34,63,94,.04)}
+.chart-period-picker{display:flex;align-items:center;gap:10px;min-width:0}
+.chart-period-current{display:grid;gap:3px;min-width:155px;cursor:pointer}
+.chart-period-current small{font-size:9px;line-height:1;color:#7589a0;font-weight:700;letter-spacing:.8px}
+.chart-month-filter input{width:100%;min-height:32px;padding:2px 0;border:0;background:transparent;color:#24364b;font:700 15px inherit;outline:none}
+.chart-month-filter input:focus{outline:none;box-shadow:none}
+.chart-month-shortcuts{display:flex;gap:7px;align-items:center}
+.chart-month-arrow,.chart-month-quick{min-height:40px;padding:0 12px;border:1px solid #dce6f1;border-radius:11px;background:#f7f9fc;color:#315f91;font-weight:700}
+.chart-month-arrow{width:40px;padding:0;font-size:22px}
+.chart-month-quick{font-size:12px;white-space:nowrap}
+.chart-month-quick.active{background:#315f91;border-color:#315f91;color:white}
+[data-theme="dark"] .chart-month-filter{background:#1c2939;border-color:#3a4b60;box-shadow:none}
+[data-theme="dark"] .chart-period-current small{color:#bdccdc}
+[data-theme="dark"] .chart-month-filter input{color:#f0f5fb}
+[data-theme="dark"] .chart-month-arrow,[data-theme="dark"] .chart-month-quick{background:#243950;border-color:#425a73;color:#d0e5fa}
+[data-theme="dark"] .chart-month-quick.active{background:#396b9c;border-color:#396b9c;color:white}
+.chart-month-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 18px}
+.chart-month-summary>div{min-width:0;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card-bg)}
+.chart-month-summary small{display:block;margin-bottom:5px;color:var(--muted);font-size:11px}
+.chart-month-summary b{display:block;overflow-wrap:anywhere;font-size:clamp(12px,2vw,16px);font-variant-numeric:tabular-nums}
+.chart-month-summary .positive{color:#315f91}.chart-month-summary .negative{color:#a75d55}
+[data-theme="dark"] .chart-month-arrow,[data-theme="dark"] .chart-month-quick{background:#1c2939;border-color:#3a4b60;color:#c1def8}
+[data-theme="dark"] .chart-month-quick{background:#263c56}
+[data-theme="dark"] .chart-month-summary>div{background:#1c2939;border-color:#3a4b60}
+[data-theme="dark"] .chart-month-summary small{color:#c1cedc}
+[data-theme="dark"] .chart-month-summary .positive{color:#b5d9f6}.chart-month-summary .negative{color:#f0b8ab}
+@media(max-width:640px){.chart-month-filter{display:grid;grid-template-columns:40px 1fr 40px;gap:8px;justify-content:stretch;margin-bottom:12px}.chart-month-filter label{grid-column:1/-1}.chart-month-filter input{width:100%;min-width:0}.chart-month-quick{grid-row:3}.chart-month-summary{gap:7px;margin-bottom:14px}.chart-month-summary>div{padding:11px 9px;border-radius:12px}.chart-month-summary small{font-size:10px}.chart-month-summary b{font-size:12px}}
+
+/* Calendar control sits in the chart card corner, like the account add action. */
+.chart-card-title{align-items:center;position:relative;padding-right:48px}
+.chart-calendar-button{position:absolute;top:0;right:0;flex:none;margin:0;width:40px;height:40px;min-width:40px;padding:0;display:grid;place-items:center}
+.chart-calendar-button svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.chart-month-filter{display:flex;justify-content:space-between;flex-wrap:wrap;margin:0 0 14px}
+.chart-period-picker{flex:1 1 210px}
+@media(max-width:640px){
+  .chart-card-title{align-items:center;position:relative;padding-right:48px}
+  .chart-calendar-button{top:50%;right:0;transform:translateY(-50%);width:42px;height:42px;min-width:42px}
+  .chart-month-filter{display:flex;align-items:center;gap:9px;padding:10px}
+  .chart-period-picker{flex:1 1 100%;display:grid;grid-template-columns:38px minmax(0,1fr) 38px;gap:7px}
+  .chart-period-current{min-width:0}
+  .chart-month-shortcuts{width:100%;display:grid;grid-template-columns:1fr 1fr}
+}
+
+/* Dark-mode contrast pass: readable text and controls, including mobile. */
+[data-theme="dark"] body{background:#111b29!important;color:#eef4fb}
+[data-theme="dark"] header h1,[data-theme="dark"] .workspace h1{color:#f1f5fb}
+[data-theme="dark"] header h1 span,[data-theme="dark"] .workspace h1 span{
+  background:none!important;-webkit-text-fill-color:#bfdcf6!important;color:#bfdcf6!important
+}
+[data-theme="dark"] .eyebrow,[data-theme="dark"] header .eyebrow{color:#c1cfde!important}
+[data-theme="dark"] .section-title h2,[data-theme="dark"] .insight-card h2{color:#edf3fb}
+[data-theme="dark"] .section-title p,[data-theme="dark"] .insight-card p,
+[data-theme="dark"] .chart-legend,[data-theme="dark"] .bar-labels,
+[data-theme="dark"] .balance-top,[data-theme="dark"] .balance-footer small,
+[data-theme="dark"] .stat-card p,[data-theme="dark"] .stat-card small{
+  color:#c4d0df!important
+}
+[data-theme="dark"] .stat-card h3,[data-theme="dark"] .balance-card h2{color:#f1f5fb}
+[data-theme="dark"] .balance-card .balance-top{color:#dfebf7!important}
+[data-theme="dark"] .balance-card .balance-footer small{color:#dfebf7!important}
+[data-theme="dark"] .mobile-nav a,[data-theme="dark"] .mobile-nav>button:not(.mobile-nav-add){color:#c2cfdd}
+[data-theme="dark"] .mobile-nav a.active{color:#c1def8;background:#263c56}
+[data-theme="dark"] .transaction-info p,[data-theme="dark"] .transaction-value small,
+[data-theme="dark"] .account small,[data-theme="dark"] .budget-numbers small,
+[data-theme="dark"] .result-count{color:#c1cedc!important}
+[data-theme="dark"] .bar-labels span{color:#c1cedc}
+[data-theme="dark"] .filters button{color:#d4dfeb}
+[data-theme="dark"] .filters .selected{color:#fff;background:#396b9c}
+[data-theme="dark"] .stat-card.income .stat-icon{background:#29435e;color:#c2def7}
+[data-theme="dark"] .stat-card.expense .stat-icon{background:#4a302c;color:#f0b8ab}
+[data-theme="dark"] .transaction-value b.income,[data-theme="dark"] .report-card.in b{color:#b5d9f6}
+[data-theme="dark"] .transaction-value b.expense,[data-theme="dark"] .report-card.out b{color:#f0b8ab}
+[data-theme="dark"] .transaction-value b.transfer{color:#c0d1e7}
+[data-theme="dark"] .mobile-nav{background:rgba(17,27,41,.98);border-color:#3a4b60}
+[data-theme="dark"] .balance-card{background:linear-gradient(135deg,#1d3855,#2b5682)!important}
+[data-theme="dark"] .insight-card,[data-theme="dark"] .stat-card,
+[data-theme="dark"] .transaction,[data-theme="dark"] .account,
+[data-theme="dark"] .budget-item,[data-theme="dark"] .goal-item,[data-theme="dark"] .debt-item{
+  background:#1c2939!important;border-color:#3a4b60!important
+}
+[data-theme="dark"] .budget-item.warn{background:#302c21!important;border-color:#655638!important}
+[data-theme="dark"] .budget-item.over{background:#342725!important;border-color:#63463e!important}
+[data-theme="dark"] .goal-item.done{background:#203146!important;border-color:#3b5670!important}
+ 

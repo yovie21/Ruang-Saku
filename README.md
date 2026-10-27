@@ -197,107 +197,86 @@
 ### 1️⃣ Landing Page — Halaman Utama
 
 ![Landing Page](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-01-landing.png)
-_Tampilan utama aplikasi Ruang Saku dengan branding dan tombol Masuk_
 
 ### 2️⃣ Halaman Login
 
 ![Login](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-19-login.png)
-_Form login dengan opsi Lanjutkan dengan Google_
 
 ### 3️⃣ Pilih Akun Google
 
 ![Google OAuth](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/rekapan.png)
-_Pilih akun Google untuk proses autentikasi_
 
 ### 4️⃣ Dashboard Utama
 
 ![Dashboard](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-04-catat utang.png)
-_Ringkasan saldo total, pemasukan, pengeluaran, chart arus 30 hari, kalender, daftar akun, anggaran, dan target tabungan_
 
 ### 5️⃣ Tambah Akun Bank (Dialog)
 
 ![Add Account Dialog](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-05-jadwal rutin.png)
-_Dialog tambah akun bank dengan field nama bank, jenis, 4 digit akhir, dan saldo awal_
 
 ### 6️⃣ Tambah Akun Bank (Form Terisi)
 
 ![Add Account Fill](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-06-kategori transaksi.png)
-_Contoh form akun bank yang sudah diisi lengkap_
 
 ### 7️⃣ Pilih Jenis Transaksi
 
 ![Pilih Transaksi](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-07-pilih-transaksi.png)
-_Pilih Pemasukan (hijau) atau Pengeluaran (merah) untuk mencatat transaksi baru_
 
 ### 8️⃣ Catat Pemasukan
 
 ![Catat Pemasukan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-08-target tabungan.png)
-_Form pencatatan pemasukan dengan judul, kategori, akun, nominal, dan tanggal_
 
 ### 9️⃣ Catat Pengeluaran
 
 ![Catat Pengeluaran](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-09-catat-pengeluaran.png)
-_Form pencatatan pengeluaran dengan judul, kategori, akun, nominal, dan tanggal_
 
 ### 🔟 Transfer Antar-Akun
 
 ![Transfer](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-akun bank.png)
-_Form transfer uang antar akun dengan akun pengirim, penerima, nominal, tanggal, dan catatan_
 
 ### 1️⃣1️⃣ Dashboard dengan Data
 
 ![Dashboard Data](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-11-dashboard-data.png)
-_Dashboard setelah ada transaksi baru — saldo total diperbarui, chart arus, dan donut chart pengeluaran per kategori_
 
 ### 1️⃣2️⃣ Atur Batas Belanja (Budget)
 
 ![Budget](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-12-budget.png)
-_Form pengaturan batas belanja per kategori dengan nominal bulanan_
 
 ### 1️⃣3️⃣ Buat Target Tabungan
 
 ![Target Tabungan](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-13-target-tabungan.png)
-_Form buat target tabungan dengan nama, nominal target, dan tanggal tenggat_
 
 ### 1️⃣4️⃣ Kelola Dana Tabungan
 
 ![Kelola Dana](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-14-kelola-dana.png)
-_Detail target tabungan dengan progress, fitur Nabung dan Tarik_
 
 ### 1️⃣5️⃣ Kelola Kategori
 
 ![Kategori](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-akun bank.png)
-_Menu kelola kategori dengan tab Pengeluaran dan Pemasukan_
 
 ### 1️⃣6️⃣ Buat Transaksi Otomatis (Recurring)
 
 ![Recurring](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-16-recurring.png)
-_Form transaksi otomatis berulang dengan nama, tipe, kategori, akun, nominal, frekuensi, dan tanggal_
 
 ### 1️⃣7️⃣ Catat Utang / Piutang
 
 ![Utang](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-17-utang.png)
-_Form catat utang dengan nama, nominal, jenis cicilan, jatuh tempo, dan catatan_
 
 ### 1️⃣8️⃣ Aktivitas Terbaru & Pencarian
 
 ![Aktivitas](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-18-aktivitas.png)
-_Daftar aktivitas terbaru dengan fitur pencarian dan filter_
 
 ### 1️⃣9️⃣ Kalender Arus Kas
 
 ![Kalender](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-19-login.png)
-_Kalender interaktif menampilkan arus kas per hari untuk bulan tertentu_
 
 ### 2️⃣0️⃣ Rekap Bulanan (Laporan)
 
 ![Rekap](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-20-rekap.png)
-_Rekapitulasi keuangan bulanan dengan ringkasan pemasukan, pengeluaran, dan arus bersih_
 
 ### 2️⃣1️⃣ Print Preview / Logout
 
 ![Print/Logout](https://raw.githubusercontent.com/yovie21/Ruang-Saku/main/public/screenshot-21-print.png)
-_Preview cetak laporan dan opsi logout_
 
 ---
 
