@@ -3015,6 +3015,16 @@ export default function Home() {
   const today = new Date().toLocaleDateString("id-ID", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
 
    return <main ref={mainRef}>
+     <section className="public-hero">
+       <h1>Ruang Saku — Rekam Keuangan Pribadi</h1>
+       <p>Catat pengeluaran, atur target tabungan, dan lihat rekap bulanan. Gratis dan offline.</p>
+       <div className="hero-features">
+         <span>✓ Catat transaksi dalam 30 detik</span>
+         <span>✓ Target tabungan fleksibel</span>
+         <span>✓ Laporan bulanan & PDF</span>
+       </div>
+       <a href="/login" className="btn-primary">Mulai Catat Sekarang</a>
+     </section>
     {menu && <div className="sidebar-backdrop" onClick={() => setMenu(false)} />}
     <aside className={menu ? "sidebar open" : "sidebar"}>
       <div className="brand"><img className="brand-mark-img" src="/logo.svg" alt="Ruang Saku" width={34} height={34} /><span>ruang<span>saku</span></span></div>

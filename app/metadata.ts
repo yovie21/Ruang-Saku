@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Ruang Saku | Keuangan Pribadi",
+  title: "Ruang Saku — Rekam Keuangan Pribadi",
   description:
-    "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi secara mudah di aplikasi Ruang Saku.",
+    "Aplikasi keuangan pribadi Ruang Saku. Catat pengeluaran, atur target tabungan, dan lihat rekap bulanan sangat mudah. Mulai catat keuanganmu sekarang.",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Ruang Saku" },
   icons: {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Ruang Saku — Aplikasi Keuangan Pribadi",
     description:
-      "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi.",
+      "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi secara mudah di aplikasi Ruang Saku.",
     type: "website",
     url: "https://ruang-saku-peach.vercel.app",
     images: [
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
 
 export const dynamicMetadata: Metadata = {
   title: {
-    default: "Ruang Saku | Keuangan Pribadi",
+    default: "Ruang Saku | Rekam Keuangan Pribadi",
     template: "%s | Ruang Saku",
   },
 };

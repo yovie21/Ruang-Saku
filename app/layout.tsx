@@ -5,8 +5,9 @@ import { ThemeProvider } from "./theme";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
-  title: "Ruang Saku | Keuangan Pribadi",
-  description: "Catat keuangan pribadi dengan lebih tenang.",
+  metadataBase: new URL("https://ruang-saku-peach.vercel.app"),
+  title: "Ruang Saku | Rekam Keuangan Pribadi",
+  description: "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi.",
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, statusBarStyle: "default", title: "Ruang Saku" },
   icons: {
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Ruang Saku — Aplikasi Keuangan Pribadi",
-    description: "Catat keuangan pribadi dengan lebih tenang.",
+    description: "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi.",
     type: "website",
     url: "https://ruang-saku-peach.vercel.app",
     images: [
@@ -38,9 +39,10 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@yovie21",
     title: "Ruang Saku — Aplikasi Keuangan Pribadi",
-    description: "Catat keuangan pribadi dengan lebih tenang.",
+    description: "Catat keuangan pribadi dengan lebih tenang. Kelola pengeluaran, target tabungan, dan rekap transaksi.",
     images: ["/og-image.svg"]
-  }
+  },
+  robots: "index, follow",
 };
 
 export const viewport = {
@@ -58,6 +60,29 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="id" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "SoftwareApplication",
+              "name": "Ruang Saku",
+              "alternateName": "Ruang Saku — Rekam Keuangan Pribadi",
+              "description": "Aplikasi keuangan pribadi untuk mencatat pengeluaran, target tabungan, dan rekap transaksi.",
+              "url": "https://ruang-saku-peach.vercel.app",
+              "applicationCategory": "FinancialApplication",
+              "operatingSystem": "Web",
+              "offers": { "@type": "Offer", "price": "0", "priceCurrency": "IDR" },
+              "author": { "@type": "Person", "name": "Yovie Muhammad" },
+              "featureList": [
+                "Catat transaksi pengeluaran",
+                "Target tabungan",
+                "Laporan bulanan",
+                "Pengelolaan target tabungan"
+              ]
+            })
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `(function(){try{var t=localStorage.getItem("ruang-saku-theme");if(!t){t=window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}document.documentElement.dataset.theme=t;}catch(e){}})();`
