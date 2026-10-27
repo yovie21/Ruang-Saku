@@ -415,36 +415,64 @@ export default function Home() {
   }
 
   async function loadData() {
+    setLoading(true);
     const nowD = new Date();
     const monthStart = `${nowD.getFullYear()}-${String(nowD.getMonth() + 1).padStart(2, "0")}-01`;
     const prevD = new Date(nowD.getFullYear(), nowD.getMonth() - 1, 1);
     const prevStart = `${prevD.getFullYear()}-${String(prevD.getMonth() + 1).padStart(2, "0")}-01`;
-    const [accRes, txRes, catRes, budRes, prevBudRes, goalRes, recRes, splitRes, debtRes, debtHistRes, billRes] = await Promise.all([
-      fetch("/api/accounts"), fetch("/api/transactions"), fetch("/api/categories?usage=1"),
-      fetch(`/api/budgets?month=${monthStart}`), fetch(`/api/budgets?month=${prevStart}`),
-      fetch("/api/goals"), fetch("/api/recurring"), fetch("/api/splits"), fetch("/api/debts"), fetch("/api/debts?history=1"), fetch("/api/bills")
-    ]);
-    const accs = await accRes.json();
-    const txs = await txRes.json();
-    const cats = await catRes.json();
-    const buds = await budRes.json();
-    const prevBuds = await prevBudRes.json();
-    const gls = await goalRes.json();
-    const recs = await recRes.json();
-    const spl = await splitRes.json();
-    const dbs = await debtRes.json().catch(() => []);
-    const dhist = await debtHistRes.json().catch(() => []);
-    const bls = await billRes.json().catch(() => []);
-    setAccounts(Array.isArray(accs) ? accs : []); setTransactions(Array.isArray(txs) ? txs : []); setCategories(Array.isArray(cats) ? cats : []);
-    setBudgets(Array.isArray(buds) ? buds : []);
-    setPrevBudgets(Array.isArray(prevBuds) ? prevBuds : []);
-    setGoals(Array.isArray(gls) ? gls : []);
-    setRecurring(Array.isArray(recs) ? recs : []);
-    setSplits(Array.isArray(spl) ? spl : []);
-    setDebts(Array.isArray(dbs) ? dbs : []);
-    setDebtHistory(Array.isArray(dhist) ? dhist : []);
+    
+    // Tier 1: Critical data (accounts, transactions, categories)
+    try {
+      const [accRes, txRes, catRes] = await Promise.all([
+        fetch("/api/accounts"),
+        fetch("/api/transactions"),
+        fetch("/api/categories?usage=1")
+      ]);
+      const accs = await accRes.json();
+      const txs = await txRes.json();
+      const cats = await catRes.json();
+      setAccounts(Array.isArray(accs) ? accs : []);
+      setTransactions(Array.isArray(txs) ? txs : []);
+      setCategories(Array.isArray(cats) ? cats : []);
+    } catch (e) {
+      console.error("Tier 1 load error:", e);
+    }
+    
+    // Tier 2: Background data (budgets, goals, recurring, splits, debts, bills)
+    (async () => {
+      try {
+        const [budRes, prevBudRes, goalRes, recRes, splitRes, debtRes, debtHistRes, billRes] = await Promise.all([
+          fetch(`/api/budgets?month=${monthStart}`),
+          fetch(`/api/budgets?month=${prevStart}`),
+          fetch("/api/goals"),
+          fetch("/api/recurring"),
+          fetch("/api/splits"),
+          fetch("/api/debts"),
+          fetch("/api/debts?history=1"),
+          fetch("/api/bills")
+        ]);
+        const buds = await budRes.json();
+        const prevBuds = await prevBudRes.json();
+        const gls = await goalRes.json();
+        const recs = await recRes.json();
+        const spl = await splitRes.json();
+        const dbs = await debtRes.json().catch(() => []);
+        const dhist = await debtHistRes.json().catch(() => []);
+        const bls = await billRes.json().catch(() => []);
+        setBudgets(Array.isArray(buds) ? buds : []);
+        setPrevBudgets(Array.isArray(prevBuds) ? prevBuds : []);
+        setGoals(Array.isArray(gls) ? gls : []);
+        setRecurring(Array.isArray(recs) ? recs : []);
+        setSplits(Array.isArray(spl) ? spl : []);
+        setDebts(Array.isArray(dbs) ? dbs : []);
+        setDebtHistory(Array.isArray(dhist) ? dhist : []);
         setBills(Array.isArray(bls) ? bls : []);
         setLoading(false);
+      } catch (e) {
+        console.error("Tier 2 load error:", e);
+        setLoading(false);
+      }
+    })();
   }
 
   useEffect(() => { loadData(); }, []);
