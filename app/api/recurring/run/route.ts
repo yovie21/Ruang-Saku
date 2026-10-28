@@ -12,7 +12,13 @@ type Rule = {
 export async function POST() {
   try {
     const userId = await requireUser();
+    if (!userId) {
+      return NextResponse.json({ error: "Unauthorized: no user session" }, { status: 401 });
+    }
+    
     const today = new Date().toISOString().slice(0, 10);
+    console.log(`[recurring/run] userId=${userId}, today=${today}`);
+    
     const rules = await query<Rule>(
       `SELECT id, title, type, amount, category_id, account_id, frequency, next_run_date, end_date
        FROM recurring_rules
@@ -20,6 +26,9 @@ export async function POST() {
        ORDER BY next_run_date LIMIT 50`,
       [userId, today]
     );
+    
+    console.log(`[recurring/run] found ${rules.length} due rules`);
+    
     let created = 0;
     const skipped: string[] = [];
     for (const r of rules) {
@@ -53,8 +62,12 @@ export async function POST() {
       await execute("UPDATE recurring_rules SET next_run_date = ?, updated_at = NOW() WHERE id = ? AND user_id = ?", [addFrequency(r.next_run_date, r.frequency), r.id, userId]);
       created += 1;
     }
+    
+    console.log(`[recurring/run] created=${created}, skipped=${skipped.length}`);
     return NextResponse.json({ created, skipped, total: rules.length });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    const errorMsg = (e as Error).message;
+    console.error(`[recurring/run] ERROR: ${errorMsg}`, e);
+    return NextResponse.json({ error: errorMsg, details: String(e) }, { status: 400 });
   }
 }
