@@ -42,8 +42,13 @@ const migrationSQL = [
 ];
 
 export async function POST(req: Request) {
-  // Temporary: Allow migration without token for initial setup
-  // TODO: Require token in production after first run
+  // Require admin token
+  const token = req.headers.get("x-admin-token");
+  const validToken = process.env.ADMIN_TOKEN;
+  
+  if (!validToken || token !== validToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
   
   try {
     console.log("Applying performance migration...");
