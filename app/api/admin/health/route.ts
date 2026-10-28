@@ -3,28 +3,24 @@ import { query } from "@/lib/db";
 
 export async function GET() {
   try {
-    // Check if recurring_rules table exists
-    const tables = await query<{ table_name: string }>(
-      `SELECT table_name FROM information_schema.tables 
-       WHERE table_schema = DATABASE() AND table_name = 'recurring_rules'`
-    );
+    const tableNames = ["recurring_rules", "users", "goals", "splits", "debts", "bills", "accounts", "transactions", "categories"];
+    const result: Record<string, boolean> = {};
     
-    const recurringExists = tables.length > 0;
+    for (const tbl of tableNames) {
+      const check = await query<{ cnt: number }>(
+        `SELECT COUNT(*) as cnt FROM information_schema.tables 
+         WHERE table_schema = DATABASE() AND table_name = ?`,
+        [tbl]
+      );
+      result[tbl] = (check[0]?.cnt || 0) > 0;
+    }
     
-    // Check if users table exists
-    const userTables = await query<{ table_name: string }>(
-      `SELECT table_name FROM information_schema.tables 
-       WHERE table_schema = DATABASE() AND table_name = 'users'`
-    );
-    
-    const usersExists = userTables.length > 0;
+    const missing = Object.entries(result).filter(([_, exists]) => !exists).map(([tbl]) => tbl);
     
     return NextResponse.json({
-      status: "ok",
-      tables: {
-        recurring_rules: recurringExists,
-        users: usersExists
-      }
+      status: missing.length === 0 ? "ok" : "missing_tables",
+      tables: result,
+      missing: missing.length > 0 ? missing : undefined
     });
   } catch (e) {
     console.error("[health] error:", e);
