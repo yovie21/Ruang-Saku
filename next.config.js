@@ -35,11 +35,11 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' https://cdn.vercel-insights.com",
+              "script-src 'self' https://accounts.google.com https://cdn.vercel-insights.com",
               "style-src 'self' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: https:",
-              "connect-src 'self' https://*.vercel-insights.com",
+              "connect-src 'self' https://*.vercel-insights.com https://accounts.google.com",
               "frame-ancestors 'none'",
               "base-uri 'self'",
               "form-action 'self'",
