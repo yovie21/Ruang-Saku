@@ -1,6 +1,20 @@
 import { execute } from "@/lib/db";
 
 const migrationSQL = [
+  `CREATE TABLE IF NOT EXISTS goals (
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    user_id CHAR(36) NOT NULL,
+    title VARCHAR(160) NOT NULL,
+    target_amount DECIMAL(18,2) NOT NULL,
+    current_amount DECIMAL(18,2) NOT NULL DEFAULT 0,
+    category VARCHAR(50) NULL,
+    due_date DATE NULL,
+    is_achieved BOOLEAN NOT NULL DEFAULT FALSE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    CONSTRAINT goals_user_fk FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    KEY goals_user_active_idx (user_id, is_achieved)
+  ) ENGINE=InnoDB`,
   `CREATE TABLE IF NOT EXISTS recurring_rules (
     id CHAR(36) NOT NULL PRIMARY KEY,
     user_id CHAR(36) NOT NULL,
