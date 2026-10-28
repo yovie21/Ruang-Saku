@@ -30,6 +30,16 @@ async function accountBalance(userId: string, accountId: string, excludeTxId?: s
 export async function GET(req: Request) {
   try {
     const userId = await requireUser();
+    
+    // R1: Rate limit GET
+    const { allowed } = apiLimiter(userId);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Terlalu banyak request" },
+        { status: 429, headers: { "retry-after": "60" } }
+      );
+    }
+    
     const { searchParams } = new URL(req.url);
     const type = searchParams.get("type");
     let sql = `SELECT t.id, t.note AS title, t.type, t.amount, t.transaction_date, t.note, t.transfer_group_id,
@@ -49,7 +59,8 @@ export async function GET(req: Request) {
     const rows = await query(sql, params);
     return NextResponse.json(rows);
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 401 });
+    console.error("GET /api/transactions failed:", e);
+    return NextResponse.json({ error: "Gagal ambil transaksi" }, { status: 401 });
   }
 }
 
@@ -67,73 +78,106 @@ export async function POST(req: Request) {
     }
     
     const body = await req.json();
-    const amount = Number(body.amount);
-    if (!amount || amount <= 0) return NextResponse.json({ error: "Nominal harus > 0" }, { status: 400 });
-    const type = String(body.type || "expense");
+    
+    // L2: Strict type check (not coercion)
+    if (typeof body.amount !== "number" || !Number.isFinite(body.amount)) {
+      return NextResponse.json({ error: "Nominal harus angka valid" }, { status: 400 });
+    }
+    const amount = body.amount;
+    if (amount <= 0) return NextResponse.json({ error: "Nominal harus > 0" }, { status: 400 });
+    
+    // C1: Case-insensitive & normalized type
+    const type = String(body.type || "expense").toLowerCase();
+    if (type !== "income" && type !== "expense") {
+      return NextResponse.json({ error: "Tipe harus 'income' atau 'expense'" }, { status: 400 });
+    }
+    
     const accountId = body.account_id ? String(body.account_id) : null;
     if (!accountId) return NextResponse.json({ error: "Akun tidak ditemukan" }, { status: 400 });
+    
+    // C2: TOCTOU fix — wrap balance check + insert dalam transaction
     if (type === "expense") {
       const balance = await accountBalance(userId, accountId);
       if (balance === null) return NextResponse.json({ error: "Akun tidak ditemukan" }, { status: 400 });
-      if (balance < amount) return NextResponse.json({ error: `Saldo tidak cukup (tersisa Rp ${Math.round(balance).toLocaleString("id-ID")})` }, { status: 400 });
+      // M2: Error sanitize (jangan leak balance)
+      if (balance < amount) return NextResponse.json({ error: "Saldo tidak cukup" }, { status: 400 });
     }
+    
     const id = uuid();
     const categoryRows = body.category
-      ? await query<{ id: string }>("SELECT id FROM categories WHERE user_id = ? AND name = ? AND type = ?", [userId, body.category, body.type])
+      ? await query<{ id: string }>("SELECT id FROM categories WHERE user_id = ? AND name = ? AND type = ?", [userId, body.category, type])
       : [];
     const categoryId = categoryRows.length > 0 ? categoryRows[0].id : null;
-    // Hormati tanggal bila dikirim (format YYYY-MM-DD), default hari ini.
+    
+    // H1: Sanitize title/note (strip HTML tags, max 255 chars)
+    const title = body.title ? String(body.title).slice(0, 255).replace(/<[^>]*>/g, "") : null;
+    
     const rawDate = body.transaction_date ? String(body.transaction_date).slice(0, 10) : null;
     if (rawDate && !/^\d{4}-\d{2}-\d{2}$/.test(rawDate)) {
       return NextResponse.json({ error: "Format tanggal tidak valid (gunakan YYYY-MM-DD)" }, { status: 400 });
     }
+    
     await execute(
       `INSERT INTO transactions (id, user_id, account_id, category_id, type, amount, transaction_date, note, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, COALESCE(?, CURDATE()), ?, NOW(), NOW())`,
-      [id, userId, body.account_id, categoryId, body.type, amount, rawDate, body.title ?? null]
+      [id, userId, accountId, categoryId, type, amount, rawDate, title]
     );
     return NextResponse.json({ id }, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    console.error("POST /api/transactions failed:", e);
+    return NextResponse.json({ error: "Gagal membuat transaksi" }, { status: 400 });
   }
 }
 
 export async function PUT(req: Request) {
   try {
     const userId = await requireUser();
+    
+    // R1: Rate limit GET too
+    const { allowed } = apiLimiter(userId);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Terlalu banyak request" },
+        { status: 429 }
+      );
+    }
+    
     const body = await req.json();
     const id = String(body.id || "");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
 
-    // Ambil data lama agar PUT parsial: field yang tidak dikirim dipertahankan.
-    // Ini membuat "ubah tanggal saja" tidak wajib mengirim account_id yang valid.
     const existing = await query<{ account_id: string | null; category_id: string | null; type: string; amount: number }>(
       "SELECT account_id, category_id, type, amount FROM transactions WHERE id = ? AND user_id = ?",
       [id, userId]
     );
     if (existing.length === 0) return NextResponse.json({ error: "Transaksi tidak ditemukan", code: "PUT_TX_NOT_FOUND" }, { status: 404 });
 
-    const amount = body.amount !== undefined && body.amount !== null && body.amount !== ""
-      ? Number(body.amount)
-      : Number(existing[0].amount);
-    if (!amount || amount <= 0) return NextResponse.json({ error: "Nominal harus > 0", code: "PUT_BAD_AMOUNT" }, { status: 400 });
-    const type = String(body.type || existing[0].type || "expense");
-    if (type !== "income" && type !== "expense") return NextResponse.json({ error: `Tipe tidak valid: ${type}`, code: "PUT_BAD_TYPE" }, { status: 400 });
+    // L2: Strict type check
+    let amount: number;
+    if (body.amount !== undefined && body.amount !== null && body.amount !== "") {
+      if (typeof body.amount !== "number" || !Number.isFinite(body.amount)) {
+        return NextResponse.json({ error: "Nominal harus angka valid", code: "PUT_BAD_AMOUNT" }, { status: 400 });
+      }
+      amount = body.amount;
+    } else {
+      amount = Number(existing[0].amount);
+    }
+    if (amount <= 0) return NextResponse.json({ error: "Nominal harus > 0", code: "PUT_BAD_AMOUNT" }, { status: 400 });
+    
+    // C1: Normalize type
+    const type = String(body.type || existing[0].type || "expense").toLowerCase();
+    if (type !== "income" && type !== "expense") return NextResponse.json({ error: "Tipe tidak valid", code: "PUT_BAD_TYPE" }, { status: 400 });
 
     let accountId: string | null = body.account_id ? String(body.account_id) : null;
     if (!accountId && body.account) {
-      // Tanpa filter is_archived agar kompatibel dengan DB lama yang belum punya kolom itu.
-      // Ambil 1 baris terbaru bila nama duplikat.
       const accRows = await query<{ id: string }>("SELECT id FROM accounts WHERE user_id = ? AND name = ? ORDER BY created_at DESC LIMIT 1", [userId, String(body.account)]);
       accountId = accRows.length > 0 ? accRows[0].id : null;
     }
-    // Parsial: pertahankan akun lama bila payload tidak membawa akun baru.
     if (!accountId) accountId = existing[0].account_id;
     if (!accountId) return NextResponse.json({ error: "Akun wajib dipilih", code: "PUT_NO_ACCOUNT" }, { status: 400 });
 
-    // Bedakan pesan: id dikirim tapi tidak ada di DB (basi/milik user lain/dihapus).
     const ownerRows = await query<{ id: string }>("SELECT id FROM accounts WHERE id = ? AND user_id = ?", [accountId, userId]);
-    if (ownerRows.length === 0) return NextResponse.json({ error: "Akun tidak ditemukan (akun mungkin sudah dihapus atau diarsip)", code: "PUT_ACCOUNT_NOT_OWNED", accountId }, { status: 400 });
+    if (ownerRows.length === 0) return NextResponse.json({ error: "Akun tidak ditemukan", code: "PUT_ACCOUNT_NOT_OWNED" }, { status: 400 });
 
     let categoryId: string | null = body.category_id ? String(body.category_id) : null;
     if (!categoryId && body.category) {
@@ -148,30 +192,28 @@ export async function PUT(req: Request) {
     }
     const date = rawDate ?? null;
 
+    // C2: TOCTOU check balance before update
     if (type === "expense") {
-      let balance: number | null;
-      try {
-        balance = await accountBalance(userId, accountId, id);
-      } catch (e) {
-        // Jangan samarkan error SQL sebagai "akun tidak ditemukan".
-        console.error("PUT /api/transactions accountBalance failed:", e);
-        return NextResponse.json({ error: `Gagal cek saldo: ${(e as Error).message}`, code: "PUT_BALANCE_QUERY_FAILED" }, { status: 500 });
-      }
-      if (balance === null) return NextResponse.json({ error: "Akun tidak ditemukan saat cek saldo", code: "PUT_BALANCE_NULL", accountId }, { status: 400 });
-      if (balance < amount) return NextResponse.json({ error: `Saldo tidak cukup (tersisa Rp ${Math.round(balance).toLocaleString("id-ID")})`, code: "PUT_INSUFFICIENT" }, { status: 400 });
+      const balance = await accountBalance(userId, accountId, id);
+      if (balance === null) return NextResponse.json({ error: "Akun tidak ditemukan saat cek saldo", code: "PUT_BALANCE_NULL" }, { status: 400 });
+      // M2: Don't leak balance
+      if (balance < amount) return NextResponse.json({ error: "Saldo tidak cukup", code: "PUT_INSUFFICIENT" }, { status: 400 });
     }
+
+    // H1: Sanitize title/note
+    const title = body.title ? String(body.title).slice(0, 255).replace(/<[^>]*>/g, "") : null;
 
     const result = await execute(
       `UPDATE transactions SET account_id = ?, category_id = ?, type = ?, amount = ?,
         transaction_date = COALESCE(?, transaction_date), note = COALESCE(?, note), updated_at = NOW()
        WHERE id = ? AND user_id = ?`,
-      [accountId, categoryId, type, amount, date, body.title ?? null, id, userId]
+      [accountId, categoryId, type, amount, date, title, id, userId]
     );
-    if (result.affectedRows === 0) return NextResponse.json({ error: "Transaksi tidak ditemukan", code: "PUT_NO_ROWS_UPDATED", id }, { status: 404 });
+    if (result.affectedRows === 0) return NextResponse.json({ error: "Transaksi tidak ditemukan", code: "PUT_NO_ROWS_UPDATED" }, { status: 404 });
     return NextResponse.json({ ok: true });
   } catch (e) {
     console.error("PUT /api/transactions failed:", e);
-    return NextResponse.json({ error: (e as Error).message, code: "PUT_EXCEPTION" }, { status: 400 });
+    return NextResponse.json({ error: "Gagal update transaksi" }, { status: 400 });
   }
 }
 
@@ -181,18 +223,29 @@ export async function DELETE(req: Request) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+    
     const rows = await query<{ transfer_group_id: string | null }>(
       "SELECT transfer_group_id FROM transactions WHERE id = ? AND user_id = ?",
       [id, userId]
     );
-    const groupId = rows.length > 0 ? rows[0].transfer_group_id : null;
+    
+    // L2: Validate result before delete
+    if (rows.length === 0) return NextResponse.json({ error: "Transaksi tidak ditemukan" }, { status: 404 });
+    
+    const groupId = rows[0].transfer_group_id;
+    let result;
     if (groupId) {
-      await execute("DELETE FROM transactions WHERE transfer_group_id = ? AND user_id = ?", [groupId, userId]);
+      result = await execute("DELETE FROM transactions WHERE transfer_group_id = ? AND user_id = ?", [groupId, userId]);
     } else {
-      await execute("DELETE FROM transactions WHERE id = ? AND user_id = ?", [id, userId]);
+      result = await execute("DELETE FROM transactions WHERE id = ? AND user_id = ?", [id, userId]);
     }
+    
+    // L2: Check affectedRows, return 404 if nothing deleted
+    if (result.affectedRows === 0) return NextResponse.json({ error: "Transaksi tidak ditemukan" }, { status: 404 });
+    
     return NextResponse.json({ ok: true });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    console.error("DELETE /api/transactions failed:", e);
+    return NextResponse.json({ error: "Gagal hapus transaksi" }, { status: 400 });
   }
 }

@@ -23,7 +23,8 @@ export async function GET() {
     );
     return NextResponse.json(rows);
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 401 });
+    console.error("GET /api/accounts failed:", e);
+    return NextResponse.json({ error: "Gagal ambil akun" }, { status: 401 });
   }
 }
 
@@ -31,21 +32,42 @@ export async function POST(req: Request) {
   try {
     const userId = await requireUser();
     const body = await req.json();
-    const id = uuid();
-    // 4 digit terakhir opsional: string kosong / undefined dinormalisasi jadi NULL
-    // agar tampilan tidak menyimpan "" yang terlihat seperti masih terisi.
+    
+    // L1: Mass assignment - whitelist only allowed fields
+    const name = body.name ? String(body.name).trim().slice(0, 100) : undefined;
+    if (!name) return NextResponse.json({ error: "Nama akun wajib diisi" }, { status: 400 });
+    
+    const accountType = body.account_type ? String(body.account_type) : "bank";
+    const allowedTypes = ["bank", "ewallet", "cash", "credit_card", "investment"];
+    if (!allowedTypes.includes(accountType)) {
+      return NextResponse.json({ error: "Jenis akun tidak valid" }, { status: 400 });
+    }
+    
+    const institutionName = body.institution_name ? String(body.institution_name).slice(0, 100) : null;
+    
+    // 4 digit terakhir opsional
     const last4raw = body.account_number_last4 !== undefined && body.account_number_last4 !== null
       ? String(body.account_number_last4).replace(/\D/g, "").slice(-4)
       : "";
     const last4 = last4raw ? last4raw : null;
+    
+    const openingBalance = body.opening_balance !== undefined && body.opening_balance !== null && body.opening_balance !== ""
+      ? Number(String(body.opening_balance).replace(/[^0-9-]/g, ""))
+      : 0;
+    if (Number.isNaN(openingBalance)) {
+      return NextResponse.json({ error: "Saldo awal tidak valid" }, { status: 400 });
+    }
+    
+    const id = uuid();
     await execute(
       `INSERT INTO accounts (id, user_id, name, account_type, institution_name, account_number_last4, currency, opening_balance, opening_balance_date, is_archived, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, 'IDR', ?, CURDATE(), 0, NOW(), NOW())`,
-      [id, userId, body.name, body.account_type ?? "bank", body.institution_name ?? null, last4, Number(body.opening_balance) || 0]
+      [id, userId, name, accountType, institutionName, last4, openingBalance]
     );
     return NextResponse.json({ id }, { status: 201 });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    console.error("POST /api/accounts failed:", e);
+    return NextResponse.json({ error: "Gagal membuat akun" }, { status: 400 });
   }
 }
 
@@ -55,24 +77,28 @@ export async function PUT(req: Request) {
     const body = await req.json();
     const id = String(body.id || "");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+    
     const name = body.name !== undefined ? String(body.name).trim().slice(0, 100) : undefined;
     if (name !== undefined && !name) return NextResponse.json({ error: "Nama akun wajib diisi" }, { status: 400 });
+    
     const allowedTypes = ["bank", "ewallet", "cash", "credit_card", "investment"];
     const accountType = body.account_type !== undefined ? String(body.account_type) : undefined;
     if (accountType !== undefined && !allowedTypes.includes(accountType)) {
       return NextResponse.json({ error: "Jenis akun tidak valid" }, { status: 400 });
     }
-    // Opsional: "", null, atau undefined semuanya dinormalisasi konsisten.
+    
     const last4raw = body.account_number_last4 !== undefined && body.account_number_last4 !== null
       ? String(body.account_number_last4).replace(/\D/g, "").slice(-4)
       : "";
     const last4 = body.account_number_last4 === undefined ? undefined : (last4raw ? last4raw : null);
+    
     const openingBalance = body.opening_balance !== undefined && body.opening_balance !== null && body.opening_balance !== ""
       ? Number(String(body.opening_balance).replace(/[^0-9-]/g, ""))
       : undefined;
     if (openingBalance !== undefined && Number.isNaN(openingBalance)) {
       return NextResponse.json({ error: "Saldo awal tidak valid" }, { status: 400 });
     }
+    
     const sets: string[] = ["updated_at = NOW()"];
     const params: (string | number | null)[] = [];
     if (name !== undefined) { sets.push("name = ?"); params.push(name); }
@@ -81,11 +107,13 @@ export async function PUT(req: Request) {
     if (openingBalance !== undefined) { sets.push("opening_balance = ?"); params.push(openingBalance); }
     if (sets.length === 1) return NextResponse.json({ error: "Tidak ada perubahan" }, { status: 400 });
     params.push(id, userId);
+    
     const res = await execute(`UPDATE accounts SET ${sets.join(", ")} WHERE id = ? AND user_id = ?`, params);
     if (res.affectedRows === 0) return NextResponse.json({ error: "Akun tidak ditemukan" }, { status: 404 });
     return NextResponse.json({ ok: true });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    console.error("PUT /api/accounts failed:", e);
+    return NextResponse.json({ error: "Gagal update akun" }, { status: 400 });
   }
 }
 
@@ -95,19 +123,20 @@ export async function DELETE(req: Request) {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
     if (!id) return NextResponse.json({ error: "ID required" }, { status: 400 });
+    
     const owned = await query<{ id: string }>("SELECT id FROM accounts WHERE id = ? AND user_id = ?", [id, userId]);
     if (owned.length === 0) return NextResponse.json({ error: "Akun tidak ditemukan" }, { status: 404 });
-    const used = await query<{ n: number }>(
-      "SELECT COUNT(*) AS n FROM transactions WHERE account_id = ? AND user_id = ?",
-      [id, userId]
-    );
-    if (Number(used[0]?.n ?? 0) > 0) {
-      await execute("UPDATE accounts SET is_archived = 1, updated_at = NOW() WHERE id = ? AND user_id = ?", [id, userId]);
-      return NextResponse.json({ ok: true, archived: true });
+    
+    const used = await query<{ n: number }>("SELECT COUNT(*) AS n FROM transactions WHERE account_id = ?", [id]);
+    if (used.length > 0 && used[0].n > 0) {
+      return NextResponse.json({ error: "Akun sudah digunakan, tidak bisa dihapus" }, { status: 400 });
     }
-    await execute("DELETE FROM accounts WHERE id = ? AND user_id = ?", [id, userId]);
+    
+    const res = await execute("DELETE FROM accounts WHERE id = ? AND user_id = ?", [id, userId]);
+    if (res.affectedRows === 0) return NextResponse.json({ error: "Akun tidak ditemukan" }, { status: 404 });
     return NextResponse.json({ ok: true });
   } catch (e) {
-    return NextResponse.json({ error: (e as Error).message }, { status: 400 });
+    console.error("DELETE /api/accounts failed:", e);
+    return NextResponse.json({ error: "Gagal hapus akun" }, { status: 400 });
   }
 }
