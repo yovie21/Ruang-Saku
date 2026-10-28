@@ -3237,7 +3237,7 @@ export default function Home() {
             <button className={filter === "transfer" ? "selected" : ""} onClick={() => setFilter("transfer")}>Transfer</button>
           </div>
           <div className="search-row">
-            <label className="search-box"><span>⌕</span><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Cari nama, kategori, akun, nominal…" /></label>
+            <label className="search-box"><span>⌕</span><input id="search" name="search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Cari nama, kategori, akun, nominal…" /></label>
             <div className="date-filters">
               <input type="date" value={dateFrom} max={dateTo || undefined} onChange={e => setDateFrom(e.target.value)} title="Dari tanggal" />
               <span>–</span>
@@ -3432,9 +3432,9 @@ export default function Home() {
             <button type="button" className="round-add" onClick={() => setBillFormOpen(v => !v)}>＋</button>
           </div>
           {billFormOpen && <form className="goal-item" onSubmit={saveBill} style={{ marginBottom: 12 }}>
-            <label className="field-label">Nama tagihan<input required maxLength={160} value={billTitle} onChange={e => setBillTitle(e.target.value)} placeholder="Contoh: WiFi, listrik" /></label>
-            <label className="field-label">Nominal<input required inputMode="numeric" value={billAmount} onChange={e => setBillAmount(formatRibuan(e.target.value))} placeholder="Rp 0" /></label>
-            <label className="field-label">Jatuh tempo<input required type="date" value={billDueDate} onChange={e => setBillDueDate(e.target.value)} /></label>
+            <label className="field-label">Nama tagihan<input id="billTitle" name="billTitle" required maxLength={160} value={billTitle} onChange={e => setBillTitle(e.target.value)} placeholder="Contoh: WiFi, listrik" /></label>
+            <label className="field-label">Nominal<input id="billAmount" name="billAmount" required inputMode="numeric" value={billAmount} onChange={e => setBillAmount(formatRibuan(e.target.value))} placeholder="Rp 0" /></label>
+            <label className="field-label">Jatuh tempo<input id="billDueDate" name="billDueDate" required type="date" value={billDueDate} onChange={e => setBillDueDate(e.target.value)} /></label>
             <button className="goal-cta" type="submit">Simpan tagihan</button>
           </form>}
           <div className="goals">
@@ -3588,14 +3588,14 @@ export default function Home() {
         <button type="button" className="close" onClick={closeEdit}>×</button>
         <p className="eyebrow">UBAH TRANSAKSI</p>
         <h2>Ubah {editing.type === "income" ? "pemasukan" : "pengeluaran"}</h2>
-        <label>Nama transaksi<input value={editTitle} onChange={e => setEditTitle(e.target.value)} required /></label>
-        <div className="form-row">
-          <label>Kategori<select value={editCategory} onChange={e => setEditCategory(e.target.value)}>{categories.filter(c => c.type === editing.type).map(c => <option key={c.id} value={c.name}>{c.name}</option>)}</select></label>
-          <label>Akun<select value={editAccount} onChange={e => setEditAccount(e.target.value)}>{accounts.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}{editAccount && !accounts.some(a => a.id === editAccount) && <option value={editAccount}>{editing.account || "Akun arsip / tidak tersedia"}</option>}</select></label>
+        <label>Nama transaksi<input id="editTitle" name="editTitle" value={editTitle} onChange={e => setEditTitle(e.target.value)} required /></label>
+        <div className="two-col">
+          <label>Kategori<select id="editCategory" name="editCategory" value={editCategory} onChange={e => setEditCategory(e.target.value)}>{categories.filter(c => c.type === editing.type).map(c => <option key={c.id} value={c.name}>{c.name}</option>)}</select></label>
+          <label>Akun<select id="editAccount" name="editAccount" value={editAccount} onChange={e => setEditAccount(e.target.value)}>{accounts.map(a => <option key={a.id} value={a.id}>{a.name}</option>)}{editAccount && !accounts.some(a => a.id === editAccount) && <option value={editAccount}>{editing.account || "Akun arsip / tidak tersedia"}</option>}</select></label>
         </div>
-        <div className="form-row">
-          <label>Nominal<input inputMode="numeric" type="text" required value={editAmount} onChange={e => setEditAmount(formatRibuan(e.target.value))} /></label>
-          <label>Tanggal<input type="date" required value={editDate} onChange={e => setEditDate(e.target.value)} /></label>
+        <div className="two-col">
+          <label>Nominal<input id="editAmount" name="editAmount" inputMode="numeric" type="text" required value={editAmount} onChange={e => setEditAmount(formatRibuan(e.target.value))} /></label>
+          <label>Tanggal<input id="editDate" name="editDate" type="date" required value={editDate} onChange={e => setEditDate(e.target.value)} /></label>
         </div>
         <button className="submit" type="submit">Simpan perubahan</button>
       </form>
@@ -3608,8 +3608,8 @@ export default function Home() {
         <h2>{editingTransfer ? "Ubah transfer" : "Transfer antar akun"}</h2>
         <p className="modal-description">Contoh: pindah Rp 500.000 dari BCA ke DANA. Saldo kedua akun otomatis menyesuaikan.</p>
         <div className="form-row">
-          <label>Dari akun<select value={transferFrom} onChange={e => setTransferFrom(e.target.value)}>{accounts.map(a => <option key={a.id} value={a.name}>{a.name} • {rupiah(Number(a.current_balance))}</option>)}</select></label>
-          <label>Ke akun<select value={transferTo} onChange={e => setTransferTo(e.target.value)}>{accounts.map(a => <option key={a.id} value={a.name}>{a.name}</option>)}</select></label>
+          <label>Dari akun<select id="transferFrom" name="transferFrom" value={transferFrom} onChange={e => setTransferFrom(e.target.value)}>{accounts.map(a => <option key={a.id} value={a.name}>{a.name} • {rupiah(Number(a.current_balance))}</option>)}</select></label>
+          <label>Ke akun<select id="transferTo" name="transferTo" value={transferTo} onChange={e => setTransferTo(e.target.value)}>{accounts.map(a => <option key={a.id} value={a.name}>{a.name}</option>)}</select></label>
         </div>
         <div className="form-row">
           <label>Nominal transfer<input inputMode="numeric" type="text" placeholder="0" required value={transferAmountDisplay} onChange={e => setTransferAmountDisplay(formatRibuan(e.target.value))} /></label>
