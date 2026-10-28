@@ -36,7 +36,7 @@ const nextConfig = {
             value: [
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' https://accounts.google.com https://cdn.vercel-insights.com",
-              "style-src 'self' https://fonts.googleapis.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: https:",
               "connect-src 'self' https://*.vercel-insights.com https://accounts.google.com",
