@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { query, execute, uuid } from "@/lib/db";
+import { query, execute, uuid, transaction, txQuery, txExecute } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 import { apiLimiter } from "@/lib/ratelimit";
 
@@ -95,15 +95,6 @@ export async function POST(req: Request) {
     const accountId = body.account_id ? String(body.account_id) : null;
     if (!accountId) return NextResponse.json({ error: "Akun tidak ditemukan" }, { status: 400 });
     
-    // C2: TOCTOU fix — wrap balance check + insert dalam transaction
-    if (type === "expense") {
-      const balance = await accountBalance(userId, accountId);
-      if (balance === null) return NextResponse.json({ error: "Akun tidak ditemukan" }, { status: 400 });
-      // M2: Error sanitize (jangan leak balance)
-      if (balance < amount) return NextResponse.json({ error: "Saldo tidak cukup" }, { status: 400 });
-    }
-    
-    const id = uuid();
     const categoryRows = body.category
       ? await query<{ id: string }>("SELECT id FROM categories WHERE user_id = ? AND name = ? AND type = ?", [userId, body.category, type])
       : [];
@@ -117,13 +108,53 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Format tanggal tidak valid (gunakan YYYY-MM-DD)" }, { status: 400 });
     }
     
-    await execute(
-      `INSERT INTO transactions (id, user_id, account_id, category_id, type, amount, transaction_date, note, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, COALESCE(?, CURDATE()), ?, NOW(), NOW())`,
-      [id, userId, accountId, categoryId, type, amount, rawDate, title]
-    );
+    const id = uuid();
+    
+    // C2 FIX: Wrap balance check + insert dalam atomic transaction
+    if (type === "expense") {
+      await transaction(async (conn) => {
+        // Row-level lock: SELECT ... FOR UPDATE
+        const balanceRows = await txQuery<{ balance: number }>(
+          conn,
+          `SELECT a.opening_balance + COALESCE(SUM(
+             CASE WHEN t.type IN ('income','transfer_in') THEN t.amount
+                  WHEN t.type IN ('expense','transfer_out') THEN -t.amount
+                  WHEN t.type = 'adjustment' THEN t.amount ELSE 0 END), 0) AS balance
+           FROM accounts a
+           LEFT JOIN transactions t ON t.account_id = a.id
+           WHERE a.id = ? AND a.user_id = ?
+           GROUP BY a.id, a.opening_balance
+           FOR UPDATE`,
+          [accountId, userId]
+        );
+        
+        if (balanceRows.length === 0) throw new Error("Account not found");
+        const balance = balanceRows[0].balance;
+        
+        // M2: Error sanitize (jangan leak balance)
+        if (balance < amount) throw new Error("Saldo tidak cukup");
+        
+        // Insert dalam transaction
+        await txExecute(
+          conn,
+          `INSERT INTO transactions (id, user_id, account_id, category_id, type, amount, transaction_date, note, created_at, updated_at)
+           VALUES (?, ?, ?, ?, ?, ?, COALESCE(?, CURDATE()), ?, NOW(), NOW())`,
+          [id, userId, accountId, categoryId, type, amount, rawDate, title]
+        );
+      });
+    } else {
+      // Income: no transaction needed
+      await execute(
+        `INSERT INTO transactions (id, user_id, account_id, category_id, type, amount, transaction_date, note, created_at, updated_at)
+         VALUES (?, ?, ?, ?, ?, ?, COALESCE(?, CURDATE()), ?, NOW(), NOW())`,
+        [id, userId, accountId, categoryId, type, amount, rawDate, title]
+      );
+    }
+    
     return NextResponse.json({ id }, { status: 201 });
   } catch (e) {
+    const msg = (e as Error).message;
+    if (msg === "Saldo tidak cukup") return NextResponse.json({ error: msg }, { status: 400 });
     console.error("POST /api/transactions failed:", e);
     return NextResponse.json({ error: "Gagal membuat transaksi" }, { status: 400 });
   }
@@ -192,26 +223,55 @@ export async function PUT(req: Request) {
     }
     const date = rawDate ?? null;
 
-    // C2: TOCTOU check balance before update
-    if (type === "expense") {
-      const balance = await accountBalance(userId, accountId, id);
-      if (balance === null) return NextResponse.json({ error: "Akun tidak ditemukan saat cek saldo", code: "PUT_BALANCE_NULL" }, { status: 400 });
-      // M2: Don't leak balance
-      if (balance < amount) return NextResponse.json({ error: "Saldo tidak cukup", code: "PUT_INSUFFICIENT" }, { status: 400 });
-    }
-
     // H1: Sanitize title/note
     const title = body.title ? String(body.title).slice(0, 255).replace(/<[^>]*>/g, "") : null;
 
-    const result = await execute(
-      `UPDATE transactions SET account_id = ?, category_id = ?, type = ?, amount = ?,
-        transaction_date = COALESCE(?, transaction_date), note = COALESCE(?, note), updated_at = NOW()
-       WHERE id = ? AND user_id = ?`,
-      [accountId, categoryId, type, amount, date, title, id, userId]
-    );
-    if (result.affectedRows === 0) return NextResponse.json({ error: "Transaksi tidak ditemukan", code: "PUT_NO_ROWS_UPDATED" }, { status: 404 });
+    // C2 FIX: Update dengan transaction untuk expense
+    if (type === "expense") {
+      await transaction(async (conn) => {
+        const balanceRows = await txQuery<{ balance: number }>(
+          conn,
+          `SELECT a.opening_balance + COALESCE(SUM(
+             CASE WHEN t.type IN ('income','transfer_in') THEN t.amount
+                  WHEN t.type IN ('expense','transfer_out') THEN -t.amount
+                  WHEN t.type = 'adjustment' THEN t.amount ELSE 0 END), 0) AS balance
+           FROM accounts a
+           LEFT JOIN transactions t ON t.account_id = a.id AND t.id != ?
+           WHERE a.id = ? AND a.user_id = ?
+           GROUP BY a.id, a.opening_balance
+           FOR UPDATE`,
+          [id, accountId, userId]
+        );
+        
+        if (balanceRows.length === 0) throw new Error("Account not found");
+        const balance = balanceRows[0].balance;
+        
+        if (balance < amount) throw new Error("Saldo tidak cukup");
+        
+        const result = await txExecute(
+          conn,
+          `UPDATE transactions SET account_id = ?, category_id = ?, type = ?, amount = ?,
+            transaction_date = COALESCE(?, transaction_date), note = COALESCE(?, note), updated_at = NOW()
+           WHERE id = ? AND user_id = ?`,
+          [accountId, categoryId, type, amount, date, title, id, userId]
+        );
+        if (result.affectedRows === 0) throw new Error("No rows updated");
+      });
+    } else {
+      const result = await execute(
+        `UPDATE transactions SET account_id = ?, category_id = ?, type = ?, amount = ?,
+          transaction_date = COALESCE(?, transaction_date), note = COALESCE(?, note), updated_at = NOW()
+         WHERE id = ? AND user_id = ?`,
+        [accountId, categoryId, type, amount, date, title, id, userId]
+      );
+      if (result.affectedRows === 0) return NextResponse.json({ error: "Transaksi tidak ditemukan", code: "PUT_NO_ROWS_UPDATED" }, { status: 404 });
+    }
+    
     return NextResponse.json({ ok: true });
   } catch (e) {
+    const msg = (e as Error).message;
+    if (msg === "Saldo tidak cukup") return NextResponse.json({ error: msg }, { status: 400 });
+    if (msg === "No rows updated") return NextResponse.json({ error: "Transaksi tidak ditemukan" }, { status: 404 });
     console.error("PUT /api/transactions failed:", e);
     return NextResponse.json({ error: "Gagal update transaksi" }, { status: 400 });
   }

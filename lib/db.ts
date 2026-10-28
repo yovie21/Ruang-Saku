@@ -1,4 +1,4 @@
-import mysql, { type Pool, type PoolOptions } from "mysql2/promise";
+import mysql, { type Pool, type PoolOptions, type Connection } from "mysql2/promise";
 import { randomUUID } from "crypto";
 
 let pool: Pool | null = null;
@@ -40,6 +40,45 @@ export async function execute(
   params: (string | number | null)[] = []
 ): Promise<{ affectedRows: number; insertId: number }> {
   const [result] = await getPool().query(sql, params);
+  const r = result as { affectedRows: number; insertId: number };
+  return { affectedRows: r.affectedRows, insertId: r.insertId };
+}
+
+// C2/C3 FIX: Transaction support for atomic operations
+export async function transaction<T>(
+  fn: (conn: Connection) => Promise<T>
+): Promise<T> {
+  const conn = await getPool().getConnection();
+  try {
+    await conn.beginTransaction();
+    const result = await fn(conn);
+    await conn.commit();
+    return result;
+  } catch (error) {
+    await conn.rollback();
+    throw error;
+  } finally {
+    conn.release();
+  }
+}
+
+// C2/C3 FIX: Helper to query within transaction
+export async function txQuery<T = Record<string, unknown>[]>(
+  conn: Connection,
+  sql: string,
+  params: (string | number | null)[] = []
+): Promise<T[]> {
+  const [rows] = await conn.query(sql, params);
+  return rows as T[];
+}
+
+// C2/C3 FIX: Helper to execute within transaction
+export async function txExecute(
+  conn: Connection,
+  sql: string,
+  params: (string | number | null)[] = []
+): Promise<{ affectedRows: number; insertId: number }> {
+  const [result] = await conn.query(sql, params);
   const r = result as { affectedRows: number; insertId: number };
   return { affectedRows: r.affectedRows, insertId: r.insertId };
 }
