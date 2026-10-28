@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { query, execute, uuid } from "@/lib/db";
 import { requireUser } from "@/lib/session";
+import { apiLimiter } from "@/lib/ratelimit";
 
 async function accountBalance(userId: string, accountId: string, excludeTxId?: string): Promise<number | null> {
   // Urutan params HARUS mengikuti urutan placeholder di SQL:
@@ -55,6 +56,16 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const userId = await requireUser();
+    
+    // Rate limit: 30 requests per minute per user
+    const { allowed, remaining } = apiLimiter(userId);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Terlalu banyak request. Coba lagi dalam beberapa saat." },
+        { status: 429, headers: { "retry-after": "60" } }
+      );
+    }
+    
     const body = await req.json();
     const amount = Number(body.amount);
     if (!amount || amount <= 0) return NextResponse.json({ error: "Nominal harus > 0" }, { status: 400 });
