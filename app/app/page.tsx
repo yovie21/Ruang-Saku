@@ -3190,7 +3190,7 @@ export default function Home() {
               <div><h2>Kalender arus kas</h2><p>{calData.label} • masuk {maskRp(calData.mIn)} • keluar {maskRp(calData.mOut)}</p></div>
               <div className="cal-nav">
                 <button type="button" className="clear-filter" onClick={() => shiftCalMonth(-1)}>←</button>
-                <input type="month" value={calMonth} onChange={e => { if (e.target.value) { setCalMonth(e.target.value); setSelectedDay(""); } }} />
+                <input type="month" id="calMonth" name="calMonth" value={calMonth} onChange={e => { if (e.target.value) { setCalMonth(e.target.value); setSelectedDay(""); } }} />
                 <button type="button" className="clear-filter" onClick={() => shiftCalMonth(1)}>→</button>
               </div>
             </div>
@@ -3239,9 +3239,9 @@ export default function Home() {
           <div className="search-row">
             <label className="search-box"><span>⌕</span><input id="search" name="search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Cari nama, kategori, akun, nominal…" /></label>
             <div className="date-filters">
-              <input type="date" value={dateFrom} max={dateTo || undefined} onChange={e => setDateFrom(e.target.value)} title="Dari tanggal" />
+              <input type="date" id="dateFrom" name="dateFrom" value={dateFrom} max={dateTo || undefined} onChange={e => setDateFrom(e.target.value)} title="Dari tanggal" />
               <span>–</span>
-              <input type="date" value={dateTo} min={dateFrom || undefined} onChange={e => setDateTo(e.target.value)} title="Sampai tanggal" />
+              <input type="date" id="dateTo" name="dateTo" value={dateTo} min={dateFrom || undefined} onChange={e => setDateTo(e.target.value)} title="Sampai tanggal" />
               {(search || dateFrom || dateTo) && <button type="button" className="clear-filter" onClick={() => { setSearch(""); setDateFrom(""); setDateTo(""); }}>Reset</button>}
             </div>
           </div>
@@ -3534,7 +3534,7 @@ export default function Home() {
         </div>
         <div className="form-row">
           <label>Nominal<input name="amount" inputMode="numeric" type="text" placeholder="0" required value={amountDisplay} onChange={e => setAmountDisplay(formatRibuan(e.target.value))} /></label>
-          <label>Tanggal<input type="date" required value={txDate} max={todayStr()} onChange={e => setTxDate(e.target.value)} /></label>
+          <label>Tanggal<input id="txDate" name="txDate" type="date" required value={txDate} max={todayStr()} onChange={e => setTxDate(e.target.value)} /></label>
         </div>
         <button className="submit" type="submit">Simpan {transactionType === "income" ? "pemasukan" : "pengeluaran"}</button>
       </form>}
@@ -3561,12 +3561,12 @@ export default function Home() {
         <p className="eyebrow">UBAH AKUN</p>
         <h2>Ubah {editingAccount.name}</h2>
         <p className="modal-description">Saldo berjalan: {maskRp(Number(editingAccount.current_balance))}. Ubah saldo awal bila perlu koreksi.</p>
-        <label>Nama akun<input value={editAccName} onChange={e => setEditAccName(e.target.value)} required maxLength={100} /></label>
-        <div className="form-row">
-          <label>Jenis<select value={editAccType} onChange={e => setEditAccType(e.target.value)}><option value="bank">Bank</option><option value="ewallet">E-Wallet</option><option value="cash">Tunai</option><option value="credit_card">Kartu Kredit</option><option value="investment">Investasi</option></select></label>
-          <label>4 digit akhir (opsional)<input value={editAccLast4} onChange={e => setEditAccLast4(e.target.value.replace(/\D/g, "").slice(0, 4))} maxLength={4} placeholder="Opsional" autoComplete="off" inputMode="numeric" /></label>
+        <label>Nama akun<input id="editAccName" name="editAccName" value={editAccName} onChange={e => setEditAccName(e.target.value)} required maxLength={100} /></label>
+        <div className="two-col">
+          <label>Jenis<select id="editAccType" name="editAccType" value={editAccType} onChange={e => setEditAccType(e.target.value)}><option value="bank">Bank</option><option value="ewallet">E-Wallet</option><option value="cash">Tunai</option><option value="credit_card">Kartu Kredit</option><option value="investment">Investasi</option></select></label>
+          <label>4 digit akhir (opsional)<input id="editAccLast4" name="editAccLast4" value={editAccLast4} onChange={e => setEditAccLast4(e.target.value.replace(/\D/g, "").slice(0, 4))} maxLength={4} placeholder="Opsional" autoComplete="off" inputMode="numeric" /></label>
         </div>
-        <label>Saldo awal<input inputMode="numeric" type="text" value={editAccBalanceDisplay} onChange={e => setEditAccBalanceDisplay(formatRibuan(e.target.value))} /></label>
+        <label>Saldo awal<input id="editAccBalanceDisplay" name="editAccBalanceDisplay" inputMode="numeric" type="text" value={editAccBalanceDisplay} onChange={e => setEditAccBalanceDisplay(formatRibuan(e.target.value))} /></label>
         <button className="submit" type="submit">Simpan perubahan</button>
       </form>
     </div>}
@@ -3612,7 +3612,7 @@ export default function Home() {
           <label>Ke akun<select id="transferTo" name="transferTo" value={transferTo} onChange={e => setTransferTo(e.target.value)}>{accounts.map(a => <option key={a.id} value={a.name}>{a.name}</option>)}</select></label>
         </div>
         <div className="form-row">
-          <label>Nominal transfer<input inputMode="numeric" type="text" placeholder="0" required value={transferAmountDisplay} onChange={e => setTransferAmountDisplay(formatRibuan(e.target.value))} /></label>
+          <label>Nominal transfer<input id="transferAmount" name="transferAmount" inputMode="numeric" type="text" placeholder="0" required value={transferAmountDisplay} onChange={e => setTransferAmountDisplay(formatRibuan(e.target.value))} /></label>
           <label>Tanggal<input type="date" required value={transferDate} max={todayStr()} onChange={e => setTransferDate(e.target.value)} /></label>
         </div>
         <label>Catatan (opsional)<input value={transferNote} onChange={e => setTransferNote(e.target.value)} placeholder="Contoh: Isi DANA" /></label>
