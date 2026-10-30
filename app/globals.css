@@ -2220,3 +2220,610 @@ header .eyebrow{color:#81765f;letter-spacing:.16em}
 [data-theme="dark"] .right-column{border-color:#34483b}
 @media(prefers-reduced-motion:reduce){.balance-card:after{transition:none}}
 
+/* === MODERN CARDS SUITE: AKUN, ANGGARAN, TARGET, UTANG === */
+.account-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all var(--transition-normal);
+  position: relative;
+}
+.account-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(21, 130, 99, 0.25);
+}
+.account-card-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+.account-card-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 19px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+.account-card-icon.bank { background: linear-gradient(135deg, #1e40af, #3b82f6); color: #fff; }
+.account-card-icon.ewallet { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #fff; }
+.account-card-icon.cash { background: linear-gradient(135deg, #15803d, #22c55e); color: #fff; }
+.account-card-icon.other { background: linear-gradient(135deg, #6b21a8, #a855f7); color: #fff; }
+.account-card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 2px;
+}
+.account-card-title-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.account-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.account-type-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--soft, #f4f8f6);
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+.account-card-sub {
+  font-size: 11px;
+  color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.account-card-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-shrink: 0;
+}
+.account-card-balance {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  text-align: right;
+}
+.account-card-actions {
+  display: flex;
+  gap: 4px;
+  opacity: 0.85;
+  transition: opacity var(--transition-fast);
+}
+.account-card:hover .account-card-actions {
+  opacity: 1;
+}
+
+/* === MODERN BUDGET CARDS === */
+.budget-modern-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all var(--transition-normal);
+}
+.budget-modern-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+}
+.budget-modern-card.is-over {
+  border-color: #fca5a5;
+  background: linear-gradient(180deg, rgba(254, 242, 242, 0.6), rgba(254, 226, 226, 0.3));
+}
+.budget-modern-card.is-warn {
+  border-color: #fde68a;
+  background: linear-gradient(180deg, rgba(254, 252, 232, 0.6), rgba(254, 243, 199, 0.3));
+}
+.budget-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.budget-card-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.budget-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.budget-status-pill {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  line-height: 1.2;
+}
+.budget-status-pill.safe {
+  background: #dcfce7;
+  color: #166534;
+}
+.budget-status-pill.warn {
+  background: #fef3c7;
+  color: #92400e;
+}
+.budget-status-pill.over {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.budget-card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.budget-spent-amount {
+  font-size: 17px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+}
+.budget-limit-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.budget-track {
+  height: 9px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+}
+.budget-progress-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.budget-progress-fill.safe {
+  background: linear-gradient(90deg, #10b981, #059669);
+}
+.budget-progress-fill.warn {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+.budget-progress-fill.over {
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+}
+.budget-footer-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.budget-footer-note.over { color: #dc2626; font-weight: 600; }
+.budget-footer-note.warn { color: #d97706; font-weight: 600; }
+
+/* Rollover / Carryover modern banner */
+.carry-modern-banner {
+  background: linear-gradient(135deg, rgba(240, 253, 244, 0.95), rgba(236, 253, 245, 0.95));
+  border: 1px solid rgba(52, 211, 153, 0.4);
+  border-radius: var(--radius-lg);
+  padding: 16px;
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.06);
+}
+.carry-banner-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.carry-banner-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.carry-banner-title h4 {
+  margin: 0;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #065f46;
+}
+.carry-banner-title p {
+  margin: 2px 0 0;
+  font-size: 11.5px;
+  color: #047857;
+}
+
+/* === MODERN SAVINGS GOALS === */
+.goal-modern-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all var(--transition-normal);
+}
+.goal-modern-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+}
+.goal-modern-card.is-done {
+  border-color: #86efac;
+  background: linear-gradient(180deg, rgba(240, 253, 244, 0.6), rgba(220, 252, 231, 0.3));
+}
+.goal-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.goal-title-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.goal-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  background: #ecfdf5;
+}
+.goal-modern-card.is-done .goal-icon-badge {
+  background: #10b981;
+  color: #fff;
+}
+.goal-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.goal-pct-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: #f3f4f6;
+  color: #374151;
+}
+.goal-pct-pill.done {
+  background: #d1fae5;
+  color: #065f46;
+}
+.goal-amount-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.goal-saved-big {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.4px;
+}
+.goal-target-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.goal-track {
+  height: 10px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.goal-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #059669, #10b981);
+  transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.goal-modern-card.is-done .goal-bar-fill {
+  background: linear-gradient(90deg, #10b981, #34d399);
+}
+.goal-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11.5px;
+  color: var(--muted);
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.goal-manage-btn {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: #ffffff;
+  border: 1px solid #a7f3d0;
+  color: #059669;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.goal-manage-btn:hover {
+  background: #ecfdf5;
+  border-color: #059669;
+  transform: translateY(-1px);
+}
+
+/* === MODERN DEBT & RECEIVABLE CARDS === */
+.debt-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  transition: all var(--transition-normal);
+}
+.debt-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+}
+.debt-card.is-overdue {
+  border-color: #fca5a5;
+  background: linear-gradient(180deg, rgba(254, 242, 242, 0.4), rgba(254, 226, 226, 0.2));
+}
+.debt-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.debt-person-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.debt-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 15px;
+  font-weight: 700;
+}
+.debt-avatar.debt { background: #fee2e2; color: #dc2626; }
+.debt-avatar.receivable { background: #dcfce7; color: #16a34a; }
+.debt-person-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.debt-badges-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.debt-kind-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2.5px 8px;
+  border-radius: 8px;
+}
+.debt-kind-pill.debt { background: #fee2e2; color: #991b1b; }
+.debt-kind-pill.receivable { background: #dcfce7; color: #166534; }
+.debt-status-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2.5px 8px;
+  border-radius: 8px;
+  background: var(--soft);
+  color: var(--muted);
+}
+.debt-status-tag.overdue {
+  background: #fef2f2;
+  color: #b91c1c;
+  font-weight: 700;
+}
+.debt-status-tag.installment {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+.debt-amount-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.debt-remaining-val {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.4px;
+}
+.debt-label-small {
+  font-size: 11.5px;
+  color: var(--muted);
+  display: block;
+}
+.debt-total-sub {
+  font-size: 12px;
+  color: var(--muted);
+}
+.debt-track {
+  height: 8px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+}
+.debt-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #10b981, #059669);
+  transition: width 0.6s ease;
+}
+.debt-card.is-overdue .debt-fill {
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+}
+.debt-note-box {
+  background: var(--soft);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: -2px;
+}
+.debt-pay-btn {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #158263, #219f8b);
+  border: none;
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(21, 130, 99, 0.2);
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+.debt-pay-btn:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+/* Debt History Modern Card */
+.debt-history-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: all var(--transition-fast);
+}
+.debt-history-card:hover {
+  border-color: #86efac;
+  background: rgba(240, 253, 244, 0.4);
+}
+.debt-history-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.debt-history-check {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #dcfce7;
+  color: #15803d;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* Dark mode overrides for modern suite */
+[data-theme="dark"] .account-card,
+[data-theme="dark"] .budget-modern-card,
+[data-theme="dark"] .goal-modern-card,
+[data-theme="dark"] .debt-card,
+[data-theme="dark"] .debt-history-card {
+  background: #141f1c;
+  border-color: #22332e;
+}
+[data-theme="dark"] .budget-modern-card.is-over,
+[data-theme="dark"] .debt-card.is-overdue {
+  background: #231616;
+  border-color: #5c2424;
+}
+[data-theme="dark"] .budget-modern-card.is-warn {
+  background: #241d11;
+  border-color: #634718;
+}
+[data-theme="dark"] .goal-modern-card.is-done {
+  background: #11261b;
+  border-color: #1e5938;
+}
+[data-theme="dark"] .carry-modern-banner {
+  background: linear-gradient(135deg, #10241c, #132b21);
+  border-color: #1f563e;
+}
+[data-theme="dark"] .carry-banner-title h4 { color: #6ee7b7; }
+[data-theme="dark"] .carry-banner-title p { color: #a7f3d0; }
+[data-theme="dark"] .budget-track,
+[data-theme="dark"] .goal-track,
+[data-theme="dark"] .debt-track {
+  background: #1f2d28;
+}
+[data-theme="dark"] .account-card-title,
+[data-theme="dark"] .account-card-balance,
+[data-theme="dark"] .budget-card-name,
+[data-theme="dark"] .budget-spent-amount,
+[data-theme="dark"] .goal-card-title,
+[data-theme="dark"] .goal-saved-big,
+[data-theme="dark"] .debt-person-name,
+[data-theme="dark"] .debt-remaining-val {
+  color: #ebf3ef;
+}
+[data-theme="dark"] .goal-manage-btn {
+  background: #192a23;
+  border-color: #2a5240;
+  color: #5ce39a;
+}
+[data-theme="dark"] .goal-manage-btn:hover {
+  background: #1f372c;
+  border-color: #5ce39a;
+}
+[data-theme="dark"] .debt-note-box {
+  background: #0f1614;
+  color: #a4b7b0;
+}
+[data-theme="dark"] .debt-history-check {
+  background: #163625;
+  color: #4ade80;
+}
+[data-theme="dark"] .debt-kind-pill.debt {
+  background: #381515;
+  color: #fca5a5;
+}
+[data-theme="dark"] .debt-kind-pill.receivable {
+  background: #143222;
+  color: #86efac;
+}
+[data-theme="dark"] .debt-status-tag {
+  background: #1a2722;
+  color: #9ab3a8;
+}
+[data-theme="dark"] .debt-status-tag.overdue {
+  background: #3e1818;
+  color: #f87171;
+}
+[data-theme="dark"] .debt-status-tag.installment {
+  background: #16243a;
+  color: #93c5fd;
+}
+
+

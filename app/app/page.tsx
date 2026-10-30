@@ -59,6 +59,21 @@ function parseBillDate(d: string): { date: Date | null; days: number; formatted:
   return { date: dt, days, formatted: `${day} ${months[m - 1]} ${y}` };
 }
 
+function getAccountMeta(a: { name: string; account_type?: string }) {
+  const name = (a.name || "").toLowerCase();
+  const type = (a.account_type || "").toLowerCase();
+  if (/gopay|ovo|dana|shopee|linkaja|spay|qris|wallet|dompet digital/.test(name) || /ewallet|wallet/.test(type)) {
+    return { icon: "📱", label: "E-Wallet", colorClass: "ewallet" };
+  }
+  if (/tunai|cash|dompet fisik|kantong|celengan/.test(name) || /cash|tunai/.test(type)) {
+    return { icon: "💵", label: "Tunai", colorClass: "cash" };
+  }
+  if (/bca|mandiri|bni|bri|cimb|bsi|jago|jenius|permata|danamon|tabungan|rekening|bank/.test(name) || /bank|saving/.test(type)) {
+    return { icon: "🏦", label: "Bank", colorClass: "bank" };
+  }
+  return { icon: "💳", label: a.account_type || "Akun", colorClass: "other" };
+}
+
 function normalizeIDR(raw: string): number {
   let s = raw.replace(/\s/g, "");
   if (!/\d/.test(s)) return 0;
@@ -3313,80 +3328,178 @@ export default function Home() {
             <div><h2>Akun saya</h2><p>{accounts.length} akun terhubung</p></div>
             <button className="round-add" onClick={openAccountModal}>＋</button>
           </div>
-          <div className="accounts" id="akun">
-            {accounts.length === 0 ? <p style={{color:"#9aa5a2",fontSize:12,padding:"12px 0"}}>Belum ada akun. Klik ＋ untuk menambah.</p> : accounts.map(a => (
-              <div className="account" key={a.id}>
-                <div className="bank-icon blue">{a.name.slice(0, 1).toUpperCase()}</div>
-                <div><b>{a.name}</b><small>{a.account_number_last4 ? `•• ${a.account_number_last4}` : "Tanpa nomor"}</small></div>
-                <strong>{maskRp(Number(a.current_balance))}</strong>
-                <div className="tx-actions" style={{marginLeft:8}}>
-                  <button className="tx-edit" onClick={() => openEditAccount(a)} title={`Ubah ${a.name}`}>✎</button>
-                  <button className="tx-delete" onClick={() => deleteAccount(a)} title={`Hapus ${a.name}`}>×</button>
-                </div>
-              </div>
-            ))}
+          <div className="accounts-grid" id="akun" style={{ display: "grid", gap: 10 }}>
+            {accounts.length === 0 ? (
+              <p style={{ color: "#9aa5a2", fontSize: 12, padding: "12px 0" }}>Belum ada akun. Klik ＋ untuk menambah.</p>
+            ) : (
+              accounts.map(a => {
+                const meta = getAccountMeta(a);
+                return (
+                  <div className="account-card" key={a.id}>
+                    <div className="account-card-left">
+                      <div className={`account-card-icon ${meta.colorClass}`}>{meta.icon}</div>
+                      <div className="account-card-info">
+                        <div className="account-card-title-row">
+                          <b className="account-card-title">{a.name}</b>
+                          <span className="account-type-tag">{meta.label}</span>
+                        </div>
+                        <small className="account-card-sub">
+                          {a.account_number_last4 ? `•••• ${a.account_number_last4}` : "Tanpa nomor"}
+                        </small>
+                      </div>
+                    </div>
+                    <div className="account-card-right">
+                      <strong className="account-card-balance">{maskRp(Number(a.current_balance))}</strong>
+                      <div className="account-card-actions">
+                        <button type="button" className="tx-edit" onClick={() => openEditAccount(a)} title={`Ubah ${a.name}`}>✎</button>
+                        <button type="button" className="tx-delete" onClick={() => deleteAccount(a)} title={`Hapus ${a.name}`}>×</button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
           <div className="section-title" style={{ marginTop: 26 }}>
             <div><h2>Anggaran</h2><p>Batas belanja bulan ini • {budgetProgress.length} kategori</p></div>
-            <div style={{display:"flex",gap:8}}>
-              {budgetProgress.length > 2 && <button type="button" className="clear-filter" onClick={() => setBudgetOpen(v => !v)}>{budgetOpen ? "Tutup ▴" : `Lihat semua (${budgetProgress.length}) ▾`}</button>}
+            <div style={{ display: "flex", gap: 8 }}>
+              {budgetProgress.length > 2 && (
+                <button type="button" className="clear-filter" onClick={() => setBudgetOpen(v => !v)}>
+                  {budgetOpen ? "Tutup ▴" : `Lihat semua (${budgetProgress.length}) ▾`}
+                </button>
+              )}
               <button className="round-add" onClick={openBudgetModal}>＋</button>
             </div>
           </div>
-          <div className="budgets">
-            {budgetProgress.length === 0
-              ? <p style={{ color: "#9aa5a2", fontSize: 12, padding: "6px 0" }}>Belum ada anggaran. Klik ＋ untuk bikin batas per kategori.</p>
-              : (budgetOpen ? budgetProgress : budgetProgress.slice(0, 2)).map(b => <div key={b.id} className={"budget-item " + b.status}>
-                <div className="budget-head">
-                  <b>{b.category}</b>
-                  <div className="tx-actions">
-                    <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => openEditBudget(b)} title="Ubah anggaran">✎</button>
-                    <button type="button" className="budget-delete" onClick={() => deleteBudget(b.id, b.category)} title="Hapus anggaran">×</button>
+          <div className="budgets" style={{ display: "grid", gap: 10 }}>
+            {budgetProgress.length === 0 ? (
+              <p style={{ color: "#9aa5a2", fontSize: 12, padding: "6px 0" }}>Belum ada anggaran. Klik ＋ untuk bikin batas per kategori.</p>
+            ) : (
+              (budgetOpen ? budgetProgress : budgetProgress.slice(0, 2)).map(b => {
+                const isOver = b.status === "over";
+                const isWarn = b.status === "warn";
+                const statusClass = isOver ? "over" : isWarn ? "warn" : "safe";
+                const remaining = Math.max(0, b.limit - b.spent);
+                return (
+                  <div key={b.id} className={`budget-modern-card ${isOver ? "is-over" : isWarn ? "is-warn" : ""}`}>
+                    <div className="budget-card-head">
+                      <div className="budget-card-title-group">
+                        <b className="budget-card-name">{b.category}</b>
+                        <span className={`budget-status-pill ${statusClass}`}>
+                          {isOver ? "⚠️ Jebol" : isWarn ? "⚡ Hampir Habis" : "✓ Aman"}
+                        </span>
+                      </div>
+                      <div className="tx-actions">
+                        <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => openEditBudget(b)} title="Ubah anggaran">✎</button>
+                        <button type="button" className="budget-delete" onClick={() => deleteBudget(b.id, b.category)} title="Hapus anggaran">×</button>
+                      </div>
+                    </div>
+
+                    <div className="budget-card-row">
+                      <div>
+                        <div className="budget-spent-amount">{maskRp(b.spent)}</div>
+                        <small className="budget-limit-sub">dari kuota {maskRp(b.limit)}</small>
+                      </div>
+                      <b className={`budget-percent ${b.status}`}>
+                        {isOver ? `+${(b.pct - 100).toFixed(0)}% lewat batas` : `Sisa ${Math.max(0, 100 - b.pct).toFixed(0)}%`}
+                      </b>
+                    </div>
+
+                    <div className="budget-track">
+                      <div className={`budget-progress-fill ${statusClass}`} style={{ width: `${Math.min(100, b.pct)}%` }} />
+                    </div>
+
+                    <div className={`budget-footer-note ${statusClass}`}>
+                      {isOver ? (
+                        <span>Jebol {maskRp(b.spent - b.limit)} — kendalikan pengeluaran ini.</span>
+                      ) : isWarn ? (
+                        <span>Tersisa {maskRp(remaining)} — gunakan dengan hati-hati.</span>
+                      ) : (
+                        <span>Sisa {maskRp(remaining)} masih aman terkendali.</span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          {carrySuggestions.length > 0 && (
+            <div className="carry-modern-banner">
+              <div className="carry-banner-header">
+                <div className="carry-banner-title">
+                  <span style={{ fontSize: 20 }}>💡</span>
+                  <div>
+                    <h4>Sisa Saldo Bulan Lalu</h4>
+                    <p>{carrySuggestions.length} kategori punya saldo sisa yang bisa dialihkan jadi modal bulan ini.</p>
                   </div>
                 </div>
-                 <div className="budget-numbers"><span>{maskRp(b.spent)}</span><small>dari {maskRp(b.limit)} • {b.pct.toFixed(0)}%</small><b className={"budget-percent " + b.status}>Sisa {Math.max(0, 100 - b.pct).toFixed(0)}%</b></div>
-                <div className="budget-bar"><span style={{ width: `${Math.min(100, b.pct)}%` }} /></div>
-                {b.status === "over"
-                  ? <small className="budget-note over">Jebol {maskRp(b.spent - b.limit)} — kurangi belanja kategori ini.</small>
-                  : b.status === "warn"
-                    ? <small className="budget-note warn">Sisa {maskRp(Math.max(0, b.limit - b.spent))} — hampir habis.</small>
-                    : <small className="budget-note safe">Sisa {maskRp(Math.max(0, b.limit - b.spent))} aman.</small>}
-              </div>)}
-          </div>
-          {carrySuggestions.length > 0 && <div className="carry-box">
-            <div className="carry-head">
-              <div><b>Sisa bulan lalu bisa dialihkan</b><small>{carrySuggestions.length} kategori • jadi modal bulan ini</small></div>
-              <button type="button" className="clear-filter primary" disabled={carryBusy} onClick={carryOverAll}>{carryBusy ? "…" : "Alihkan semua"}</button>
+                <button type="button" className="clear-filter primary" disabled={carryBusy} onClick={carryOverAll}>
+                  {carryBusy ? "…" : "Alihkan Semua"}
+                </button>
+              </div>
+              <div style={{ display: "grid", gap: 6 }}>
+                {carrySuggestions.slice(0, 4).map(s => (
+                  <div key={s.category} className="category-row" style={{ padding: "6px 8px", background: "rgba(255,255,255,0.6)", borderRadius: 8 }}>
+                    <span>{s.category} <small>• sisa {maskRp(s.leftover)} dari {maskRp(s.limit)}</small></span>
+                    <button type="button" className="cat-save" disabled={carryBusy} onClick={() => carryOverBudget(s.category, s.leftover)}>Alihkan</button>
+                  </div>
+                ))}
+              </div>
             </div>
-            {carrySuggestions.slice(0, 4).map(s => <div key={s.category} className="category-row">
-              <span>{s.category} <small>• sisa {maskRp(s.leftover)} dari {maskRp(s.limit)}</small></span>
-              <button type="button" className="cat-save" disabled={carryBusy} onClick={() => carryOverBudget(s.category, s.leftover)}>Alihkan</button>
-            </div>)}
-          </div>}
+          )}
           <div className="section-title" style={{ marginTop: 26 }}>
             <div><h2>Target tabungan</h2><p>Nabung bertahap sampai tercapai</p></div>
             <button className="round-add" onClick={openGoalModal}>＋</button>
           </div>
-          <div className="goals">
-            {goalProgress.length === 0
-              ? <p style={{ color: "#9aa5a2", fontSize: 12, padding: "6px 0" }}>Belum ada target. Klik ＋ untuk bikin, misal Dana darurat Rp 10.000.000.</p>
-              : goalProgress.map(g => <div key={g.id} className={"goal-item" + (g.done ? " done" : "")}>
-                <div className="budget-head">
-                  <b>{g.done ? "✓ " : ""}{g.name}</b>
-                  <div className="tx-actions">
-                    <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => openEditGoal(g)} title="Ubah target">✎</button>
-                    <button type="button" className="budget-delete" onClick={() => deleteGoal(g.id, g.name)} title="Hapus target">×</button>
+          <div className="goals" style={{ display: "grid", gap: 10 }}>
+            {goalProgress.length === 0 ? (
+              <p style={{ color: "#9aa5a2", fontSize: 12, padding: "6px 0" }}>Belum ada target. Klik ＋ untuk bikin, misal Dana darurat Rp 10.000.000.</p>
+            ) : (
+              goalProgress.map(g => (
+                <div key={g.id} className={`goal-modern-card ${g.done ? "is-done" : ""}`}>
+                  <div className="goal-card-top">
+                    <div className="goal-title-group">
+                      <span className="goal-icon-badge">{g.done ? "🏆" : "🎯"}</span>
+                      <b className="goal-card-title">{g.name}</b>
+                      <span className={`goal-pct-pill ${g.done ? "done" : ""}`}>
+                        {g.done ? "✓ Tercapai" : `${g.pct.toFixed(0)}%`}
+                      </span>
+                    </div>
+                    <div className="tx-actions">
+                      <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => openEditGoal(g)} title="Ubah target">✎</button>
+                      <button type="button" className="budget-delete" onClick={() => deleteGoal(g.id, g.name)} title="Hapus target">×</button>
+                    </div>
                   </div>
+
+                  <div className="goal-amount-row">
+                    <div>
+                      <div className="goal-saved-big">{maskRp(g.saved)}</div>
+                      <small className="goal-target-sub">dari target {maskRp(g.target)}</small>
+                    </div>
+                    {g.deadline && (
+                      <span className="debt-status-tag">
+                        📅 {new Date(g.deadline).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="goal-track">
+                    <div className="goal-bar-fill" style={{ width: `${Math.min(100, g.pct)}%` }} />
+                  </div>
+
+                  <div className="goal-meta-row">
+                    <span>
+                      {g.done ? "Target selesai tercapai!" : `Kurang ${maskRp(Math.max(0, g.target - g.saved))}`}
+                    </span>
+                    <span>{g.deposits} kali setor dana</span>
+                  </div>
+
+                  <button type="button" className="goal-manage-btn" onClick={() => openAllocModal(g)}>
+                    {g.done ? "Lihat Riwayat Nabung" : "＋ Setor / Alokasikan Tabungan"}
+                  </button>
                 </div>
-                <div className="budget-numbers"><span>{maskRp(g.saved)}</span><small>dari {maskRp(g.target)} • {g.pct.toFixed(0)}%</small></div>
-                <div className="budget-bar goal"><span style={{ width: `${Math.min(100, g.pct)}%` }} /></div>
-                <small className={"budget-note " + (g.done ? "safe" : "")}>
-                  {g.done
-                    ? "Tercapai — selamat!"
-                    : <>Kurang {maskRp(Math.max(0, g.target - g.saved))}{g.deadline ? ` • tenggat ${new Date(g.deadline).toLocaleDateString("id-ID", { day: "numeric", month: "short", year: "numeric" })}` : ""} • {g.deposits} kali nabung</>}
-                </small>
-                <button type="button" className="goal-cta" onClick={() => openAllocModal(g)}>Kelola dana</button>
-              </div>)}
+              ))
+            )}
           </div>
           <div className="section-title" style={{ marginTop: 26 }}>
             <div><h2>Kategori</h2><p>Atur kategori & warna grafik</p></div>
@@ -3578,52 +3691,110 @@ export default function Home() {
               <button className="round-add" onClick={() => openDebtModal("debt")}>＋</button>
             </div>
           </div>
-          <div className="goals">
-            {debts.length === 0
-              ? <p style={{ color: "#9aa5a2", fontSize: 12, padding: "6px 0" }}>Belum ada utang/piutang. Klik ＋ untuk mencatat.</p>
-              : (debtOpen ? debts : debts.slice(0, 2)).map(d => {
+          <div className="debts-grid" style={{ display: "grid", gap: 10 }}>
+            {debts.length === 0 ? (
+              <div className="bill-empty-state">
+                <div className="bill-empty-icon">🤝</div>
+                <b>Belum ada catatan utang / piutang</b>
+                <p>Tekan tombol ＋ untuk mencatat pinjaman atau dana yang dipinjam teman.</p>
+              </div>
+            ) : (
+              (debtOpen ? debts : debts.slice(0, 2)).map(d => {
                 const total = Number(d.amount);
                 const paid = Number(d.paid);
                 const rest = Math.max(0, Number(d.remaining ?? (total - paid)));
                 const pct = total > 0 ? Math.min(100, (paid / total) * 100) : 0;
                 const overdue = d.due_date && String(d.due_date).slice(0, 10) < todayStr();
-                return <div key={d.id} className="goal-item">
-                  <div className="budget-head">
-                    <b>{d.kind === "debt" ? "↑ " : "↓ "}{d.person}</b>
-                    <div className="tx-actions">
-                      <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => openEditDebt(d)} title="Ubah">✎</button>
-                      <button type="button" className="budget-delete" onClick={() => deleteDebt(d)} title="Hapus">×</button>
+                const info = debtInstallmentInfo(d);
+                const isDebt = d.kind === "debt";
+
+                return (
+                  <div key={d.id} className={`debt-card ${overdue ? "is-overdue" : ""}`}>
+                    <div className="debt-card-top">
+                      <div className="debt-person-group">
+                        <div className={`debt-avatar ${isDebt ? "debt" : "receivable"}`}>
+                          {isDebt ? "💸" : "💰"}
+                        </div>
+                        <div>
+                          <b className="debt-person-name">{d.person}</b>
+                          <div className="debt-badges-row" style={{ marginTop: 2 }}>
+                            <span className={`debt-kind-pill ${isDebt ? "debt" : "receivable"}`}>
+                              {isDebt ? "Utang Saya" : "Piutang Saya"}
+                            </span>
+                            {overdue ? (
+                              <span className="debt-status-tag overdue">⚠️ Jatuh tempo lewat</span>
+                            ) : d.due_date ? (
+                              <span className="debt-status-tag">Tenggat: {d.due_date}</span>
+                            ) : null}
+                            {info.total > 0 && (
+                              <span className="debt-status-tag installment">
+                                Cicilan {Math.min(info.done, info.total)}/{info.total}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="tx-actions">
+                        <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => openEditDebt(d)} title="Ubah">✎</button>
+                        <button type="button" className="budget-delete" onClick={() => deleteDebt(d)} title="Hapus">×</button>
+                      </div>
+                    </div>
+
+                    <div className="debt-amount-block">
+                      <div>
+                        <small className="debt-label-small">{isDebt ? "Sisa utang harus dibayar" : "Sisa piutang harus diterima"}</small>
+                        <div className="debt-remaining-val">{maskRp(rest)}</div>
+                      </div>
+                      <div className="debt-total-sub">Total: {maskRp(total)}</div>
+                    </div>
+
+                    <div className="debt-track">
+                      <div className="debt-fill" style={{ width: `${pct}%` }} />
+                    </div>
+
+                    {d.note && (
+                      <div className="debt-note-box">
+                        💬 {d.note}
+                      </div>
+                    )}
+
+                    <button type="button" className="debt-pay-btn" onClick={() => openPayDebt(d)}>
+                      Bayar {info.total > 0 ? `Cicilan #${info.nextNo} (${maskRp(info.nextAmount)})` : `Lunas (${maskRp(rest)})`}
+                    </button>
+                  </div>
+                );
+              })
+            )}
+          </div>
+          {debtHistory.length > 0 && (
+            <div className="section-title" style={{ marginTop: 20 }}>
+              <div><h2 style={{ fontSize: 15 }}>Riwayat lunas</h2><p>{debtHistory.length} selesai</p></div>
+              <button type="button" className="clear-filter" onClick={() => setDebtHistoryOpen(v => !v)}>
+                {debtHistoryOpen ? "Tutup ▴" : "Lihat ▾"}
+              </button>
+            </div>
+          )}
+          {debtHistoryOpen && debtHistory.length > 0 && (
+            <div className="debt-history-list" style={{ display: "grid", gap: 8 }}>
+              {debtHistory.map(d => (
+                <div key={d.id} className="debt-history-card">
+                  <div className="debt-history-info">
+                    <span className="debt-history-check">✓</span>
+                    <div>
+                      <b style={{ fontSize: 14 }}>{d.person}</b>
+                      <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>
+                        {d.kind === "debt" ? "Utang" : "Piutang"} • {maskRp(Number(d.amount))} • Lunas {d.updated_at ? String(d.updated_at).slice(0, 10) : ""}
+                      </div>
                     </div>
                   </div>
-                  <div className="budget-numbers"><span>{maskRp(rest)}</span><small>sisa dari {maskRp(total)} • {d.kind === "debt" ? "Utang" : "Piutang"}{(() => { const info = debtInstallmentInfo(d); return info.total > 0 ? ` • cicilan ${Math.min(info.done, info.total)}/${info.total}` : ""; })()}</small></div>
-                  <div className="budget-bar goal"><span style={{ width: `${pct}%` }} /></div>
-                  <small className={"budget-note " + (overdue ? "over" : "")}>
-                    {overdue ? `Jatuh tempo ${d.due_date} — segera lunasi. ` : d.due_date ? `Tenggat ${d.due_date} • ` : ""}{d.note || `Terbayar ${maskRp(paid)}`}
-                    {(() => { const info = debtInstallmentInfo(d); return info.total > 0 ? ` • bayar ${maskRp(info.nextAmount)} untuk cicilan ${info.nextNo}/${info.total}` : ""; })()}
-                  </small>
-                  <div style={{display:"flex",gap:8,marginTop:8}}>
-                    <button type="button" className="goal-cta" style={{marginTop:0}} onClick={() => openPayDebt(d)}>Bayar{(() => { const info = debtInstallmentInfo(d); return info.total > 0 ? ` cicilan ${info.nextNo}/${info.total} • ${maskRp(info.nextAmount)}` : ` • ${maskRp(rest)}`; })()}</button>
+                  <div className="tx-actions">
+                    <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => reopenDebt(d)} title="Kembalikan ke belum lunas">↩</button>
+                    <button type="button" className="budget-delete" onClick={() => deleteDebtHistory(d)} title="Hapus riwayat">×</button>
                   </div>
-                </div>;
-              })}
-          </div>
-          {debtHistory.length > 0 && <div className="section-title" style={{ marginTop: 18 }}>
-            <div><h2 style={{fontSize:15}}>Riwayat lunas</h2><p>{debtHistory.length} selesai</p></div>
-            <button type="button" className="clear-filter" onClick={() => setDebtHistoryOpen(v => !v)}>{debtHistoryOpen ? "Tutup ▴" : `Lihat ▾`}</button>
-          </div>}
-          {debtHistoryOpen && debtHistory.length > 0 && <div className="goals">
-            {debtHistory.map(d => <div key={d.id} className="goal-item done">
-              <div className="budget-head">
-                <b>✓ {d.person}</b>
-                <div className="tx-actions">
-                  <button type="button" className="tx-edit" style={{ opacity: 1 }} onClick={() => reopenDebt(d)} title="Kembalikan ke belum lunas">↩</button>
-                  <button type="button" className="budget-delete" onClick={() => deleteDebtHistory(d)} title="Hapus riwayat">×</button>
                 </div>
-              </div>
-              <div className="budget-numbers"><span>{maskRp(Number(d.amount))}</span><small>{d.kind === "debt" ? "Utang" : "Piutang"} • lunas</small></div>
-              <small className="budget-note safe">Selesai {d.updated_at ? String(d.updated_at).slice(0, 10) : ""}{d.due_date ? ` • tenggat ${d.due_date}` : ""}</small>
-            </div>)}
-          </div>}
+              ))}
+            </div>
+          )}
         </aside>
       </section>
     </section>

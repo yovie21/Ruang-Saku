@@ -18,13 +18,13 @@
 .land-nav-links a,.land-nav-cta,.land-menu-button{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 .land-nav-links a:hover,.land-footer>a:last-child:hover{color:#a46f2c}
 .land-nav-actions{display:flex;align-items:center;gap:10px}
-.land-nav-cta{font-size:13px;font-weight:600;border:1px solid #bcb6a8;padding:0 19px;border-radius:3px;transition:background .18s,color .18s}
+.land-nav-cta{font-size:13px;font-weight:600;border:1px solid #bcb6a8;padding:0 19px;border-radius:8px;transition:background .18s,color .18s}
 .land-nav-cta:hover{background:var(--pine);color:white;border-color:var(--pine)}
-.land-menu-button{display:none;width:44px;padding:10px;background:transparent;color:var(--pine);border:1px solid #bcb6a8;border-radius:3px;cursor:pointer;flex-direction:column;gap:5px}
+.land-menu-button{display:none;width:44px;padding:10px;background:transparent;color:var(--pine);border:1px solid #bcb6a8;border-radius:8px;cursor:pointer;flex-direction:column;gap:5px}
 .land-menu-button>span:not(.sr-only){display:block;width:18px;height:2px;background:currentColor;transition:transform .18s}
 .land-menu-button[aria-expanded="true"]>span:nth-of-type(2){transform:translateY(3.5px) rotate(45deg)}
 .land-menu-button[aria-expanded="true"]>span:nth-of-type(3){transform:translateY(-3.5px) rotate(-45deg)}
-.land-install-button{font-size:13px;font-weight:600;color:white;background:var(--accent);border:1px solid var(--accent);padding:0 16px;border-radius:3px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .18s,box-shadow .18s}
+.land-install-button{font-size:13px;font-weight:600;color:white;background:var(--accent);border:1px solid var(--accent);padding:0 16px;border-radius:8px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:background .18s,box-shadow .18s}
 .land-install-button:hover{background:#a46f2c;box-shadow:0 2px 8px rgba(189,139,68,.2)}
 /* CTA Animations */
 .land-nav-cta{position:relative;overflow:hidden}
@@ -57,10 +57,10 @@
 .land-copy h1 em,.land-intro h2 em,.land-close h2 em{color:#8b7858;font-weight:500}
 .land-lede{font-size:16px;line-height:1.8;color:#65685f;max-width:440px;margin:24px 0 0}
 .land-actions{display:flex;align-items:center;gap:23px;margin-top:32px}
-.land-button{display:inline-flex;min-height:52px;padding:0 24px;align-items:center;justify-content:center;background:var(--pine);color:#fff!important;border:1px solid var(--pine);border-radius:3px;font-size:13px;font-weight:600;transition:transform .15s,box-shadow .15s}
-.land-button:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(25,59,48,.18)}
+.land-button{display:inline-flex;min-height:52px;padding:0 26px;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--pine),#244f41);color:#fff!important;border:1px solid var(--pine);border-radius:10px;font-size:13.5px;font-weight:600;box-shadow:0 4px 14px rgba(25,59,48,.18);transition:transform .15s,box-shadow .15s}
+.land-button:hover{transform:translateY(-2px);box-shadow:0 8px 22px rgba(25,59,48,.26)}
 .land-button:active{transform:translateY(0)}
-.land-button-light{background:transparent;color:var(--pine)!important}
+.land-button-light{background:transparent;color:var(--pine)!important;box-shadow:none}
 .land-button-light:hover{background:var(--pine);color:#fff!important}
 
 /* CTA purposeful pulse - R-19: animation serves focus attention on primary action */
@@ -72,11 +72,11 @@
 .land-text-link{font-size:12px;color:#7a6d4f;text-decoration:underline;text-underline-offset:3px}
 .land-text-link:hover{color:#a4812b}
 .land-note{margin-top:19px;font-size:12px;color:#9e9385}
-.land-visual{padding:17px;background:#e8e3d5;border:1px solid #d4cebe;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.04);transform:rotate(-0.4deg);transition:transform .3s}
-.land-visual:hover{transform:rotate(0deg) scale(1.01)}
-.land-visual-label{display:flex;justify-content:space-between;padding:0 0 11px;font-size:9px;letter-spacing:.5px;color:#7d7363;font-weight:600}
-.land-screenshot{display:block;width:100%;height:auto;border:1px solid #ccc5b5;border-radius:2px}
-.land-caption{display:flex;justify-content:space-between;align-items:center;padding:11px 0 0;font-size:9px;color:#8b8070}
+.land-visual{padding:18px;background:rgba(232,227,213,0.7);backdrop-filter:blur(8px);border:1px solid #d4cebe;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,.06);transform:rotate(-0.4deg);transition:all .3s}
+.land-visual:hover{transform:rotate(0deg) scale(1.01);box-shadow:0 16px 48px rgba(0,0,0,.1)}
+.land-visual-label{display:flex;justify-content:space-between;padding:0 0 11px;font-size:9.5px;letter-spacing:.6px;color:#7d7363;font-weight:700}
+.land-screenshot{display:block;width:100%;height:auto;border:1px solid rgba(204,197,181,0.6);border-radius:8px;box-shadow:0 4px 16px rgba(0,0,0,0.04)}
+.land-caption{display:flex;justify-content:space-between;align-items:center;padding:12px 2px 0;font-size:10px;color:#8b8070}
 .land-mark{font-family:'Playfair Display',serif;font-weight:600;font-style:italic;font-size:11px;color:#a88d5c}
 
 /* Intro */
