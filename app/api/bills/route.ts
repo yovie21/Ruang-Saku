@@ -2,10 +2,15 @@ import { NextResponse } from "next/server";
 import { query, execute, uuid } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 
-// Convert DD-MM-YYYY → YYYY-MM-DD
-function parseDateInput(ddmmyyyy: string): string {
-  const match = String(ddmmyyyy).match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
-  if (!match) throw new Error("Format tanggal harus DD-MM-YYYY");
+// Convert DD-MM-YYYY or YYYY-MM-DD → YYYY-MM-DD
+function parseDateInput(input: string): string {
+  const str = String(input || "").trim();
+  if (/^\d{4}-\d{2}-\d{2}$/.test(str)) {
+    if (Number.isNaN(Date.parse(`${str}T00:00:00Z`))) throw new Error("Tanggal tidak valid");
+    return str;
+  }
+  const match = str.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (!match) throw new Error("Format tanggal harus DD-MM-YYYY atau YYYY-MM-DD");
   const [, day, month, year] = match;
   const formatted = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
   if (Number.isNaN(Date.parse(`${formatted}T00:00:00Z`))) throw new Error("Tanggal tidak valid");

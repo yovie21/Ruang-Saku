@@ -33,6 +33,32 @@ const todayStr = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 };
 
+function parseBillDate(d: string): { date: Date | null; days: number; formatted: string } {
+  if (!d) return { date: null, days: 0, formatted: "—" };
+  const s = String(d).trim();
+  let y = 0, m = 0, day = 0;
+  const ddmmyyyy = s.match(/^(\d{1,2})-(\d{1,2})-(\d{4})$/);
+  if (ddmmyyyy) {
+    day = parseInt(ddmmyyyy[1], 10);
+    m = parseInt(ddmmyyyy[2], 10);
+    y = parseInt(ddmmyyyy[3], 10);
+  } else {
+    const yyyymmdd = s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if (yyyymmdd) {
+      y = parseInt(yyyymmdd[1], 10);
+      m = parseInt(yyyymmdd[2], 10);
+      day = parseInt(yyyymmdd[3], 10);
+    }
+  }
+  if (!y || !m || !day) return { date: null, days: 0, formatted: s };
+  const dt = new Date(y, m - 1, day);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const days = Math.ceil((dt.getTime() - today.getTime()) / 86400000);
+  const months = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+  return { date: dt, days, formatted: `${day} ${months[m - 1]} ${y}` };
+}
+
 function normalizeIDR(raw: string): number {
   let s = raw.replace(/\s/g, "");
   if (!/\d/.test(s)) return 0;
@@ -1479,10 +1505,9 @@ export default function Home() {
     }
     for (const bill of bills) {
       if (bill.is_paid) continue;
-      const due = String(bill.due_date).slice(0, 10);
-      const daysLeft = Math.ceil((new Date(`${due}T00:00:00`).getTime() - new Date(`${today}T00:00:00`).getTime()) / 86400000);
-      if (daysLeft < 0) items.push({ id: `bill-over-${bill.id}`, kind: "error", title: `Tagihan ${bill.title} terlambat`, detail: `${rupiah(Number(bill.amount))} • jatuh tempo ${due}` });
-      else if (daysLeft <= 3) items.push({ id: `bill-due-${bill.id}`, kind: "warning", title: `Tagihan ${bill.title} ${daysLeft === 0 ? "jatuh tempo hari ini" : `${daysLeft} hari lagi`}`, detail: `${rupiah(Number(bill.amount))} • jatuh tempo ${due}` });
+      const { days: daysLeft, formatted } = parseBillDate(bill.due_date);
+      if (daysLeft < 0) items.push({ id: `bill-over-${bill.id}`, kind: "error", title: `Tagihan ${bill.title} terlambat`, detail: `${rupiah(Number(bill.amount))} • jatuh tempo ${formatted}` });
+      else if (daysLeft <= 3) items.push({ id: `bill-due-${bill.id}`, kind: "warning", title: `Tagihan ${bill.title} ${daysLeft === 0 ? "jatuh tempo hari ini" : `${daysLeft} hari lagi`}`, detail: `${rupiah(Number(bill.amount))} • jatuh tempo ${formatted}` });
     }
     for (const r of recurring) {
       if (!r.is_active) continue;
@@ -3431,22 +3456,120 @@ export default function Home() {
             <div><h2>Tagihan mendatang</h2><p>{bills.filter(b => !b.is_paid).length} belum dibayar</p></div>
             <button type="button" className="round-add" onClick={() => setBillFormOpen(v => !v)}>＋</button>
           </div>
-          {billFormOpen && <form className="goal-item" onSubmit={saveBill} style={{ marginBottom: 12 }}>
-            <label className="field-label">Nama tagihan<input id="billTitle" name="billTitle" required maxLength={160} value={billTitle} onChange={e => setBillTitle(e.target.value)} placeholder="Contoh: WiFi, listrik" /></label>
-            <label className="field-label">Nominal<input id="billAmount" name="billAmount" required inputMode="numeric" value={billAmount} onChange={e => setBillAmount(formatRibuan(e.target.value))} placeholder="Rp 0" /></label>
-            <label className="field-label">Jatuh tempo<input id="billDueDate" name="billDueDate" required type="date" value={billDueDate} onChange={e => setBillDueDate(e.target.value)} /></label>
-            <button className="goal-cta" type="submit">Simpan tagihan</button>
-          </form>}
+          {billFormOpen && (
+            <form className="bill-form-card" onSubmit={saveBill}>
+              <div className="bill-form-header">
+                <div>
+                  <h3>Tambah Tagihan Baru</h3>
+                  <p>Pengingat otomatis sebelum tanggal jatuh tempo</p>
+                </div>
+                <button type="button" className="bill-form-close" onClick={() => setBillFormOpen(false)} title="Tutup">×</button>
+              </div>
+
+              <div className="bill-form-body">
+                <div className="bill-form-field">
+                  <label htmlFor="billTitle">Nama Tagihan</label>
+                  <input
+                    id="billTitle"
+                    name="billTitle"
+                    required
+                    maxLength={160}
+                    value={billTitle}
+                    onChange={e => setBillTitle(e.target.value)}
+                    placeholder="Contoh: WiFi Indihome, Listrik PLN, Kosan"
+                  />
+                </div>
+
+                <div className="bill-form-row">
+                  <div className="bill-form-field">
+                    <label htmlFor="billAmount">Nominal (Rp)</label>
+                    <input
+                      id="billAmount"
+                      name="billAmount"
+                      required
+                      inputMode="numeric"
+                      value={billAmount}
+                      onChange={e => setBillAmount(formatRibuan(e.target.value))}
+                      placeholder="0"
+                    />
+                  </div>
+                  <div className="bill-form-field">
+                    <label htmlFor="billDueDate">Jatuh Tempo</label>
+                    <input
+                      id="billDueDate"
+                      name="billDueDate"
+                      required
+                      type="date"
+                      value={billDueDate}
+                      onChange={e => setBillDueDate(e.target.value)}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="bill-form-actions">
+                <button type="button" className="bill-btn-secondary" onClick={() => setBillFormOpen(false)}>Batal</button>
+                <button type="submit" className="bill-btn-primary">Simpan Tagihan</button>
+              </div>
+            </form>
+          )}
           <div className="goals">
-            {bills.length === 0 ? <p style={{ color: "#9aa5a2", fontSize: 12, padding: "6px 0" }}>Belum ada tagihan. Tekan ＋ untuk menambah.</p> : bills.map(b => {
-              const due = String(b.due_date).slice(0, 10);
-              const days = Math.ceil((new Date(`${due}T00:00:00`).getTime() - new Date(`${todayStr()}T00:00:00`).getTime()) / 86400000);
-              return <div key={b.id} className={`goal-item ${b.is_paid ? "done" : ""}`}>
-                <div className="budget-head"><b>{b.is_paid ? "✓ " : ""}{b.title}</b><button type="button" className="budget-delete" onClick={() => deleteBill(b.id)} title="Hapus">×</button></div>
-                <div className="budget-numbers"><span>{maskRp(Number(b.amount))}</span><small>{b.is_paid ? "Lunas" : days < 0 ? `Terlambat ${Math.abs(days)} hari` : days === 0 ? "Jatuh tempo hari ini" : `Jatuh tempo ${due} • ${days} hari lagi`}</small></div>
-                {!b.is_paid && <button type="button" className="goal-cta" onClick={() => toggleBill(b)}>Tandai lunas</button>}
-              </div>;
-            })}
+            {bills.length === 0 ? (
+              !billFormOpen && (
+                <div className="bill-empty-state">
+                  <div className="bill-empty-icon">🗓️</div>
+                  <b>Belum ada tagihan aktif</b>
+                  <p>Tekan tombol ＋ di atas untuk mencatat tagihan bulanan atau berkala.</p>
+                </div>
+              )
+            ) : (
+              bills.map(b => {
+                const { days, formatted } = parseBillDate(b.due_date);
+                const isOverdue = !b.is_paid && days < 0;
+                const isToday = !b.is_paid && days === 0;
+                const isSoon = !b.is_paid && days > 0 && days <= 3;
+
+                return (
+                  <div key={b.id} className={`bill-card ${b.is_paid ? "is-paid" : isOverdue ? "is-overdue" : isToday ? "is-today" : ""}`}>
+                    <div className="bill-card-top">
+                      <div className="bill-card-title-group">
+                        <span className="bill-card-icon">{b.is_paid ? "✓" : isOverdue ? "⚠️" : isToday ? "⚡" : "📋"}</span>
+                        <b className="bill-card-title">{b.title}</b>
+                      </div>
+                      <button type="button" className="budget-delete" onClick={() => deleteBill(b.id)} title="Hapus">×</button>
+                    </div>
+
+                    <div className="bill-card-body">
+                      <div className="bill-card-amount">{maskRp(Number(b.amount))}</div>
+                      <div className="bill-card-badge-row">
+                        {b.is_paid ? (
+                          <span className="bill-badge paid">✓ Lunas</span>
+                        ) : isOverdue ? (
+                          <span className="bill-badge overdue">Terlambat {Math.abs(days)} hari</span>
+                        ) : isToday ? (
+                          <span className="bill-badge today">Jatuh tempo hari ini</span>
+                        ) : isSoon ? (
+                          <span className="bill-badge soon">{days} hari lagi</span>
+                        ) : (
+                          <span className="bill-badge upcoming">{days} hari lagi</span>
+                        )}
+                        <span className="bill-card-due">Tenggat: {formatted}</span>
+                      </div>
+                    </div>
+
+                    <div className="bill-card-actions">
+                      <button
+                        type="button"
+                        className={`bill-toggle-btn ${b.is_paid ? "paid" : "unpaid"}`}
+                        onClick={() => toggleBill(b)}
+                      >
+                        {b.is_paid ? "Tandai Belum Lunas" : "Tandai Lunas"}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            )}
           </div>
           <div className="section-title" style={{ marginTop: 26 }} id="utang">
             <div><h2>Utang & Piutang</h2><p>{debts.length > 0 ? `${debts.length} belum lunas` : "Catat pinjaman & tagihan"}</p></div>
