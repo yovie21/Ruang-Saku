@@ -779,11 +779,39 @@ export default function Home() {
       const spent = prevMonthSpentByCategory.get(pb.category) ?? 0;
       const leftover = Math.max(0, limit - spent);
       const exists = budgets.some(b => b.category === pb.category);
-      return { category: pb.category, limit, spent, leftover, exists };
+      return { category_id: pb.category_id, category: pb.category, limit, spent, leftover, exists };
     })
     .filter(x => x.leftover > 0 && !x.exists), [prevBudgets, prevMonthSpentByCategory, budgets]);
 
-  async function carryOverBudget(category: string, leftover: number) {
+  const [dismissedCarry, setDismissedCarry] = useState(false);
+  const [dismissedCarryCats, setDismissedCarryCats] = useState<Set<string>>(() => new Set());
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(`dismissed_carry_${monthKey}`);
+      if (saved === "true") setDismissedCarry(true);
+    } catch {}
+  }, [monthKey]);
+
+  function dismissAllCarry() {
+    setDismissedCarry(true);
+    try {
+      localStorage.setItem(`dismissed_carry_${monthKey}`, "true");
+    } catch {}
+    pushToast("warning", "Peringatan dihapus", "Saran pengalihan saldo bulan lalu telah ditutup");
+  }
+
+  function dismissCategoryCarry(cat: string) {
+    setDismissedCarryCats(prev => new Set(prev).add(cat));
+    pushToast("warning", "Diabaikan", `Saran untuk kategori ${cat} diabaikan`);
+  }
+
+  const visibleCarrySuggestions = useMemo(() => {
+    if (dismissedCarry) return [];
+    return carrySuggestions.filter(s => !dismissedCarryCats.has(s.category));
+  }, [carrySuggestions, dismissedCarry, dismissedCarryCats]);
+
+  async function carryOverBudget(category: string, leftover: number, category_id?: string) {
     const nowD = new Date();
     const monthStart = `${nowD.getFullYear()}-${String(nowD.getMonth() + 1).padStart(2, "0")}-01`;
     setCarryBusy(true);
@@ -791,7 +819,7 @@ export default function Home() {
       const response = await fetch("/api/budgets", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ category, amount: leftover, month_start: monthStart })
+        body: JSON.stringify({ category, category_id, amount: leftover, month_start: monthStart })
       });
       if (!response.ok) {
         const result = await response.json().catch(() => ({}));
@@ -806,17 +834,17 @@ export default function Home() {
   }
 
   async function carryOverAll() {
-    if (carrySuggestions.length === 0) return;
+    if (visibleCarrySuggestions.length === 0) return;
     setCarryBusy(true);
     try {
       let ok = 0;
-      for (const s of carrySuggestions) {
+      for (const s of visibleCarrySuggestions) {
         const nowD = new Date();
         const monthStart = `${nowD.getFullYear()}-${String(nowD.getMonth() + 1).padStart(2, "0")}-01`;
         const response = await fetch("/api/budgets", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ category: s.category, amount: s.leftover, month_start: monthStart })
+          body: JSON.stringify({ category: s.category, category_id: s.category_id, amount: s.leftover, month_start: monthStart })
         });
         if (response.ok) ok += 1;
       }
@@ -3423,25 +3451,33 @@ export default function Home() {
               })
             )}
           </div>
-          {carrySuggestions.length > 0 && (
+          {visibleCarrySuggestions.length > 0 && (
             <div className="carry-modern-banner">
               <div className="carry-banner-header">
                 <div className="carry-banner-title">
                   <span style={{ fontSize: 20 }}>💡</span>
                   <div>
                     <h4>Sisa Saldo Bulan Lalu</h4>
-                    <p>{carrySuggestions.length} kategori punya saldo sisa yang bisa dialihkan jadi modal bulan ini.</p>
+                    <p>{visibleCarrySuggestions.length} kategori punya saldo sisa yang bisa dialihkan jadi modal bulan ini.</p>
                   </div>
                 </div>
-                <button type="button" className="clear-filter primary" disabled={carryBusy} onClick={carryOverAll}>
-                  {carryBusy ? "…" : "Alihkan Semua"}
-                </button>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <button type="button" className="clear-filter primary" disabled={carryBusy} onClick={carryOverAll}>
+                    {carryBusy ? "…" : "Alihkan Semua"}
+                  </button>
+                  <button type="button" className="carry-dismiss-all-btn" onClick={dismissAllCarry} title="Hapus / Tutup saran ini">
+                    ✕
+                  </button>
+                </div>
               </div>
               <div style={{ display: "grid", gap: 6 }}>
-                {carrySuggestions.slice(0, 4).map(s => (
-                  <div key={s.category} className="category-row" style={{ padding: "6px 8px", background: "rgba(255,255,255,0.6)", borderRadius: 8 }}>
+                {visibleCarrySuggestions.slice(0, 4).map(s => (
+                  <div key={s.category} className="category-row" style={{ padding: "6px 8px", background: "rgba(255,255,255,0.6)", borderRadius: 8, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <span>{s.category} <small>• sisa {maskRp(s.leftover)} dari {maskRp(s.limit)}</small></span>
-                    <button type="button" className="cat-save" disabled={carryBusy} onClick={() => carryOverBudget(s.category, s.leftover)}>Alihkan</button>
+                    <div style={{ display: "flex", gap: 6 }}>
+                      <button type="button" className="cat-save" disabled={carryBusy} onClick={() => carryOverBudget(s.category, s.leftover, s.category_id)}>Alihkan</button>
+                      <button type="button" className="cat-dismiss-btn" onClick={() => dismissCategoryCarry(s.category)} title="Hapus kategori ini dari saran">✕</button>
+                    </div>
                   </div>
                 ))}
               </div>

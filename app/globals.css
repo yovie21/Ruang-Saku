@@ -2306,13 +2306,117 @@ header .eyebrow{color:#81765f;letter-spacing:.16em}
   text-align: right;
 }
 .account-card-actions {
-  display: flex;
-  gap: 4px;
-  opacity: 0.85;
-  transition: opacity var(--transition-fast);
+  display: flex !important;
+  align-items: center;
+  gap: 6px;
+  opacity: 1 !important;
 }
-.account-card:hover .account-card-actions {
-  opacity: 1;
+.account-card-actions .tx-edit,
+.account-card-actions .tx-delete {
+  opacity: 1 !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.account-card-actions .tx-edit {
+  color: #1b6e4e !important;
+  background: #eaf5ef !important;
+  border: 1px solid #c9e8d6 !important;
+}
+.account-card-actions .tx-edit:hover,
+.account-card-actions .tx-edit:active {
+  background: #d1fae5 !important;
+  color: #065f46 !important;
+  transform: translateY(-1px);
+}
+.account-card-actions .tx-delete {
+  color: #dc2626 !important;
+  background: #fef2f2 !important;
+  border: 1px solid #fecaca !important;
+  font-size: 18px !important;
+  line-height: 1;
+}
+.account-card-actions .tx-delete:hover,
+.account-card-actions .tx-delete:active {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  transform: translateY(-1px);
+}
+[data-theme="dark"] .account-card-actions .tx-edit {
+  color: #6ee7b7 !important;
+  background: #143225 !important;
+  border-color: #1e4d38 !important;
+}
+[data-theme="dark"] .account-card-actions .tx-delete {
+  color: #fca5a5 !important;
+  background: #361717 !important;
+  border-color: #552424 !important;
+}
+.carry-dismiss-all-btn {
+  background: rgba(220, 38, 38, 0.08);
+  border: 1px solid rgba(220, 38, 38, 0.2);
+  color: #dc2626;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all var(--transition-fast);
+}
+.carry-dismiss-all-btn:hover {
+  background: #fee2e2;
+  color: #991b1b;
+}
+.cat-dismiss-btn {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #6b7280;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: all var(--transition-fast);
+}
+.cat-dismiss-btn:hover {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+[data-theme="dark"] .carry-dismiss-all-btn {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #fca5a5;
+}
+[data-theme="dark"] .carry-dismiss-all-btn:hover {
+  background: #451a1a;
+  color: #fecaca;
+}
+[data-theme="dark"] .cat-dismiss-btn {
+  border-color: #374151;
+  color: #9ca3af;
+}
+[data-theme="dark"] .cat-dismiss-btn:hover {
+  background: #381515;
+  color: #fca5a5;
+  border-color: #7f1d1d;
 }
 
 /* === MODERN BUDGET CARDS === */
@@ -2824,6 +2928,31 @@ header .eyebrow{color:#81765f;letter-spacing:.16em}
 [data-theme="dark"] .debt-status-tag.installment {
   background: #16243a;
   color: #93c5fd;
+}
+
+@media (max-width: 640px) {
+  .account-card {
+    padding: 12px 14px;
+    gap: 10px;
+  }
+  .account-card-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+  .account-card-actions {
+    display: flex !important;
+    gap: 5px;
+  }
+  .account-card-actions .tx-edit,
+  .account-card-actions .tx-delete {
+    width: 28px !important;
+    height: 28px !important;
+    min-width: 28px !important;
+    min-height: 28px !important;
+    font-size: 13px !important;
+  }
 }
 
 
