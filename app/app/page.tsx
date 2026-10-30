@@ -703,21 +703,43 @@ export default function Home() {
     return map;
   }, [categories]);
 
-  const expenseByCategory = useMemo(() => {
+  const [showAllCategories, setShowAllCategories] = useState(false);
+
+  const { allExpenseCategories, otherCategoriesTotal, otherCategoriesCount, chartExpense } = useMemo(() => {
     const sum = new Map<string, number>();
     for (const t of transactions) {
       if (t.type !== "expense" || String(t.transaction_date).slice(0, 7) !== chartMonth) continue;
       const name = t.category || "Lainnya";
       sum.set(name, (sum.get(name) ?? 0) + Number(t.amount));
     }
-    const totalExp = [...sum.values()].reduce((s, v) => s + v, 0) || 1;
-    const palette = ["#315f91", "#4f84b8", "#bd655c", "#c2a35e", "#747fa3", "#4f89a8", "#8293a5"];
-    return [...sum.entries()]
+    const realTotal = [...sum.values()].reduce((s, v) => s + v, 0);
+    const totalExp = realTotal || 1;
+    const palette = [
+      "#315f91", "#4f84b8", "#bd655c", "#c2a35e", "#747fa3", 
+      "#4f89a8", "#8293a5", "#0d9488", "#d97706", "#7c3aed", 
+      "#e11d48", "#2563eb", "#059669", "#ea580c"
+    ];
+    const sorted = [...sum.entries()]
       .sort((a, b) => b[1] - a[1])
-      .slice(0, 6)
-      .map(([name, value], i) => ({ name, value, pct: (value / totalExp) * 100, color: categoryColor.get(`expense:${name}`) ?? palette[i % palette.length] }));
+      .map(([name, value], i) => ({
+        name,
+        value,
+        pct: (value / totalExp) * 100,
+        color: categoryColor.get(`expense:${name}`) ?? palette[i % palette.length]
+      }));
+
+    const otherList = sorted.slice(6);
+    const otherTotal = otherList.reduce((acc, cur) => acc + cur.value, 0);
+
+    return {
+      allExpenseCategories: sorted,
+      otherCategoriesTotal: otherTotal,
+      otherCategoriesCount: otherList.length,
+      chartExpense: realTotal
+    };
   }, [transactions, categoryColor, chartMonth]);
-  const chartExpense = expenseByCategory.reduce((sum, item) => sum + item.value, 0);
+
+  const expenseByCategory = allExpenseCategories;
   const chartMonthLabel = new Date(Number(chartMonth.slice(0, 4)), Number(chartMonth.slice(5, 7)) - 1).toLocaleDateString("id-ID", { month: "long", year: "numeric" });
   const chartTotals = useMemo(() => trend30.reduce((totals, day) => ({ income: totals.income + day.income, expense: totals.expense + day.expense }), { income: 0, expense: 0 }), [trend30]);
   const setChartMonthOffset = (offset: number) => {
@@ -727,12 +749,12 @@ export default function Home() {
   };
   const donutSegments = useMemo(() => {
     let acc = 0;
-    return expenseByCategory.map(s => {
+    return allExpenseCategories.map(s => {
       const from = acc;
       acc += s.pct;
       return { ...s, from, to: acc };
     });
-  }, [expenseByCategory]);
+  }, [allExpenseCategories]);
   const donutBackground = donutSegments.length === 0
     ? "#edf2ee"
     : `conic-gradient(${donutSegments.map(s => `${s.color} ${s.from}% ${s.to}%`).join(", ")})`;
@@ -3245,10 +3267,25 @@ export default function Home() {
                   <div className="donut" style={{ background: donutBackground }}><div className="donut-center"><b>{maskRp(chartExpense)}</b><small>keluar bulan ini</small></div></div>
                 </div>
                 <div className="category-legend">
-                  {expenseByCategory.map(c => <div key={c.name} className="category-row">
+                  {(showAllCategories ? allExpenseCategories : allExpenseCategories.slice(0, 6)).map(c => <div key={c.name} className="category-row">
                     <span><i className="dot" style={{ background: c.color }} /> {c.name}</span>
                     <span><b>{maskRp(c.value)}</b> <small>{c.pct.toFixed(0)}%</small></span>
                   </div>)}
+                  {!showAllCategories && otherCategoriesCount > 0 && (
+                    <div className="category-row" style={{ opacity: 0.85, borderTop: "1px dashed var(--line)", paddingTop: 8 }}>
+                      <span><i className="dot" style={{ background: "#94a3b8" }} /> {otherCategoriesCount} Kategori Lainnya</span>
+                      <span><b>{maskRp(otherCategoriesTotal)}</b> <small>{((otherCategoriesTotal / (chartExpense || 1)) * 100).toFixed(0)}%</small></span>
+                    </div>
+                  )}
+                  {allExpenseCategories.length > 6 && (
+                    <button
+                      type="button"
+                      className="cat-toggle-all-btn"
+                      onClick={() => setShowAllCategories(!showAllCategories)}
+                    >
+                      {showAllCategories ? "Ciutkan rincian ▲" : `Lihat semua (${allExpenseCategories.length} kategori) ▼`}
+                    </button>
+                  )}
                 </div>
               </>}
             </div>

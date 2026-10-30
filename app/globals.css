@@ -2419,6 +2419,36 @@ header .eyebrow{color:#81765f;letter-spacing:.16em}
   border-color: #7f1d1d;
 }
 
+.cat-toggle-all-btn {
+  margin-top: 10px;
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--sand, #f4efe6);
+  border: 1px dashed var(--line, #e2ded5);
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--pine, #1b6e4e);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all var(--transition-fast);
+}
+.cat-toggle-all-btn:hover {
+  background: #eaf5ef;
+  border-color: #a7f3d0;
+}
+[data-theme="dark"] .cat-toggle-all-btn {
+  background: #15221c;
+  border-color: #244234;
+  color: #6ee7b7;
+}
+[data-theme="dark"] .cat-toggle-all-btn:hover {
+  background: #1c3227;
+}
+
 /* === MODERN BUDGET CARDS === */
 .budget-modern-card {
   background: var(--card-bg, #ffffff);
