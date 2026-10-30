@@ -137,7 +137,7 @@ header h1 span{background:linear-gradient(135deg,var(--green),var(--teal));-webk
 .balance-card::before{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:#d9f34833;right:-60px;top:-70px}
 .balance-card::after{content:"";position:absolute;width:160px;height:160px;border-radius:50%;background:#ffffff22;left:-40px;bottom:-60px}
 .balance-card::before,.balance-card::after{animation:float 5s ease-in-out infinite}
-.balance-card h2{font:800 30px Fraunces,serif;margin:0 0 17px;letter-spacing:-1px;text-shadow:0 2px 10px rgba(0,0,0,0.3);animation:countUp 0.6s ease both}
+.balance-card h2{color:#ffffff;font:800 30px Fraunces,serif;margin:0 0 17px;letter-spacing:-1px;text-shadow:0 2px 10px rgba(0,0,0,0.3);animation:countUp 0.6s ease both}
 .balance-top{display:flex;justify-content:space-between;color:#bed2c7;font-size:12px}
 .balance-top button{background:transparent;color:#d4e4dc;letter-spacing:2px;transition:all var(--transition-fast)}
 .balance-top button:hover{color:#fff}
@@ -2180,10 +2180,11 @@ header .eyebrow{font-size:10px;letter-spacing:.12em;color:#718178}
 header{margin-bottom:32px}
 header h1{color:#193b2e}
 header .eyebrow{color:#81765f;letter-spacing:.16em}
-.balance-card{background:linear-gradient(145deg,#153f32 0%,#1d5942 100%)!important;border:1px solid rgba(217,190,126,.28);border-radius:20px;position:relative}
+.balance-card{background:linear-gradient(145deg,#153f32 0%,#1d5942 100%)!important;border:1px solid rgba(217,190,126,.28);border-radius:20px;position:relative;color:#ffffff!important}
 .balance-card:after{content:"";display:block!important;position:absolute;inset:12px;border:1px solid rgba(228,205,153,.16);border-radius:13px;pointer-events:none}
-.balance-card h2{font-family:Fraunces,Georgia,serif;font-size:clamp(27px,3vw,34px);letter-spacing:-.7px;text-shadow:none}
-.balance-top{color:#d9d0b8}
+.balance-card h2{font-family:Fraunces,Georgia,serif;font-size:clamp(27px,3vw,34px);letter-spacing:-.7px;text-shadow:none;color:#ffffff!important}
+.balance-card .balance-top,.balance-card .balance-top span{color:#f1ebd8!important}
+.balance-card .balance-footer small{color:#dcd4be!important}
 .balance-footer>span{background:#d7c18a;color:#193b2e}
 .stat-card{background:#fffefa;border-color:#e9e2d2;box-shadow:0 5px 18px rgba(48,54,39,.035)}
 .stat-card.income{background:#f1f5ef;border-color:#dce6d8}
