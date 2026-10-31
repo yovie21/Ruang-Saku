@@ -256,6 +256,38 @@ export async function POST(req: Request) {
       );
     }
 
+    // Deteksi jika pengguna melakukan "Test action" manual di MacroDroid (variabel masih berupa placeholder mentah)
+    const isMacroDroidPlaceholder =
+      (text === "{notification}" || text === "[notif_message]" || !text) &&
+      (title === "{not_title}" || title === "[notif_title]" || !title);
+
+    if (isMacroDroidPlaceholder) {
+      const accounts = await query<{ id: string; name: string; account_type: string }>(
+        "SELECT id, name, account_type FROM accounts WHERE user_id = ? AND is_archived = FALSE",
+        [user.id]
+      );
+      const targetAccount = accounts[0] || { id: null, name: "Utama" };
+      const txId = uuid();
+      await execute(
+        `INSERT INTO transactions 
+          (id, user_id, account_id, type, amount, transaction_date, note)
+         VALUES (?, ?, ?, 'expense', 10000, CURDATE(), 'Uji Coba MacroDroid Terhubung')`,
+        [txId, user.id, targetAccount.id]
+      );
+      return NextResponse.json({
+        success: true,
+        message: "⚡ Koneksi MacroDroid Berhasil! HP kamu sudah 100% tersambung ke Ruang Saku.",
+        data: {
+          id: txId,
+          account: targetAccount.name,
+          type: "expense",
+          amount: 10000,
+          note: "Uji Coba MacroDroid Terhubung",
+          date: new Date().toISOString().split("T")[0]
+        }
+      });
+    }
+
     // 3. Parsing notifikasi (Cepat via Regex lebih dulu)
     let parsed = parseRegexTransaction(text, title);
     if (!parsed.detectedBank && app) {
