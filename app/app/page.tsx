@@ -82,27 +82,50 @@ function normalizeIDR(raw: string): number {
   return parseInt(int.replace(/[^\d]/g, "") || "0", 10);
 }
 
-function parseReceiptText(raw: string): { amount: number; date: string; merchant: string } {
+function parseReceiptText(raw: string): { amount: number; date: string; merchant: string; category?: string } {
   const text = raw || "";
   const lines = text.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
   const numToken = /R?p\.?\s*([\d][\d.,]*)|([\d][\d.,]*\d)/gi;
   const lineValues: { line: string; value: number }[] = [];
+  
   for (const line of lines) {
+    if (/899\d{9,}|08\d{8,}|\+62\d{8,}/.test(line)) continue;
     numToken.lastIndex = 0;
     let m: RegExpExecArray | null;
     while ((m = numToken.exec(line)) !== null) {
       const v = normalizeIDR(m[1] ?? m[2] ?? m[0]);
-      if (v > 0) lineValues.push({ line, value: v });
+      if (v >= 500 && v <= 50_000_000) lineValues.push({ line, value: v });
     }
   }
-  const totalKw = /total|jumlah|bayar|tunai|cash|tagihan|amount|grand/i;
-  const excludeKw = /kembali|change|tanggal|date|telp|phone|nota|kasir|jam|waktu|transaksi|struk|receipt/i;
-  const totalCands = lineValues.filter(x => totalKw.test(x.line) && !excludeKw.test(x.line)).map(x => x.value);
-  const bigCands = lineValues.map(x => x.value).filter(v => v >= 1000);
-  const allVals = lineValues.map(x => x.value);
-  const amount = totalCands.length > 0
-    ? Math.max(...totalCands)
-    : bigCands.length > 0 ? Math.max(...bigCands) : allVals.length > 0 ? Math.max(...allVals) : 0;
+
+  const grandTotalKw = /(?:grand\s*total|total\s*akhir|total\s*belanja|total\s*harga|total\s*bayar|tot\b|t0tal)/i;
+  const subtotalKw = /(?:sub\s*total|tagihan|jumlah\s*harga|jumlah\b)/i;
+  const cashKw = /(?:tunai|cash|bayar\s*tunai)/i;
+  const changeKw = /(?:kembali|kembalian|change)/i;
+  const excludeKw = /tanggal|date|telp|phone|nota|kasir|jam|waktu|transaksi|struk|receipt/i;
+
+  const grandCands = lineValues.filter(x => grandTotalKw.test(x.line) && !changeKw.test(x.line) && !excludeKw.test(x.line)).map(x => x.value);
+  const subCands = lineValues.filter(x => subtotalKw.test(x.line) && !changeKw.test(x.line) && !excludeKw.test(x.line)).map(x => x.value);
+  
+  const cashVals = lineValues.filter(x => cashKw.test(x.line)).map(x => x.value);
+  const changeVals = lineValues.filter(x => changeKw.test(x.line)).map(x => x.value);
+  let computedTotalFromCash = 0;
+  if (cashVals.length > 0 && changeVals.length > 0) {
+    const cash = Math.max(...cashVals);
+    const change = Math.max(...changeVals);
+    if (cash > change) computedTotalFromCash = cash - change;
+  }
+
+  let amount = 0;
+  if (grandCands.length > 0) {
+    amount = Math.max(...grandCands);
+  } else if (subCands.length > 0) {
+    amount = Math.max(...subCands);
+  } else if (computedTotalFromCash > 0) {
+    amount = computedTotalFromCash;
+  } else if (lineValues.length > 0) {
+    amount = Math.max(...lineValues.map(x => x.value));
+  }
 
   let date = "";
   const months: Record<string, string> = { jan: "01", feb: "02", mar: "03", apr: "04", mei: "05", jun: "06", jul: "07", agu: "08", sep: "09", okt: "10", nov: "11", des: "12" };
@@ -144,7 +167,86 @@ function parseReceiptText(raw: string): { amount: number; date: string; merchant
       break;
     }
   }
-  return { amount, date, merchant };
+
+  let category = "";
+  const lowerAll = text.toLowerCase();
+  if (/alfa|indomaret|superindo|hypermart|transmart|yomart|supermarket|minimarket/.test(lowerAll)) {
+    category = "Kebutuhan Pribadi";
+  } else if (/pertamina|spbu|shell|bp-akr|bensin|pertalite|pertamax|parkir|toll|etoll/.test(lowerAll)) {
+    category = "Transportasi";
+  } else if (/kopi|cafe|resto|restoran|warung|mie|ayam|bakso|mcd|kfc|hokben|starbucks|chatime|food/.test(lowerAll)) {
+    category = "Makan & Minum";
+  } else if (/pln|listrik|pdam|indihome|telkom|pulsa|paket\s*data|bpjs/.test(lowerAll)) {
+    category = "Tagihan";
+  }
+
+  return { amount, date, merchant, category };
+}
+
+function compressImage(file: File, maxDim = 1600): Promise<string> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const src = e.target?.result as string;
+      if (!src) return resolve("");
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        if (!ctx) return resolve(src);
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL("image/jpeg", 0.85));
+      };
+      img.onerror = () => resolve(src);
+      img.src = src;
+    };
+    reader.onerror = () => resolve("");
+    reader.readAsDataURL(file);
+  });
+}
+
+function enhanceReceiptForLocalOcr(dataUrl: string): Promise<string> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return resolve(dataUrl);
+      ctx.drawImage(img, 0, 0);
+      try {
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const d = imgData.data;
+        for (let i = 0; i < d.length; i += 4) {
+          const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+          const c = (gray - 128) * 1.6 + 128;
+          const val = c > 135 ? 255 : c < 90 ? 0 : c;
+          d[i] = val;
+          d[i + 1] = val;
+          d[i + 2] = val;
+        }
+        ctx.putImageData(imgData, 0, 0);
+        resolve(canvas.toDataURL("image/png"));
+      } catch {
+        resolve(dataUrl);
+      }
+    };
+    img.onerror = () => resolve(dataUrl);
+    img.src = dataUrl;
+  });
 }
 
 function fileToBase64(file: File): Promise<string> {
@@ -250,6 +352,7 @@ export default function Home() {
   const [scanProgress, setScanProgress] = useState(0);
   const [scanFileName, setScanFileName] = useState("");
   const [scanPreview, setScanPreview] = useState("");
+  const [scanStatus, setScanStatus] = useState("");
   const scanRef = useRef<{ url: string; mime: string; name: string; text: string } | null>(null);
   const recurringRan = useRef(false);
   const reportAutoRan = useRef(false);
@@ -1701,6 +1804,10 @@ export default function Home() {
     setTransactionType(null);
     setAmountDisplay("");
     setScanProgress(0);
+    setScanBusy(false);
+    setScanStatus("");
+    setScanFileName("");
+    setScanPreview("");
   }
 
   async function scanReceipt(file: File | undefined) {
@@ -1710,16 +1817,77 @@ export default function Home() {
       pushToast("error", "Format tidak didukung", "Scan pakai foto JPG, PNG, atau WebP (bukan PDF).");
       return;
     }
-    if (file.size > 4_000_000) {
-      pushToast("error", "Foto terlalu besar", "Maksimal 4MB agar scan cepat.");
+    if (file.size > 15_000_000) {
+      pushToast("error", "Foto terlalu besar", "Maksimal 15MB agar scan optimal.");
       return;
     }
     setScanBusy(true);
     setScanProgress(0);
+    setScanStatus("Menyiapkan foto...");
     setScanFileName(file.name);
+
     try {
-      const dataUrl = await fileToBase64(file);
-      setScanPreview(dataUrl);
+      // 1. Kompresi gambar agar cepat diunggah & diproses
+      const compressedDataUrl = await compressImage(file, 1600);
+      const previewUrl = compressedDataUrl || (await fileToBase64(file));
+      setScanPreview(previewUrl);
+
+      // 2. Coba AI Vision terlebih dahulu
+      setScanStatus("✨ AI Vision sedang menganalisis nota...");
+      const availableCats = categories.filter(c => c.type === (transactionType || "expense")).map(c => c.name);
+
+      let aiSuccess = false;
+      try {
+        const aiRes = await fetch("/api/scan-receipt", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ image: previewUrl, categories: availableCats })
+        });
+
+        if (aiRes.ok) {
+          const aiJson = await aiRes.json();
+          if (aiJson.success && aiJson.data) {
+            const { merchant, total, date, category } = aiJson.data;
+            if (total && total > 0) {
+              setAmountDisplay(new Intl.NumberFormat("id-ID").format(total));
+            }
+            if (merchant) {
+              const nameInput = document.querySelector('form.modal input[name="title"]') as HTMLInputElement | null;
+              if (nameInput) {
+                nameInput.value = merchant;
+                nameInput.dispatchEvent(new Event("input", { bubbles: true }));
+              }
+            }
+            if (category) {
+              const catSelect = document.querySelector('form.modal select[name="category"]') as HTMLSelectElement | null;
+              if (catSelect) {
+                const opt = Array.from(catSelect.options).find(
+                  o => o.value.toLowerCase() === category.toLowerCase() || o.text.toLowerCase() === category.toLowerCase()
+                );
+                if (opt) {
+                  catSelect.value = opt.value;
+                  catSelect.dispatchEvent(new Event("change", { bubbles: true }));
+                }
+              }
+            }
+            if (date) {
+              setTxDate(date);
+            }
+            scanRef.current = { url: previewUrl, mime: file.type, name: file.name, text: JSON.stringify(aiJson.data) };
+            pushToast("success", "Nota terbaca AI Vision ✨", `${merchant || "Struk"} • ${rupiah(total || 0)}${category ? ` • [${category}]` : ""}`);
+            aiSuccess = true;
+          }
+        }
+      } catch (aiErr) {
+        console.warn("[AI Vision] Dialihkan ke scan lokal:", aiErr);
+      }
+
+      if (aiSuccess) return;
+
+      // 3. Fallback ke Local OCR dengan pra-pemrosesan kontras tajam
+      setScanStatus("Memindai offline (kontras ditingkatkan)...");
+      const enhancedDataUrl = await enhanceReceiptForLocalOcr(previewUrl);
+
       const { createWorker } = await import("tesseract.js");
       const worker = await createWorker(["ind", "eng"], undefined, {
         logger: (m: { status?: string; progress?: number }) => {
@@ -1728,29 +1896,47 @@ export default function Home() {
           }
         }
       });
-      const { data } = await worker.recognize(dataUrl);
+      const { data } = await worker.recognize(enhancedDataUrl);
       await worker.terminate();
+
       const parsed = parseReceiptText(data.text || "");
       if (!parsed.amount || parsed.amount < 1) {
-        pushToast("error", "Nominal tidak terbaca", "Foto kurang jelas — ketik nominal manual.");
-        scanRef.current = null;
+        pushToast("warning", "Nominal belum terbaca", "Foto kurang jelas — silakan ketik nominal manual.");
+        scanRef.current = { url: previewUrl, mime: file.type, name: file.name, text: data.text || "" };
         return;
       }
+
       setAmountDisplay(new Intl.NumberFormat("id-ID").format(parsed.amount));
       const nameInput = document.querySelector('form.modal input[name="title"]') as HTMLInputElement | null;
       if (nameInput && !nameInput.value && parsed.merchant) {
-        const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, "value")?.set;
-        setter?.call(nameInput, parsed.merchant);
+        nameInput.value = parsed.merchant;
         nameInput.dispatchEvent(new Event("input", { bubbles: true }));
       }
-      scanRef.current = { url: dataUrl, mime: file.type, name: file.name, text: data.text || "" };
-      pushToast("success", "Struk terbaca", `${parsed.merchant || "Transaksi"} • ${rupiah(parsed.amount)}${parsed.date ? ` • ${parsed.date}` : ""}. Cek lagi sebelum simpan.`);
+      if (parsed.category) {
+        const catSelect = document.querySelector('form.modal select[name="category"]') as HTMLSelectElement | null;
+        if (catSelect) {
+          const opt = Array.from(catSelect.options).find(
+            o => o.value.toLowerCase() === parsed.category?.toLowerCase() || o.text.toLowerCase() === parsed.category?.toLowerCase()
+          );
+          if (opt) {
+            catSelect.value = opt.value;
+            catSelect.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+        }
+      }
+      if (parsed.date) {
+        setTxDate(parsed.date);
+      }
+
+      scanRef.current = { url: previewUrl, mime: file.type, name: file.name, text: data.text || "" };
+      pushToast("success", "Struk terbaca offline", `${parsed.merchant || "Transaksi"} • ${rupiah(parsed.amount)}${parsed.date ? ` • ${parsed.date}` : ""}`);
     } catch {
-      pushToast("error", "Scan gagal", "Coba foto ulang yang lebih jelas.");
+      pushToast("error", "Scan struk gagal", "Coba foto ulang yang lebih tegak & cukup cahaya.");
       scanRef.current = null;
     } finally {
       setScanBusy(false);
       setScanProgress(0);
+      setScanStatus("");
     }
   }
 
@@ -3887,11 +4073,25 @@ export default function Home() {
         <p className="eyebrow">{transactionType === "income" ? "PEMASUKAN BARU" : "PENGELUARAN BARU"}</p>
         <h2>Catat {transactionType === "income" ? "pemasukan" : "pengeluaran"}</h2>
         <div className="scan-box">
-          <label className="scan-pick">📷 Scan struk
+          <label className="scan-pick">
+            <span>✨ Scan Struk AI</span>
             <input type="file" accept="image/jpeg,image/png,image/webp" hidden disabled={scanBusy} onChange={e => scanReceipt(e.target.files?.[0])} />
           </label>
-          {scanBusy && <small>Memindai… {scanProgress > 0 ? `${scanProgress}%` : ""}</small>}
-          {!scanBusy && scanFileName && <small>{scanFileName} • nominal terisi otomatis, cek lagi ya</small>}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            {scanBusy ? (
+              <small style={{ color: "var(--pine, #1b6e4e)", fontWeight: 600, display: "block" }}>
+                {scanStatus || "Memproses nota…"} {scanProgress > 0 ? `(${scanProgress}%)` : ""}
+              </small>
+            ) : scanFileName ? (
+              <small style={{ display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                ✓ {scanFileName} • nominal &amp; kategori dicek otomatis
+              </small>
+            ) : (
+              <small style={{ display: "block", color: "var(--muted)" }}>
+                Foto struk belanja, kwitansi, atau bon warung
+              </small>
+            )}
+          </div>
         </div>
         {scanPreview && <img className="scan-preview" src={scanPreview} alt={scanFileName} />}
         <label>Nama transaksi<input name="title" placeholder={transactionType === "income" ? "Contoh: Gaji bulanan" : "Contoh: Makan siang"} required /></label>
