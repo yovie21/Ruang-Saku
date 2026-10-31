@@ -15,6 +15,49 @@ function parseNominal(val: unknown): number {
   return isNaN(num) ? 0 : num;
 }
 
+function parseAiResponseText(raw: string): string {
+  const trimmed = raw.trim();
+
+  // 1. Format standar JSON { choices: [...] }
+  if (trimmed.startsWith("{") && trimmed.endsWith("}")) {
+    try {
+      const obj = JSON.parse(trimmed);
+      if (obj.choices?.[0]?.message?.content) {
+        return obj.choices[0].message.content;
+      }
+    } catch {
+      // Abaikan dan lanjut ke parser berikutnya
+    }
+  }
+
+  // 2. Format Server-Sent Events (SSE / streaming) "data: {...}"
+  const chunks: string[] = [];
+  const lines = trimmed.split(/\r?\n/);
+  for (const line of lines) {
+    const l = line.trim();
+    if (!l.startsWith("data:")) continue;
+    const jsonStr = l.slice(5).trim();
+    if (!jsonStr || jsonStr === "[DONE]") continue;
+    try {
+      const data = JSON.parse(jsonStr);
+      const delta = data.choices?.[0]?.delta;
+      if (delta?.content) {
+        chunks.push(delta.content);
+      } else if (data.choices?.[0]?.message?.content) {
+        chunks.push(data.choices[0].message.content);
+      }
+    } catch {
+      // Lewati baris tak valid
+    }
+  }
+
+  if (chunks.length > 0) {
+    return chunks.join("");
+  }
+
+  return trimmed;
+}
+
 function extractJson(text: string): Record<string, unknown> {
   const cleaned = text
     .trim()
@@ -24,10 +67,16 @@ function extractJson(text: string): Record<string, unknown> {
     .trim();
 
   const match = cleaned.match(/\{[\s\S]*\}/);
-  if (match) {
-    return JSON.parse(match[0]);
+  const target = match ? match[0] : cleaned;
+
+  try {
+    return JSON.parse(target);
+  } catch {
+    const sanitized = target
+      .replace(/,\s*([}\]])/g, "$1")
+      .replace(/([{\s,])(\w+)\s*:/g, '$1"$2":');
+    return JSON.parse(sanitized);
   }
-  return JSON.parse(cleaned);
 }
 
 export async function POST(req: Request) {
@@ -67,18 +116,18 @@ export async function POST(req: Request) {
       ? categories.join(", ")
       : "Makan & Minum, Kebutuhan Pribadi, Tagihan, Transportasi, Hiburan, Belanja, Kesehatan, Sedekah, Lainnya";
 
-    const prompt = `Analisis gambar struk / nota / bon belanja / kwitansi / bukti pembayaran ini dengan sangat teliti.
+    const prompt = `Analisis gambar struk / nota belanja / kwitansi pembayaran ini dengan sangat teliti.
 
 Tugas utamamu:
-1. "merchant": Nama toko, supermarket, warung, atau tempat usaha (contoh: "ASSALAAM HYPERMARKET", "Indomaret", "Alfamart", "SPBU", dll).
-2. "total": NOMINAL TOTAL AKHIR RUPIAH yang harus dibayar.
-   - WAJIB CARI angka nominal total belanja/tagihan (biasanya berlabel TOTAL, TOTAL HARGA, TOTAL BELANJA, GRAND TOTAL, TAGIHAN, JUMLAH, SUBTOTAL, atau angka rupiah terbesar sebelum baris CASH/TUNAI/KEMBALI).
-   - Di struk supermarket (seperti Assalaam Hypermarket, Super Indo, Hypermart), periksa baris TOTAL di bawah daftar barang belanjaan.
-   - JANGAN kembalikan 0 jika ada angka harga/nominal yang tertera.
-   - Hapus titik/koma/Rp dan kembalikan angka integer murni (contoh: 87500).
-3. "date": Tanggal transaksi dalam format "YYYY-MM-DD" (contoh: "2026-10-30").
+1. "merchant": Nama toko / tempat belanja / supermarket / restoran (contoh: "ASSALAAM HYPERMARKET", "Indomaret", "Alfamart", "Super Indo", dll).
+2. "total": JUMLAH TOTAL AKHIR KESELURUHAN BELANJAAN (wajib angka integer dalam Rupiah, contoh: 125000).
+   - CARI baris TOTAL, GRAND TOTAL, TOTAL BELANJA, TOTAL HARGA, TAGIHAN, JUMLAH, atau SUBTOTAL.
+   - PENTING: Jika nota belanja memiliki banyak item barang dan angka Total di bawah kurang terbaca atau buram, JUMLAHKAN HARGA SEMUA BARANG YANG TERTERA untuk mendapatkan total keseluruhan belanjaan!
+   - JANGAN kembalikan 0 jika di nota ada angka belanjaan atau harga barang.
+   - JANGAN mengambil uang tunai bayar (Cash/Tunai) atau kembalian (Change/Kembali), ambil TOTAL BELANJAAN-nya.
+3. "date": Tanggal transaksi dalam format "YYYY-MM-DD" (contoh: "2026-10-30"). Jika tahun 2 digit (misal 26), jadikan 2026.
 4. "category": Pilih satu nama kategori yang paling sesuai dari daftar berikut: [${categoryList}].
-5. "items": Daftar singkat 1-5 nama barang/layanan utama yang dibeli jika terbaca jelas.
+5. "items": Daftar singkat nama barang yang dibeli beserta nominal harganya jika terbaca (contoh: [{"name": "Barang A", "price": 25000}]).
 
 Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain, dengan format:
 {
@@ -86,7 +135,7 @@ Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain
   "total": 45000,
   "date": "YYYY-MM-DD",
   "category": "Kategori Pilihan",
-  "items": ["Item 1", "Item 2"]
+  "items": [{"name": "Item 1", "price": 25000}, {"name": "Item 2", "price": 20000}]
 }`;
 
     const endpoint = `${apiUrl}/chat/completions`;
@@ -106,7 +155,7 @@ Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain
     };
 
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 25000);
+    const timer = setTimeout(() => controller.abort(), 28000);
 
     let res: Response;
     try {
@@ -133,9 +182,9 @@ Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain
       );
     }
 
-    const data = await res.json();
-    const content = data?.choices?.[0]?.message?.content || "";
-    
+    const rawBody = await res.text();
+    const content = parseAiResponseText(rawBody);
+
     if (!content) {
       return NextResponse.json(
         { error: "AI tidak mengembalikan hasil analisis gambar." },
@@ -176,13 +225,13 @@ Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain
       parsed.Nominal
     );
 
-    // 2. Jika total masih 0, periksa jika ada item berharga di array items
+    // 2. Jika total masih 0, periksa jika ada item berharga di array items dan JUMLAHKAN
     if (total <= 0 && Array.isArray(parsed.items)) {
       let sumItems = 0;
       for (const item of parsed.items) {
         if (typeof item === "object" && item !== null) {
           const rawItem = item as Record<string, unknown>;
-          const p = parseNominal(rawItem.price ?? rawItem.harga ?? rawItem.total ?? rawItem.subtotal);
+          const p = parseNominal(rawItem.price ?? rawItem.harga ?? rawItem.total ?? rawItem.subtotal ?? rawItem.nominal);
           if (p > 0) sumItems += p;
         } else if (typeof item === "string") {
           const matchPrice = item.match(/(?:rp|@)?\s*([\d.,]{3,})/i);
@@ -197,7 +246,7 @@ Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain
 
     // 3. Jika total masih 0, cari angka nominal dari raw text respons LLM
     if (total <= 0 && content) {
-      const matchTotal = content.match(/(?:total|grand\s*total|tagihan|jumlah|bayar)[^\d\n\r]*?(\d[\d.,]*\d|\d+)/i);
+      const matchTotal = content.match(/(?:total|grand\s*total|tagihan|jumlah|belanja)[^\d\n\r]*?(\d[\d.,]*\d|\d+)/i);
       if (matchTotal) {
         total = parseNominal(matchTotal[1]);
       }
@@ -209,8 +258,10 @@ Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain
 
     const category = typeof parsed.category === "string" ? parsed.category.trim() : "";
     const items = Array.isArray(parsed.items)
-      ? parsed.items.map(it => String(it).trim()).filter(Boolean).slice(0, 5)
+      ? parsed.items.map(it => typeof it === "object" && it !== null ? (it as Record<string, unknown>).name : String(it)).filter(Boolean).slice(0, 5)
       : [];
+
+    console.log(`[AI Vision Success] Toko: "${merchant}", Total: Rp ${total}, Tgl: "${date}", Kategori: "${category}"`);
 
     return NextResponse.json({
       success: true,

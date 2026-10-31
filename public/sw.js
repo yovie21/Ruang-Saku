@@ -1,4 +1,4 @@
-const CACHE = "ruang-saku-v2";
+const CACHE = "ruang-saku-v3";
 const CORE = ["/", "/manifest.webmanifest", "/icon-192.png", "/icon-512.png"];
 
 self.addEventListener("install", (event) => {

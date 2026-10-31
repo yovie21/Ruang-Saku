@@ -1827,8 +1827,8 @@ export default function Home() {
     setScanFileName(file.name);
 
     try {
-      // 1. Kompresi gambar dengan resolusi tajam agar angka struk panjang terbaca jelas
-      const compressedDataUrl = await compressImage(file, 2400);
+      // 1. Kompresi gambar dengan resolusi tajam & ukuran efisien (~150KB)
+      const compressedDataUrl = await compressImage(file, 1400);
       const previewUrl = compressedDataUrl || (await fileToBase64(file));
       setScanPreview(previewUrl);
 
