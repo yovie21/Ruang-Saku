@@ -174,7 +174,21 @@ export async function POST(req: Request) {
     const contentType = req.headers.get("content-type") || "";
 
     if (contentType.includes("application/json")) {
-      body = await req.json().catch(() => ({}));
+      try {
+        body = await req.json();
+      } catch {
+        const raw = await req.text().catch(() => "");
+        const jsonMatch = raw.match(/\{[\s\S]*\}/);
+        if (jsonMatch) {
+          try {
+            body = JSON.parse(jsonMatch[0]);
+          } catch {
+            body = { text: raw };
+          }
+        } else {
+          body = { text: raw };
+        }
+      }
     } else if (contentType.includes("application/x-www-form-urlencoded")) {
       const formText = await req.text();
       const params = new URLSearchParams(formText);
@@ -209,16 +223,31 @@ export async function POST(req: Request) {
     const user = userRows[0];
 
     // 2. Ekstrak teks notifikasi
-    const title = String(body.title || body.subject || searchParams.get("title") || "").trim();
+    const title = String(
+      body.title ||
+      body.subject ||
+      body.not_title ||
+      body.notif_title ||
+      searchParams.get("title") ||
+      ""
+    ).trim();
     const text = String(
       body.text ||
       body.message ||
+      body.notification ||
+      body.notif_message ||
       body.body ||
       body.content ||
       searchParams.get("text") ||
       ""
     ).trim();
-    const app = String(body.app || body.package || searchParams.get("app") || "").toLowerCase();
+    const app = String(
+      body.app ||
+      body.package ||
+      body.not_app_package ||
+      searchParams.get("app") ||
+      ""
+    ).toLowerCase();
 
     if (!text && !title) {
       return NextResponse.json(
