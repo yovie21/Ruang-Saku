@@ -4,6 +4,17 @@ import { apiLimiter } from "@/lib/ratelimit";
 
 export const maxDuration = 30; // 30 detik batas waktu serverless
 
+function parseNominal(val: unknown): number {
+  if (typeof val === "number" && !isNaN(val)) return Math.round(val);
+  if (typeof val !== "string") return 0;
+  let str = val.trim();
+  // Hilangkan desimal nol seperti ,00 atau .00
+  str = str.replace(/[,.]00$/, "");
+  const clean = str.replace(/[^\d]/g, "");
+  const num = parseInt(clean, 10);
+  return isNaN(num) ? 0 : num;
+}
+
 function extractJson(text: string): Record<string, unknown> {
   const cleaned = text
     .trim()
@@ -56,18 +67,18 @@ export async function POST(req: Request) {
       ? categories.join(", ")
       : "Makan & Minum, Kebutuhan Pribadi, Tagihan, Transportasi, Hiburan, Belanja, Kesehatan, Sedekah, Lainnya";
 
-    const prompt = `Analisis gambar struk / nota / bon / kwitansi / bukti transfer pembayaran ini secara seksama.
-Kertas nota bisa berupa struk kasir thermal (Indomaret/Alfamart/SPBU/Cafe), kwitansi tulisan tangan, bon warung, atau tangkapan layar m-banking / QRIS.
+    const prompt = `Analisis gambar struk / nota / bon belanja / kwitansi / bukti pembayaran ini dengan sangat teliti.
 
-Instruksi:
-1. "merchant": Nama toko / tempat usaha / penjual / penerima transfer yang tertera. Jika tulisan tangan atau nama toko tidak tertulis, buat deskripsi ringkas yang masuk akal (contoh: "Warung Makan", "Toko Bangunan", "Bensin SPBU").
-2. "total": Nominal akhir (TOTAL / GRAND TOTAL / TOTAL TAGIHAN / JUMLAH BAYAR) yang harus dibayar.
-   - PENTING: Jangan ambil uang tunai yang diserahkan pembeli (misal bayar 100.000 dengan kembali 30.000, maka totalnya 70000).
-   - Jangan ambil angka barcode/nomor telepon/nomor nota/kembalian.
-   - Kembalikan angka integer murni (contoh: 45000).
-3. "date": Tanggal transaksi dalam format "YYYY-MM-DD". Jika format tanggal tertera DD/MM/YYYY atau tulisan tangan bulan singkat, konversikan ke "YYYY-MM-DD". Jika tahun hanya 2 digit (misal 26), jadikan 2026. Jika tidak terbaca, kosongkan "".
+Tugas utamamu:
+1. "merchant": Nama toko, supermarket, warung, atau tempat usaha (contoh: "ASSALAAM HYPERMARKET", "Indomaret", "Alfamart", "SPBU", dll).
+2. "total": NOMINAL TOTAL AKHIR RUPIAH yang harus dibayar.
+   - WAJIB CARI angka nominal total belanja/tagihan (biasanya berlabel TOTAL, TOTAL HARGA, TOTAL BELANJA, GRAND TOTAL, TAGIHAN, JUMLAH, SUBTOTAL, atau angka rupiah terbesar sebelum baris CASH/TUNAI/KEMBALI).
+   - Di struk supermarket (seperti Assalaam Hypermarket, Super Indo, Hypermart), periksa baris TOTAL di bawah daftar barang belanjaan.
+   - JANGAN kembalikan 0 jika ada angka harga/nominal yang tertera.
+   - Hapus titik/koma/Rp dan kembalikan angka integer murni (contoh: 87500).
+3. "date": Tanggal transaksi dalam format "YYYY-MM-DD" (contoh: "2026-10-30").
 4. "category": Pilih satu nama kategori yang paling sesuai dari daftar berikut: [${categoryList}].
-5. "items": Daftar singkat 1-5 nama barang/layanan utama yang dibeli jika terbaca jelas (contoh: ["Kopi Susu", "Roti Coklat"]).
+5. "items": Daftar singkat 1-5 nama barang/layanan utama yang dibeli jika terbaca jelas.
 
 Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain, dengan format:
 {
@@ -147,12 +158,49 @@ Balas HANYA teks JSON valid murni tanpa formatting markdown atau penjelasan lain
       ? parsed.merchant.trim().slice(0, 80)
       : "Pengeluaran";
 
-    let total = 0;
-    if (typeof parsed.total === "number" && !isNaN(parsed.total)) {
-      total = Math.round(parsed.total);
-    } else if (typeof parsed.total === "string") {
-      const num = parseInt(parsed.total.replace(/[^\d]/g, "") || "0", 10);
-      if (!isNaN(num)) total = num;
+    // 1. Cek semua variasi key yang mungkin dihasilkan model AI
+    let total = parseNominal(
+      parsed.total ??
+      parsed.amount ??
+      parsed.nominal ??
+      parsed.grand_total ??
+      parsed.grandTotal ??
+      parsed.total_bayar ??
+      parsed.total_belanja ??
+      parsed.total_harga ??
+      parsed.total_amount ??
+      parsed.subtotal ??
+      parsed.Total ??
+      parsed.TOTAL ??
+      parsed.Amount ??
+      parsed.Nominal
+    );
+
+    // 2. Jika total masih 0, periksa jika ada item berharga di array items
+    if (total <= 0 && Array.isArray(parsed.items)) {
+      let sumItems = 0;
+      for (const item of parsed.items) {
+        if (typeof item === "object" && item !== null) {
+          const rawItem = item as Record<string, unknown>;
+          const p = parseNominal(rawItem.price ?? rawItem.harga ?? rawItem.total ?? rawItem.subtotal);
+          if (p > 0) sumItems += p;
+        } else if (typeof item === "string") {
+          const matchPrice = item.match(/(?:rp|@)?\s*([\d.,]{3,})/i);
+          if (matchPrice) {
+            const p = parseNominal(matchPrice[1]);
+            if (p > 0 && p < 100_000_000) sumItems += p;
+          }
+        }
+      }
+      if (sumItems > 0) total = sumItems;
+    }
+
+    // 3. Jika total masih 0, cari angka nominal dari raw text respons LLM
+    if (total <= 0 && content) {
+      const matchTotal = content.match(/(?:total|grand\s*total|tagihan|jumlah|bayar)[^\d\n\r]*?(\d[\d.,]*\d|\d+)/i);
+      if (matchTotal) {
+        total = parseNominal(matchTotal[1]);
+      }
     }
 
     const date = typeof parsed.date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(parsed.date)

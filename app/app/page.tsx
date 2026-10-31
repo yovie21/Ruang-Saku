@@ -1827,8 +1827,8 @@ export default function Home() {
     setScanFileName(file.name);
 
     try {
-      // 1. Kompresi gambar agar cepat diunggah & diproses
-      const compressedDataUrl = await compressImage(file, 1600);
+      // 1. Kompresi gambar dengan resolusi tajam agar angka struk panjang terbaca jelas
+      const compressedDataUrl = await compressImage(file, 2400);
       const previewUrl = compressedDataUrl || (await fileToBase64(file));
       setScanPreview(previewUrl);
 
@@ -1848,9 +1848,18 @@ export default function Home() {
           const aiJson = await aiRes.json();
           if (aiJson.success && aiJson.data) {
             const { merchant, total, date, category } = aiJson.data;
-            if (total && total > 0) {
-              setAmountDisplay(new Intl.NumberFormat("id-ID").format(total));
+            let resolvedTotal = typeof total === "number" && total > 0 ? total : 0;
+
+            if (resolvedTotal > 0) {
+              const formatted = new Intl.NumberFormat("id-ID").format(resolvedTotal);
+              setAmountDisplay(formatted);
+              const amountInput = document.querySelector('form.modal input[name="amount"]') as HTMLInputElement | null;
+              if (amountInput) {
+                amountInput.value = formatted;
+                amountInput.dispatchEvent(new Event("input", { bubbles: true }));
+              }
             }
+
             if (merchant) {
               const nameInput = document.querySelector('form.modal input[name="title"]') as HTMLInputElement | null;
               if (nameInput) {
@@ -1873,8 +1882,43 @@ export default function Home() {
             if (date) {
               setTxDate(date);
             }
+
+            // Jika AI berhasil baca toko & tanggal tapi angka total belum terbaca,
+            // jalankan pencarian angka lokal ber-kontras tajam sebagai second-opinion
+            if (resolvedTotal <= 0) {
+              setScanStatus("AI menemukan toko. Memindai angka nominal...");
+              try {
+                const enhancedDataUrl = await enhanceReceiptForLocalOcr(previewUrl);
+                const { createWorker } = await import("tesseract.js");
+                const worker = await createWorker(["ind", "eng"]);
+                const { data } = await worker.recognize(enhancedDataUrl);
+                await worker.terminate();
+                const localParsed = parseReceiptText(data.text || "");
+                if (localParsed.amount && localParsed.amount > 0) {
+                  resolvedTotal = localParsed.amount;
+                  const formatted = new Intl.NumberFormat("id-ID").format(resolvedTotal);
+                  setAmountDisplay(formatted);
+                  const amountInput = document.querySelector('form.modal input[name="amount"]') as HTMLInputElement | null;
+                  if (amountInput) {
+                    amountInput.value = formatted;
+                    amountInput.dispatchEvent(new Event("input", { bubbles: true }));
+                  }
+                }
+              } catch (e) {
+                console.warn("[Local OCR nominal second-opinion]:", e);
+              }
+            }
+
             scanRef.current = { url: previewUrl, mime: file.type, name: file.name, text: JSON.stringify(aiJson.data) };
-            pushToast("success", "Nota terbaca AI Vision ✨", `${merchant || "Struk"} • ${rupiah(total || 0)}${category ? ` • [${category}]` : ""}`);
+            if (resolvedTotal > 0) {
+              pushToast("success", "Nota terbaca AI Vision ✨", `${merchant || "Struk"} • ${rupiah(resolvedTotal)}${category ? ` • [${category}]` : ""}`);
+            } else {
+              pushToast("warning", "Nama toko & kategori terisi ✨", "Nominal di foto struk kurang jelas, silakan ketik nominal.");
+              setTimeout(() => {
+                const amountInput = document.querySelector('form.modal input[name="amount"]') as HTMLInputElement | null;
+                amountInput?.focus();
+              }, 150);
+            }
             aiSuccess = true;
           }
         }
