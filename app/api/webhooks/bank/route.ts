@@ -44,6 +44,8 @@ function parseRegexTransaction(text: string, title = ""): {
   const amountPatterns = [
     /(?:rp\.?|idr)\s*([\d.,]{3,})/i,
     /sebesar\s+(?:rp\.?|idr)?\s*([\d.,]{3,})/i,
+    /jumlah\s+(?:transfer|transaksi)?\s*(?:rp\.?|idr)?\s*([\d.,]{3,})/i,
+    /total\s+(?:transaksi|belanja|bayar)?\s*(?:rp\.?|idr)?\s*([\d.,]{3,})/i,
     /nominal\s+(?:rp\.?|idr)?\s*([\d.,]{3,})/i,
     /(?:berhasil|sukses)\s+(?:sebesar\s+)?(?:rp\.?|idr)?\s*([\d.,]{3,})/i,
     /([\d.,]{3,})\s*(?:berhasil|sukses)/i
@@ -65,6 +67,7 @@ function parseRegexTransaction(text: string, title = ""): {
   const merchantMatch =
     combined.match(/(?:di|merchant)\s+([A-Za-z0-9\s&'.-]{2,35}?)(?:\s+sebesar|\s+berhasil|\s+sukses|\.|$)/i) ||
     combined.match(/(?:transfer ke|ke rek|ke rekening)\s+([A-Za-z0-9\s&'.-]{2,35}?)(?:\s+sebesar|\s+berhasil|\.|$)/i) ||
+    combined.match(/(?:penerima|tujuan)[:\s]+([A-Za-z0-9\s&'.-]{2,35}?)(?:\s+no|\s+rek|\s+sebesar|\s+rp|\n|$)/i) ||
     combined.match(/(?:a\.?n\.?|atas nama)\s+([A-Za-z\s]{2,30}?)(?:\s+sebesar|\s+berhasil|\.|$)/i) ||
     combined.match(/(?:pembayaran|tagihan)\s+([A-Za-z0-9\s&'.-]{2,35}?)(?:\s+sebesar|\s+berhasil|\.|$)/i);
 
@@ -178,15 +181,20 @@ export async function POST(req: Request) {
         body = await req.json();
       } catch {
         const raw = await req.text().catch(() => "");
-        const jsonMatch = raw.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-          try {
-            body = JSON.parse(jsonMatch[0]);
-          } catch {
+        try {
+          const sanitized = raw.replace(/[\r\n\t]+/g, " ");
+          body = JSON.parse(sanitized);
+        } catch {
+          const jsonMatch = raw.match(/\{[\s\S]*\}/);
+          if (jsonMatch) {
+            try {
+              body = JSON.parse(jsonMatch[0].replace(/[\r\n\t]+/g, " "));
+            } catch {
+              body = { text: raw };
+            }
+          } else {
             body = { text: raw };
           }
-        } else {
-          body = { text: raw };
         }
       }
     } else if (contentType.includes("application/x-www-form-urlencoded")) {
@@ -231,6 +239,18 @@ export async function POST(req: Request) {
       searchParams.get("title") ||
       ""
     ).trim();
+
+    const bigText = String(
+      body.big_text ||
+      body.not_text_big ||
+      body.text_big ||
+      body.body_text ||
+      body.details ||
+      body.sub_text ||
+      body.not_sub_text ||
+      ""
+    ).trim();
+
     const text = String(
       body.text ||
       body.message ||
@@ -241,6 +261,7 @@ export async function POST(req: Request) {
       searchParams.get("text") ||
       ""
     ).trim();
+
     const app = String(
       body.app ||
       body.package ||
@@ -249,7 +270,10 @@ export async function POST(req: Request) {
       ""
     ).toLowerCase();
 
-    if (!text && !title) {
+    // Gabungkan text dan bigText jika keduanya ada (misal di Gmail nominal ada di bigText)
+    const fullMessageText = [text, bigText].filter(Boolean).join(" ").trim();
+
+    if (!fullMessageText && !title) {
       return NextResponse.json(
         { error: "Teks atau judul notifikasi tidak boleh kosong." },
         { status: 400 }
@@ -258,7 +282,7 @@ export async function POST(req: Request) {
 
     // Deteksi jika pengguna melakukan "Test action" manual di MacroDroid (variabel masih berupa placeholder mentah)
     const isMacroDroidPlaceholder =
-      (text === "{notification}" || text === "[notif_message]" || !text) &&
+      (fullMessageText === "{notification}" || fullMessageText === "[notif_message]" || !fullMessageText) &&
       (title === "{not_title}" || title === "[notif_title]" || !title);
 
     if (isMacroDroidPlaceholder) {
@@ -289,7 +313,7 @@ export async function POST(req: Request) {
     }
 
     // 3. Parsing notifikasi (Cepat via Regex lebih dulu)
-    let parsed = parseRegexTransaction(text, title);
+    let parsed = parseRegexTransaction(fullMessageText, title);
     if (!parsed.detectedBank && app) {
       if (/mandiri|livin|bmri/.test(app)) parsed.detectedBank = "mandiri";
       else if (/seabank/.test(app)) parsed.detectedBank = "seabank";
@@ -304,14 +328,14 @@ export async function POST(req: Request) {
 
     // Jika regex belum menemukan nominal, gunakan fallback AI
     if (parsed.amount <= 0) {
-      parsed = await parseWithAi(text, title);
+      parsed = await parseWithAi(fullMessageText, title);
     }
 
     if (parsed.amount <= 0) {
       return NextResponse.json({
         success: false,
         error: "Nominal transaksi tidak terdeteksi dalam notifikasi ini.",
-        received: { title, text }
+        received: { title, text: fullMessageText }
       }, { status: 422 });
     }
 

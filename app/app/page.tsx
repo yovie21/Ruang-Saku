@@ -2787,7 +2787,7 @@ export default function Home() {
   }
 
   async function copyJsonSnippet() {
-    const snippet = `{"title":"{not_title}","text":"{notification}","app":"{not_app_package}"}`;
+    const snippet = `{"title":"{not_title}","text":"{notification}","big_text":"{not_text_big}","app":"{not_app_package}"}`;
     try {
       await navigator.clipboard.writeText(snippet);
       setJsonCopied(true);
@@ -4893,7 +4893,7 @@ export default function Home() {
                 <li>Hapus semua isi kotaknya, lalu tempel format JSON di bawah ini:</li>
               </ol>
               <div style={{ background: "#1c2826", color: "#a5f3fc", padding: "10px 12px", borderRadius: 8, fontFamily: "monospace", fontSize: 11, wordBreak: "break-all", marginBottom: 8 }}>
-                {`{"title":"{not_title}","text":"{notification}","app":"{not_app_package}"}`}
+                {`{"title":"{not_title}","text":"{notification}","big_text":"{not_text_big}","app":"{not_app_package}"}`}
               </div>
               <button
                 type="button"
