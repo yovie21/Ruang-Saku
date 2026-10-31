@@ -273,6 +273,10 @@ export async function POST(req: Request) {
     // Gabungkan text dan bigText jika keduanya ada (misal di Gmail nominal ada di bigText)
     const fullMessageText = [text, bigText].filter(Boolean).join(" ").trim();
 
+    console.log(
+      `[Webhook Bank] Incoming: title="${title}", text="${text}", bigText="${bigText}", app="${app}"`
+    );
+
     if (!fullMessageText && !title) {
       return NextResponse.json(
         { error: "Teks atau judul notifikasi tidak boleh kosong." },
@@ -282,8 +286,13 @@ export async function POST(req: Request) {
 
     // Deteksi jika pengguna melakukan "Test action" manual di MacroDroid (variabel masih berupa placeholder mentah)
     const isMacroDroidPlaceholder =
-      (fullMessageText === "{notification}" || fullMessageText === "[notif_message]" || !fullMessageText) &&
-      (title === "{not_title}" || title === "[notif_title]" || !title);
+      (
+        (!title || title.includes("{not_title}") || title.includes("[notif_title]")) &&
+        (!text || text.includes("{notification}") || text.includes("[notif_message]"))
+      ) ||
+      fullMessageText.includes("{notification}") ||
+      fullMessageText.includes("{not_text_big}") ||
+      fullMessageText.includes("[notif_message]");
 
     if (isMacroDroidPlaceholder) {
       const accounts = await query<{ id: string; name: string; account_type: string }>(
