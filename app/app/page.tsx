@@ -367,6 +367,12 @@ export default function Home() {
   });
   const [pushOn, setPushOn] = useState(false);
   const pushFired = useRef<Set<string>>(new Set());
+  const [webhookModal, setWebhookModal] = useState(false);
+  const [webhookUrl, setWebhookUrl] = useState("");
+  const [webhookLoading, setWebhookLoading] = useState(false);
+  const [webhookCopied, setWebhookCopied] = useState(false);
+  const [testNotifText, setTestNotifText] = useState("Transaksi QR Bayar di KOPI KENANGAN sebesar Rp 25.000 berhasil.");
+  const [testNotifBusy, setTestNotifBusy] = useState(false);
   const [prevBudgets, setPrevBudgets] = useState<Budget[]>([]);
   const [calMonth, setCalMonth] = useState(() => {
     const d = new Date();
@@ -2747,6 +2753,63 @@ export default function Home() {
     }
   }
 
+  async function openWebhookModal() {
+    setWebhookModal(true);
+    setWebhookLoading(true);
+    try {
+      const res = await fetch("/api/user/webhook");
+      if (res.ok) {
+        const json = await res.json();
+        if (json.webhookUrl) {
+          setWebhookUrl(json.webhookUrl);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setWebhookLoading(false);
+    }
+  }
+
+  async function copyWebhookUrl() {
+    if (!webhookUrl) return;
+    try {
+      await navigator.clipboard.writeText(webhookUrl);
+      setWebhookCopied(true);
+      pushToast("success", "URL Webhook disalin! 📋", "Tempelkan ke aplikasi MacroDroid di HP.");
+      setTimeout(() => setWebhookCopied(false), 3000);
+    } catch {
+      pushToast("warning", "Salin manual", webhookUrl);
+    }
+  }
+
+  async function testSendWebhook() {
+    if (!webhookUrl) return;
+    setTestNotifBusy(true);
+    try {
+      const res = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "Transaksi Berhasil",
+          text: testNotifText,
+          app: "id.bmri.livin"
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        pushToast("success", "⚡ Berhasil Dicatat Otomatis!", `${data.data.account} • ${data.data.type === "income" ? "Pemasukan" : "Pengeluaran"} ${rupiah(data.data.amount)} • ${data.data.note}`);
+        await loadData();
+      } else {
+        pushToast("error", "Gagal tes webhook", data.error || data.message || "Coba lagi.");
+      }
+    } catch (e) {
+      pushToast("error", "Gagal terhubung", "Pastikan koneksi internet lancar.");
+    } finally {
+      setTestNotifBusy(false);
+    }
+  }
+
   function openTransferModal() {
     setEditingTransfer(null);
     setTransferFrom(accounts[0]?.name ?? "");
@@ -3370,6 +3433,9 @@ export default function Home() {
         <a className={activeNav === "beranda" ? "active" : ""} href="#beranda" onClick={e => { e.preventDefault(); scrollToSection("beranda"); }}><span>⌂</span> Beranda</a>
         <a className={activeNav === "transaksi" ? "active" : ""} href="#transaksi" onClick={e => { e.preventDefault(); scrollToSection("transaksi"); }}><span>⇄</span> Transaksi</a>
         <a className={activeNav === "akun" ? "active" : ""} href="#akun" onClick={e => { e.preventDefault(); scrollToSection("akun"); }}><span>▣</span> Akun</a>
+        <button type="button" onClick={() => { setMenu(false); openWebhookModal(); }} style={{ display: "flex", alignItems: "center", gap: 10, width: "100%", padding: "10px 14px", background: "transparent", border: "none", borderRadius: 10, color: "var(--foreground)", cursor: "pointer", fontSize: 14, fontWeight: 600, textAlign: "left" }}>
+          <span>⚡</span> Auto-Bank
+        </button>
       </nav>
       <div className="sidebar-bottom">
         {session?.user?.role === "admin" && <a href="/admin"><span>♙</span> Panel Admin</a>}
@@ -3407,6 +3473,7 @@ export default function Home() {
           <ThemeToggle />
           <button type="button" className="theme-toggle" onClick={togglePrivacy} title={privacyHide ? "Tampilkan nominal" : "Sembunyikan nominal"}>{privacyHide ? "👁‍🗨" : "👁"}</button>
           <button type="button" className="theme-toggle" onClick={() => { setPinInput(""); setPinModal(hasPin ? "unlock" : "set"); }} title={hasPin ? "Kunci / buka aplikasi" : "Aktifkan PIN"}>{locked ? "🔒" : "🔓"}</button>
+          <button className="transfer-button" onClick={openWebhookModal} title="Otomatisasi notifikasi bank">⚡ Auto-Bank</button>
           <button className="transfer-button" onClick={openTransferModal} title="Pindah saldo antar akun">⇄ Transfer</button>
           <button className="transfer-button" onClick={() => setReportModal(true)} title="Lihat laporan bulanan">▤ Laporan</button>
           <button className="add-button" onClick={openTransactionDialog}><strong>＋</strong> Catat transaksi</button>
@@ -3433,7 +3500,12 @@ export default function Home() {
             })}
           </div>}
       </section>}
-      <div className="mobile-add"><button className="add-button" onClick={openTransactionDialog}>＋ Catat transaksi</button><button className="transfer-button" onClick={openTransferModal}>⇄ Transfer</button><button className="transfer-button" onClick={() => setReportModal(true)}>▤ Laporan</button></div>
+      <div className="mobile-add">
+        <button className="add-button" onClick={openTransactionDialog}>＋ Catat transaksi</button>
+        <button className="transfer-button" onClick={openWebhookModal}>⚡ Auto-Bank</button>
+        <button className="transfer-button" onClick={openTransferModal}>⇄ Transfer</button>
+        <button className="transfer-button" onClick={() => setReportModal(true)}>▤ Laporan</button>
+      </div>
       <section className="summary reveal">
         <div className="balance-card">
           <div className="balance-top"><span>Saldo total (semua waktu)</span></div>
@@ -4639,6 +4711,73 @@ export default function Home() {
         <label>Catatan (opsional)<input value={debtNote} onChange={e => setDebtNote(e.target.value)} placeholder="Contoh: Pinjam presentasi" maxLength={500} /></label>
         <button className="submit" type="submit">Simpan</button>
       </form>
+    </div>}
+
+    {webhookModal && <div className="modal-layer" onMouseDown={() => setWebhookModal(false)}>
+      <section className="modal" onMouseDown={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
+        <button type="button" className="close" onClick={() => setWebhookModal(false)}>×</button>
+        <p className="eyebrow">OTOMATISASI BANK</p>
+        <h2>⚡ Catat otomatis dari notifikasi HP</h2>
+        <p className="modal-description">
+          Setiap kali ada notifikasi pembayaran dari <b>Livin&apos; by Mandiri, BCA, Seabank, GoPay, QRIS, dsb</b>, Ruang Saku akan langsung mencatatnya ke buku kas tanpa kamu perlu buka aplikasi atau ketik manual!
+        </p>
+
+        <div style={{ marginTop: 16 }}>
+          <label style={{ fontWeight: 600, fontSize: 13 }}>URL Webhook Pribadi Kamu:</label>
+          <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+            <input
+              readOnly
+              value={webhookLoading ? "Memuat URL..." : webhookUrl}
+              style={{ flex: 1, fontFamily: "monospace", fontSize: 12, padding: "8px 12px", background: "var(--surface)" }}
+              onClick={e => (e.target as HTMLInputElement).select()}
+            />
+            <button
+              type="button"
+              className="submit"
+              style={{ marginTop: 0, padding: "8px 16px", whiteSpace: "nowrap" }}
+              onClick={copyWebhookUrl}
+            >
+              {webhookCopied ? "✓ Disalin" : "📋 Salin URL"}
+            </button>
+          </div>
+        </div>
+
+        <div style={{ background: "var(--surface, #f6f8f7)", padding: "16px 18px", borderRadius: 14, marginTop: 18, border: "1px solid var(--line)" }}>
+          <b style={{ display: "block", fontSize: 14, marginBottom: 8, color: "var(--green)" }}>Cara Setting di HP Android (MacroDroid):</b>
+          <ol style={{ margin: 0, paddingLeft: 20, fontSize: 13, lineHeight: 1.6, display: "flex", flexDirection: "column", gap: 6 }}>
+            <li>Install aplikasi gratis <b>MacroDroid</b> di Google Play Store.</li>
+            <li>Klik <b>Tambah Makro</b>:
+              <br/>• <b>Pemicu (Triggers)</b>: pilih <code>Notifikasi ➔ Notifikasi Diterima</code> ➔ centang aplikasi m-Banking kamu (Mandiri, BCA, Seabank, GoPay, dll).
+            </li>
+            <li>• <b>Tindakan (Actions)</b>: pilih <code>Konektivitas ➔ Permintaan HTTP (HTTP Request)</code>:
+              <br/>- Metode: <b>POST</b>
+              <br/>- URL: <i>(Tempel URL Webhook di atas)</i>
+              <br/>- Tipe Konten: <code>application/json</code>
+              <br/>- Isi Teks (Body): <code>{`{"title":"{notif_title}","text":"{notif_message}","app":"{package_name}"}`}</code>
+            </li>
+            <li>Simpan Makro. Selesai! Transaksi bank akan otomatis masuk ke akun terkait.</li>
+          </ol>
+        </div>
+
+        <div style={{ marginTop: 18, padding: "14px 16px", borderRadius: 12, border: "1px dashed var(--line)" }}>
+          <b style={{ display: "block", fontSize: 13, marginBottom: 6 }}>Tes Webhook Sekarang:</b>
+          <input
+            value={testNotifText}
+            onChange={e => setTestNotifText(e.target.value)}
+            placeholder="Ketik contoh notifikasi bank..."
+            style={{ width: "100%", fontSize: 13 }}
+          />
+          <button
+            type="button"
+            className="submit"
+            disabled={testNotifBusy || !webhookUrl}
+            onClick={testSendWebhook}
+            style={{ marginTop: 10, width: "100%" }}
+          >
+            {testNotifBusy ? "Mengirim notifikasi..." : "⚡ Kirim Notifikasi Uji Coba"}
+          </button>
+        </div>
+      </section>
     </div>}
 
     {guideModal && <div className="modal-layer" onMouseDown={() => setGuideModal(false)}>
