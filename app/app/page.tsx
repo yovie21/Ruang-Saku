@@ -371,6 +371,9 @@ export default function Home() {
   const [webhookUrl, setWebhookUrl] = useState("");
   const [webhookLoading, setWebhookLoading] = useState(false);
   const [webhookCopied, setWebhookCopied] = useState(false);
+  const [webhookTab, setWebhookTab] = useState<"guide" | "test" | "faq">("guide");
+  const [jsonCopied, setJsonCopied] = useState(false);
+  const [testResult, setTestResult] = useState<{ account: string; type: string; amount: number; note: string } | null>(null);
   const [testNotifText, setTestNotifText] = useState("Transaksi QR Bayar di KOPI KENANGAN sebesar Rp 25.000 berhasil.");
   const [testNotifBusy, setTestNotifBusy] = useState(false);
   const [prevBudgets, setPrevBudgets] = useState<Budget[]>([]);
@@ -2783,6 +2786,51 @@ export default function Home() {
     }
   }
 
+  async function copyJsonSnippet() {
+    const snippet = `{"title":"{not_title}","text":"{notification}","app":"{not_app_package}"}`;
+    try {
+      await navigator.clipboard.writeText(snippet);
+      setJsonCopied(true);
+      pushToast("success", "Format JSON disalin! 📋", "Tempelkan di tab Content Body MacroDroid.");
+      setTimeout(() => setJsonCopied(false), 3000);
+    } catch {
+      pushToast("warning", "Salin manual", snippet);
+    }
+  }
+
+  async function sendQuickTest(sampleText: string, sampleApp: string) {
+    if (!webhookUrl) return;
+    setTestNotifBusy(true);
+    setTestResult(null);
+    try {
+      const res = await fetch(webhookUrl, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: "Transaksi Berhasil",
+          text: sampleText,
+          app: sampleApp
+        })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (data.data) {
+          setTestResult(data.data);
+          pushToast("success", "⚡ Berhasil Dicatat Otomatis!", `${data.data.account} • ${data.data.type === "income" ? "Pemasukan" : "Pengeluaran"} ${rupiah(data.data.amount)} • ${data.data.note}`);
+        } else {
+          pushToast("success", "Notifikasi Diterima", data.message || "Berhasil diproses.");
+        }
+        await loadData();
+      } else {
+        pushToast("error", "Gagal tes webhook", data.error || data.message || "Coba lagi.");
+      }
+    } catch {
+      pushToast("error", "Gagal terhubung", "Pastikan koneksi internet lancar.");
+    } finally {
+      setTestNotifBusy(false);
+    }
+  }
+
   async function testSendWebhook() {
     if (!webhookUrl) return;
     setTestNotifBusy(true);
@@ -4714,70 +4762,284 @@ export default function Home() {
     </div>}
 
     {webhookModal && <div className="modal-layer" onMouseDown={() => setWebhookModal(false)}>
-      <section className="modal" onMouseDown={e => e.stopPropagation()} style={{ maxWidth: 600 }}>
+      <section className="modal" onMouseDown={e => e.stopPropagation()} style={{ maxWidth: 640, maxHeight: "90vh", overflowY: "auto" }}>
         <button type="button" className="close" onClick={() => setWebhookModal(false)}>×</button>
-        <p className="eyebrow">OTOMATISASI BANK</p>
-        <h2>⚡ Catat otomatis dari notifikasi HP</h2>
-        <p className="modal-description">
-          Setiap kali ada notifikasi pembayaran dari <b>Livin&apos; by Mandiri, BCA, Seabank, GoPay, QRIS, dsb</b>, Ruang Saku akan langsung mencatatnya ke buku kas tanpa kamu perlu buka aplikasi atau ketik manual!
+        <p className="eyebrow">OTOMATISASI BANK REALTIME</p>
+        <h2 style={{ fontSize: 20, marginBottom: 4 }}>⚡ Auto-Bank Sync</h2>
+        <p className="modal-description" style={{ marginBottom: 14 }}>
+          Catat pengeluaran & pemasukan otomatis langsung dari notifikasi m-Banking di HP Android tanpa perlu input manual.
         </p>
 
-        <div style={{ marginTop: 16 }}>
-          <label style={{ fontWeight: 600, fontSize: 13, display: "block", marginBottom: 6 }}>URL Webhook Pribadi Kamu:</label>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <input
-              readOnly
-              value={webhookLoading ? "Memuat URL..." : webhookUrl}
-              placeholder="https://ruangsakuapp.vercel.app/api/webhooks/bank?token=..."
-              style={{ width: "100%", boxSizing: "border-box", fontFamily: "monospace", fontSize: 12, padding: "10px 12px", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 10, wordBreak: "break-all" }}
-              onClick={e => (e.target as HTMLInputElement).select()}
-            />
-            <button
-              type="button"
-              className="submit"
-              style={{ marginTop: 0, padding: "10px 16px", width: "100%", justifyContent: "center" }}
-              onClick={copyWebhookUrl}
-            >
-              {webhookCopied ? "✓ Berhasil Disalin ke Clipboard" : "📋 Salin URL Webhook"}
-            </button>
-          </div>
-        </div>
-
-        <div style={{ background: "var(--surface, #f6f8f7)", padding: "16px 18px", borderRadius: 14, marginTop: 18, border: "1px solid var(--line)" }}>
-          <b style={{ display: "block", fontSize: 14, marginBottom: 8, color: "var(--green)" }}>Cara Setting di HP Android (MacroDroid):</b>
-          <ol style={{ margin: 0, paddingLeft: 20, fontSize: 13, lineHeight: 1.6, display: "flex", flexDirection: "column", gap: 6 }}>
-            <li>Install aplikasi gratis <b>MacroDroid</b> di Google Play Store.</li>
-            <li>Klik <b>Tambah Makro</b>:
-              <br/>• <b>Pemicu (Triggers)</b>: pilih <code>Notifikasi ➔ Notifikasi Diterima</code> ➔ centang aplikasi m-Banking kamu (Mandiri, BCA, Seabank, GoPay, dll).
-            </li>
-            <li>• <b>Tindakan (Actions)</b>: pilih <code>Konektivitas ➔ Permintaan HTTP (HTTP Request)</code>:
-              <br/>- Metode: <b>POST</b>
-              <br/>- URL: <i>(Tempel URL Webhook di atas)</i>
-              <br/>- Tipe Konten: <code>application/json</code>
-              <br/>- Isi Teks (Body): <code>{`{"title":"{notif_title}","text":"{notif_message}","app":"{package_name}"}`}</code>
-            </li>
-            <li>Simpan Makro. Selesai! Transaksi bank akan otomatis masuk ke akun terkait.</li>
-          </ol>
-        </div>
-
-        <div style={{ marginTop: 18, padding: "14px 16px", borderRadius: 12, border: "1px dashed var(--line)" }}>
-          <b style={{ display: "block", fontSize: 13, marginBottom: 6 }}>Tes Webhook Sekarang:</b>
-          <input
-            value={testNotifText}
-            onChange={e => setTestNotifText(e.target.value)}
-            placeholder="Ketik contoh notifikasi bank..."
-            style={{ width: "100%", fontSize: 13 }}
-          />
+        {/* Tab Navigation */}
+        <div style={{ display: "flex", gap: 6, padding: 4, background: "var(--soft, #f0f4f2)", borderRadius: 12, marginBottom: 16 }}>
           <button
             type="button"
-            className="submit"
-            disabled={testNotifBusy || !webhookUrl}
-            onClick={testSendWebhook}
-            style={{ marginTop: 10, width: "100%" }}
+            onClick={() => setWebhookTab("guide")}
+            style={{
+              flex: 1,
+              padding: "8px 10px",
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 600,
+              background: webhookTab === "guide" ? "var(--card-bg, #fff)" : "transparent",
+              color: webhookTab === "guide" ? "var(--green, #158263)" : "var(--muted, #5e716d)",
+              boxShadow: webhookTab === "guide" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+              transition: "all 0.15s ease"
+            }}
           >
-            {testNotifBusy ? "Mengirim notifikasi..." : "⚡ Kirim Notifikasi Uji Coba"}
+            📘 Panduan Pasang
+          </button>
+          <button
+            type="button"
+            onClick={() => setWebhookTab("test")}
+            style={{
+              flex: 1,
+              padding: "8px 10px",
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 600,
+              background: webhookTab === "test" ? "var(--card-bg, #fff)" : "transparent",
+              color: webhookTab === "test" ? "var(--green, #158263)" : "var(--muted, #5e716d)",
+              boxShadow: webhookTab === "test" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+              transition: "all 0.15s ease"
+            }}
+          >
+            🧪 Uji Coba
+          </button>
+          <button
+            type="button"
+            onClick={() => setWebhookTab("faq")}
+            style={{
+              flex: 1,
+              padding: "8px 10px",
+              borderRadius: 8,
+              fontSize: 13,
+              fontWeight: 600,
+              background: webhookTab === "faq" ? "var(--card-bg, #fff)" : "transparent",
+              color: webhookTab === "faq" ? "var(--green, #158263)" : "var(--muted, #5e716d)",
+              boxShadow: webhookTab === "faq" ? "0 2px 8px rgba(0,0,0,0.06)" : "none",
+              transition: "all 0.15s ease"
+            }}
+          >
+            🛡️ FAQ & Aman
           </button>
         </div>
+
+        {/* TAB 1: PANDUAN LANGKAH DEMI LANGKAH */}
+        {webhookTab === "guide" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            {/* Step 1 */}
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 14, padding: "14px 16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <span style={{ background: "var(--green)", color: "#fff", width: 22, height: 22, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700 }}>1</span>
+                <b style={{ fontSize: 14 }}>Salin URL Webhook Pribadi Kamu</b>
+              </div>
+              <p style={{ fontSize: 12, color: "var(--muted)", margin: "0 0 10px" }}>
+                URL ini menghubungkan notifikasi HP langsung ke akun Ruang Saku kamu secara privat.
+              </p>
+              <input
+                readOnly
+                value={webhookLoading ? "Memuat URL..." : webhookUrl}
+                placeholder="https://ruangsakuapp.vercel.app/api/webhooks/bank?token=..."
+                style={{ width: "100%", boxSizing: "border-box", fontFamily: "monospace", fontSize: 12, padding: "9px 12px", background: "var(--card-bg, #fff)", border: "1px solid var(--line)", borderRadius: 8, wordBreak: "break-all", marginBottom: 8 }}
+                onClick={e => (e.target as HTMLInputElement).select()}
+              />
+              <button
+                type="button"
+                className="submit"
+                style={{ marginTop: 0, padding: "9px 16px", width: "100%", justifyContent: "center", fontSize: 13 }}
+                onClick={copyWebhookUrl}
+              >
+                {webhookCopied ? "✓ Berhasil Disalin ke Clipboard!" : "📋 Salin URL Webhook"}
+              </button>
+            </div>
+
+            {/* Step 2 */}
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 14, padding: "14px 16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <span style={{ background: "#e45b48", color: "#fff", width: 22, height: 22, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700 }}>2</span>
+                <b style={{ fontSize: 14 }}>Buka MacroDroid & Buat Pemicu (Trigger)</b>
+              </div>
+              <p style={{ fontSize: 12, color: "var(--muted)", margin: "0 0 10px" }}>
+                Gunakan aplikasi gratis MacroDroid untuk menangkap notifikasi saat transaksi terjadi.
+              </p>
+              <a
+                href="https://play.google.com/store/apps/details?id=com.arlosoft.macrodroid"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 12, fontWeight: 600, color: "var(--green)", textDecoration: "none", marginBottom: 10, padding: "6px 10px", background: "rgba(21,130,99,0.08)", borderRadius: 8 }}
+              >
+                📲 Download / Buka MacroDroid di Google Play ↗
+              </a>
+              <ol style={{ margin: 0, paddingLeft: 18, fontSize: 12, lineHeight: 1.6, color: "var(--ink)" }}>
+                <li>Buka MacroDroid ➔ klik <b>Tambah Makro</b> (*Add Macro*).</li>
+                <li>Di kotak <b style={{ color: "#e45b48" }}>Triggers (Merah)</b>, tekan tanda <b>＋</b>.</li>
+                <li>Cari dan pilih: <b>Notification Received</b> (Notifikasi Diterima).</li>
+                <li>Pilih <b>Select Applications</b> ➔ centang aplikasi bank kamu: <i>Mandiri Livin&apos;, BCA, SeaBank, BRImo, GoPay, DANA, ShopeePay, dll</i>.</li>
+                <li>Pilih opsi teks: <b>Any Content</b> (Semua Isi) ➔ tekan <b>OK</b>.</li>
+              </ol>
+            </div>
+
+            {/* Step 3 */}
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 14, padding: "14px 16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <span style={{ background: "#3a73cb", color: "#fff", width: 22, height: 22, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700 }}>3</span>
+                <b style={{ fontSize: 14 }}>Atur Pengiriman (Action HTTP)</b>
+              </div>
+              <ol style={{ margin: 0, paddingLeft: 18, fontSize: 12, lineHeight: 1.6, color: "var(--ink)", marginBottom: 10 }}>
+                <li>Di kotak <b style={{ color: "#3a73cb" }}>Actions (Biru)</b>, tekan tanda <b>＋</b> ➔ cari: <b>HTTP Request</b>.</li>
+                <li>Di tab <b>Settings</b>: Metode pilih <b>POST</b>, lalu tempel <b>URL Webhook</b> dari Langkah 1.</li>
+                <li>Di tab <b>Content Body</b>: Tipe pilih <code>application/json</code>, mode pilih <b>Text</b>.</li>
+                <li>Hapus semua isi kotaknya, lalu tempel format JSON di bawah ini:</li>
+              </ol>
+              <div style={{ background: "#1c2826", color: "#a5f3fc", padding: "10px 12px", borderRadius: 8, fontFamily: "monospace", fontSize: 11, wordBreak: "break-all", marginBottom: 8 }}>
+                {`{"title":"{not_title}","text":"{notification}","app":"{not_app_package}"}`}
+              </div>
+              <button
+                type="button"
+                className="submit"
+                style={{ marginTop: 0, padding: "8px 14px", width: "100%", justifyContent: "center", fontSize: 12, background: "var(--blue)" }}
+                onClick={copyJsonSnippet}
+              >
+                {jsonCopied ? "✓ Format JSON Disalin!" : "📋 Salin Format JSON di Atas"}
+              </button>
+            </div>
+
+            {/* Step 4 */}
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 14, padding: "14px 16px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                <span style={{ background: "var(--teal)", color: "#fff", width: 22, height: 22, borderRadius: "50%", display: "inline-flex", alignItems: "center", justifyContent: "center", fontSize: 12, fontWeight: 700 }}>4</span>
+                <b style={{ fontSize: 14 }}>Simpan & Beri Izin Android</b>
+              </div>
+              <ol style={{ margin: 0, paddingLeft: 18, fontSize: 12, lineHeight: 1.6, color: "var(--ink)" }}>
+                <li>Tekan tanda <b>Centang (✓)</b> di pojok kanan atas untuk menyimpan HTTP Request.</li>
+                <li>Beri nama makro di atas: <code>Ruang Saku Bank Sync</code>.</li>
+                <li>Tekan tombol <b>Simpan (✓)</b> di pojok kanan bawah.</li>
+                <li>Jika ada tanda seru merah (!) atau diminta izin notifikasi, klik dan pilih <b>Izinkan</b> untuk MacroDroid.</li>
+              </ol>
+              <div style={{ marginTop: 10, padding: "8px 12px", background: "rgba(21,130,99,0.1)", borderRadius: 8, fontSize: 12, color: "var(--green)", fontWeight: 600 }}>
+                🎉 Selesai! Setiap ada notifikasi dari bank, otomatis tercatat di Ruang Saku.
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 2: UJI COBA */}
+        {webhookTab === "test" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <p style={{ fontSize: 13, color: "var(--muted)", margin: 0 }}>
+              Pilih salah satu contoh notifikasi di bawah untuk mengetes apakah webhook Ruang Saku kamu merespons dengan benar:
+            </p>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+              <button
+                type="button"
+                className="secondary"
+                disabled={testNotifBusy || !webhookUrl}
+                onClick={() => sendQuickTest("Transaksi QR Bayar di KOPI KENANGAN sebesar Rp 25.000 berhasil.", "id.bmri.livin")}
+                style={{ textAlign: "left", padding: "10px 12px", fontSize: 12, height: "auto" }}
+              >
+                ☕ <b>QRIS Mandiri</b>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Rp 25.000 • Kopi Kenangan</div>
+              </button>
+
+              <button
+                type="button"
+                className="secondary"
+                disabled={testNotifBusy || !webhookUrl}
+                onClick={() => sendQuickTest("Pembayaran QRIS di ALFAMART sebesar Rp 42.500 berhasil.", "com.bca")}
+                style={{ textAlign: "left", padding: "10px 12px", fontSize: 12, height: "auto" }}
+              >
+                🛒 <b>QRIS BCA</b>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Rp 42.500 • Alfamart</div>
+              </button>
+
+              <button
+                type="button"
+                className="secondary"
+                disabled={testNotifBusy || !webhookUrl}
+                onClick={() => sendQuickTest("Kamu menerima transfer dana masuk sebesar Rp 150.000 dari BUDI SANTOSO.", "com.seabank.mobile")}
+                style={{ textAlign: "left", padding: "10px 12px", fontSize: 12, height: "auto" }}
+              >
+                💸 <b>Masuk SeaBank</b>
+                <div style={{ fontSize: 11, color: "var(--green)", marginTop: 2 }}>+ Rp 150.000 • Transfer Masuk</div>
+              </button>
+
+              <button
+                type="button"
+                className="secondary"
+                disabled={testNotifBusy || !webhookUrl}
+                onClick={() => sendQuickTest("Pembayaran GoFood sebesar Rp 55.000 berhasil.", "com.gojek.app")}
+                style={{ textAlign: "left", padding: "10px 12px", fontSize: 12, height: "auto" }}
+              >
+                🍔 <b>GoPay / GoFood</b>
+                <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Rp 55.000 • Makan Siang</div>
+              </button>
+            </div>
+
+            {testResult && (
+              <div style={{ background: "rgba(21,130,99,0.1)", border: "1px solid var(--green)", borderRadius: 12, padding: "12px 14px", fontSize: 13 }}>
+                <b style={{ color: "var(--green)", display: "block", marginBottom: 4 }}>✓ Tes Berhasil Masuk ke Database:</b>
+                <div>• Akun: <b>{testResult.account}</b></div>
+                <div>• Tipe: <b>{testResult.type === "income" ? "Pemasukan (+)" : "Pengeluaran (-)"}</b></div>
+                <div>• Nominal: <b>{rupiah(testResult.amount)}</b></div>
+                <div>• Keterangan: <i>{testResult.note}</i></div>
+              </div>
+            )}
+
+            <div style={{ marginTop: 8, padding: "12px 14px", borderRadius: 12, border: "1px dashed var(--line)" }}>
+              <b style={{ display: "block", fontSize: 13, marginBottom: 6 }}>Tes Notifikasi Kustom:</b>
+              <input
+                value={testNotifText}
+                onChange={e => setTestNotifText(e.target.value)}
+                placeholder="Ketik teks notifikasi bank..."
+                style={{ width: "100%", fontSize: 12, boxSizing: "border-box" }}
+              />
+              <button
+                type="button"
+                className="submit"
+                disabled={testNotifBusy || !webhookUrl}
+                onClick={testSendWebhook}
+                style={{ marginTop: 8, width: "100%", fontSize: 13 }}
+              >
+                {testNotifBusy ? "Mengirim notifikasi..." : "⚡ Kirim Teks Ini"}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* TAB 3: FAQ & KEAMANAN */}
+        {webhookTab === "faq" && (
+          <div style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 13, lineHeight: 1.5 }}>
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 12, padding: "12px 14px" }}>
+              <b style={{ color: "var(--green)", display: "block", marginBottom: 4 }}>🛡️ Apakah ini aman?</b>
+              <p style={{ margin: 0, color: "var(--muted)", fontSize: 12 }}>
+                <b>100% Aman.</b> Ruang Saku tidak pernah meminta PIN, password, OTP, atau kredensial m-banking kamu. Sistem murni membaca judul dan teks pesan notifikasi yang muncul di status bar HP.
+              </p>
+            </div>
+
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 12, padding: "12px 14px" }}>
+              <b style={{ color: "var(--blue)", display: "block", marginBottom: 4 }}>🏦 Bank & e-Wallet apa saja yang didukung?</b>
+              <p style={{ margin: 0, color: "var(--muted)", fontSize: 12 }}>
+                Livin&apos; by Mandiri, BCA mobile / myBCA, SeaBank, BRImo, BNI / wondr, Bank Jago, GoPay, OVO, DANA, ShopeePay, dan transaksi QRIS merchant mana pun.
+              </p>
+            </div>
+
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 12, padding: "12px 14px" }}>
+              <b style={{ color: "var(--purple)", display: "block", marginBottom: 4 }}>▣ Masuk ke akun bank yang mana?</b>
+              <p style={{ margin: 0, color: "var(--muted)", fontSize: 12 }}>
+                Sistem otomatis mencocokkan nama bank dari notifikasi ke akunmu di menu <b>Akun saya</b>. Pastikan nama akunmu mengandung kata seperti <code>Mandiri</code>, <code>BCA</code>, atau <code>SeaBank</code> agar saldo tercatat akurat.
+              </p>
+            </div>
+
+            <div style={{ background: "var(--surface, #f9fbfa)", border: "1px solid var(--line)", borderRadius: 12, padding: "12px 14px" }}>
+              <b style={{ color: "var(--orange)", display: "block", marginBottom: 4 }}>⚠️ Bagaimana jika ada notifikasi duplikat?</b>
+              <p style={{ margin: 0, color: "var(--muted)", fontSize: 12 }}>
+                Ruang Saku dilengkapi filter anti-duplikasi pintar (interval 3 menit). Jika bank mengirim notifikasi berulang untuk transaksi yang sama, duplikatnya akan diabaikan otomatis.
+              </p>
+            </div>
+          </div>
+        )}
       </section>
     </div>}
 
