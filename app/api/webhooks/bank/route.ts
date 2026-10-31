@@ -246,8 +246,13 @@ export async function POST(req: Request) {
       body.text_big ||
       body.body_text ||
       body.details ||
+      body.lines ||
+      body.text_lines ||
+      body.not_text_lines ||
       body.sub_text ||
       body.not_sub_text ||
+      body.ticker ||
+      body.not_ticker ||
       ""
     ).trim();
 
