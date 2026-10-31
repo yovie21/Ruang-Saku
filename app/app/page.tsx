@@ -4723,21 +4723,22 @@ export default function Home() {
         </p>
 
         <div style={{ marginTop: 16 }}>
-          <label style={{ fontWeight: 600, fontSize: 13 }}>URL Webhook Pribadi Kamu:</label>
-          <div style={{ display: "flex", gap: 8, marginTop: 6 }}>
+          <label style={{ fontWeight: 600, fontSize: 13, display: "block", marginBottom: 6 }}>URL Webhook Pribadi Kamu:</label>
+          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             <input
               readOnly
               value={webhookLoading ? "Memuat URL..." : webhookUrl}
-              style={{ flex: 1, fontFamily: "monospace", fontSize: 12, padding: "8px 12px", background: "var(--surface)" }}
+              placeholder="https://ruangsakuapp.vercel.app/api/webhooks/bank?token=..."
+              style={{ width: "100%", boxSizing: "border-box", fontFamily: "monospace", fontSize: 12, padding: "10px 12px", background: "var(--surface)", border: "1px solid var(--line)", borderRadius: 10, wordBreak: "break-all" }}
               onClick={e => (e.target as HTMLInputElement).select()}
             />
             <button
               type="button"
               className="submit"
-              style={{ marginTop: 0, padding: "8px 16px", whiteSpace: "nowrap" }}
+              style={{ marginTop: 0, padding: "10px 16px", width: "100%", justifyContent: "center" }}
               onClick={copyWebhookUrl}
             >
-              {webhookCopied ? "✓ Disalin" : "📋 Salin URL"}
+              {webhookCopied ? "✓ Berhasil Disalin ke Clipboard" : "📋 Salin URL Webhook"}
             </button>
           </div>
         </div>
