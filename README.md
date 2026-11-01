@@ -8,7 +8,7 @@
 [![Next.js](https://img.shields.io/badge/Next.js-14.2-black?style=for-the-badge&logo=nextdotjs&labelColor=000000)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?style=for-the-badge&logo=typescript&labelColor=007ACC)](https://www.typescriptlang.org/)
 [![Vercel](https://img.shields.io/badge/Deployed_on-Vercel-000000?style=for-the-badge&logo=vercel&labelColor=000000)](https://vercel.com/)
-[![Live Site](https://img.shields.io/badge/Live_Site-ruang-saku-peach-0052CC?style=for-the-badge&logo=vercel&labelColor=0052CC)](https://ruang-saku-peach.vercel.app/)
+[![Live Site](https://img.shields.io/badge/Live_Site-ruangsakuapp-0052CC?style=for-the-badge&logo=vercel&labelColor=0052CC)](https://ruangsakuapp.vercel.app/)
 [![MySQL](https://img.shields.io/badge/Database-MySQL-4479A1?style=for-the-badge&logo=mysql&labelColor=4479A1)](https://www.mysql.com/)
 [![NextAuth.js](https://img.shields.io/badge/Auth-NextAuth.js-111?style=for-the-badge&logo=nextauth&labelColor=111)](https://next-auth.js.org/)
 [![Vercel Speed Insights](https://img.shields.io/badge/Speed_Insights-Enabled-0052CC?style=for-the-badge&logo=vercel&labelColor=0052CC)](https://vercel.com/docs/speed-insights)
@@ -103,7 +103,7 @@
   <a href="mailto:yovie6513@gmail.com" target="_blank">
     <img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white&animation=pulse" alt="Email">
   </a>
-  <a href="https://ruang-saku-peach.vercel.app" target="_blank">
+  <a href="https://ruangsakuapp.vercel.app" target="_blank">
     <img src="https://img.shields.io/badge/Live_Site-0052CC?style=for-the-badge&logo=vercel&logoColor=white&animation=pulse" alt="Live Site">
   </a>
 </p>
@@ -519,7 +519,7 @@ DB_NAME="ruang_saku_db"
 
 # NextAuth
 NEXTAUTH_SECRET="generate-a-long-random-secret"
-NEXTAUTH_URL="https://ruang-saku-peach.vercel.app"
+NEXTAUTH_URL="https://ruangsakuapp.vercel.app"
 
 # Google OAuth
 GOOGLE_CLIENT_ID="your-google-client-id"
