@@ -3681,7 +3681,6 @@ export default function Home() {
           <div className="section-title">
             <div><h2>Aktivitas terbaru</h2><p>Transaksi yang baru kamu lakukan</p></div>
             <div className="section-actions">
-              <button type="button" className="export-button add-tx-btn" onClick={openTransactionDialog} title="Catat transaksi baru">＋ Catat</button>
               <button type="button" className="export-button" onClick={openImportModal} title="Impor CSV mutasi">⭳ Impor</button>
               <button type="button" className="export-button" onClick={exportCsv} title="Unduh CSV">⭳ CSV</button>
             </div>
