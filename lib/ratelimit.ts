@@ -27,3 +27,4 @@ export function createRateLimiter(
 // Pre-configured limiters
 export const loginLimiter = createRateLimiter(5, 15 * 60 * 1000); // 5 requests / 15 min
 export const apiLimiter = createRateLimiter(30, 60 * 1000); // 30 requests / min
+export const webhookLimiter = createRateLimiter(60, 60 * 1000); // 60 requests / min

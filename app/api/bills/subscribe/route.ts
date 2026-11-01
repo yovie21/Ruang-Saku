@@ -3,8 +3,11 @@ import webpush from "web-push";
 import { execute, query, uuid } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 
+let pushTableEnsured = false;
 async function ensureTable() {
+  if (pushTableEnsured) return;
   await execute(`CREATE TABLE IF NOT EXISTS push_subscriptions (id CHAR(36) PRIMARY KEY, user_id CHAR(36) NOT NULL, endpoint TEXT NOT NULL, p256dh VARCHAR(255) NOT NULL, auth VARCHAR(255) NOT NULL, created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, UNIQUE KEY push_endpoint (endpoint(191)), KEY push_user (user_id)) ENGINE=InnoDB`);
+  pushTableEnsured = true;
 }
 export async function GET() {
   return NextResponse.json({ key: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY || "" });

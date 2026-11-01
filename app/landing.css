@@ -69,8 +69,8 @@
 .cta-primary:hover::before{opacity:1;animation:ctaPulse 1.5s ease-in-out infinite}
 @keyframes ctaPulse{0%,100%{opacity:.15}50%{opacity:.3}}
 
-.land-text-link{font-size:12px;color:#7a6d4f;text-decoration:underline;text-underline-offset:3px}
-.land-text-link:hover{color:#a4812b}
+.land-text-link{font-size:12px;color:#d8caaa;text-decoration:underline;text-underline-offset:3px}
+.land-text-link:hover{color:#ffffff}
 .land-note{margin-top:19px;font-size:12px;color:#9e9385}
 .land-visual{padding:18px;background:rgba(232,227,213,0.7);backdrop-filter:blur(8px);border:1px solid #d4cebe;border-radius:14px;box-shadow:0 12px 36px rgba(0,0,0,.06);transform:rotate(-0.4deg);transition:all .3s}
 .land-visual:hover{transform:rotate(0deg) scale(1.01);box-shadow:0 16px 48px rgba(0,0,0,.1)}

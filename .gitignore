@@ -4,6 +4,7 @@ node_modules
 .vercel
 .env.local
 *.log
+*.tsbuildinfo
 
 .vercel
 .env*

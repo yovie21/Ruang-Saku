@@ -101,6 +101,24 @@ export async function POST(req: Request) {
       );
     }
 
+    if (image.length > 7 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: "Ukuran gambar terlalu besar (maksimal 5MB)." },
+        { status: 400 }
+      );
+    }
+
+    const isBase64Data = image.startsWith("data:image/");
+    const isHttpsUrl = /^https:\/\/[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/i.test(image) &&
+      !/^(https?:\/\/)?(localhost|127\.|10\.|192\.168\.|172\.(1[6-9]|2[0-9]|3[01])\.|169\.254\.|::1)/i.test(image);
+
+    if (!isBase64Data && !isHttpsUrl) {
+      return NextResponse.json(
+        { error: "Format gambar tidak valid. Gunakan base64 (data:image/...) atau URL https publik yang aman." },
+        { status: 400 }
+      );
+    }
+
     const apiUrl = (process.env.AI_VISION_URL || "https://hermuse-9router-backup.pages.dev/v1").replace(/\/$/, "");
     const apiKey = process.env.AI_VISION_KEY || process.env.GEMINI_API_KEY || "";
     const model = process.env.AI_VISION_MODEL || "hermes";

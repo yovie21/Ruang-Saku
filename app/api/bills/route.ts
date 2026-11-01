@@ -23,7 +23,9 @@ function formatDateOutput(yyyymmdd: string): string {
   return `${day}-${month}-${year}`;
 }
 
+let billsTableEnsured = false;
 async function ensureTable() {
+  if (billsTableEnsured) return;
   await execute(`CREATE TABLE IF NOT EXISTS bills (
     id CHAR(36) NOT NULL PRIMARY KEY,
     user_id CHAR(36) NOT NULL,
@@ -36,6 +38,7 @@ async function ensureTable() {
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     KEY bills_user_due_idx (user_id, is_paid, due_date)
   ) ENGINE=InnoDB`);
+  billsTableEnsured = true;
 }
 
 export async function GET() {

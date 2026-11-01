@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { query, execute, uuid } from "@/lib/db";
+import { webhookLimiter } from "@/lib/ratelimit";
 
 export const maxDuration = 30;
 
@@ -211,9 +212,19 @@ export async function POST(req: Request) {
       bearerToken ||
       (typeof body.token === "string" ? body.token : "");
 
-    if (!token) {
+    const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || req.headers.get("x-real-ip") || "unknown";
+    const rateKey = token ? `wh-tok-${token}` : `wh-ip-${clientIp}`;
+    const { allowed } = webhookLimiter(rateKey);
+    if (!allowed) {
       return NextResponse.json(
-        { error: "Token webhook tidak disertakan. Gunakan ?token=YOUR_TOKEN atau header x-webhook-token" },
+        { error: "Terlalu banyak permintaan webhook. Coba lagi dalam 1 menit." },
+        { status: 429, headers: { "retry-after": "60" } }
+      );
+    }
+
+    if (!token || token.length < 16) {
+      return NextResponse.json(
+        { error: "Token webhook tidak disertakan atau format tidak valid." },
         { status: 401 }
       );
     }

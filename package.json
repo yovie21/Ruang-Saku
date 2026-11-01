@@ -13,7 +13,7 @@
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "mysql2": "^3.24.3",
-    "next": "14.2.15",
+    "next": "^14.2.35",
     "next-auth": "^4.24.7",
     "ratelimit": "^0.0.4",
     "react": "18.3.1",
