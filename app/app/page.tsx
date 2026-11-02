@@ -567,6 +567,21 @@ export default function Home() {
     await loadData();
   }
 
+  async function reloadCore() {
+    try {
+      const [accRes, txRes] = await Promise.all([
+        fetch("/api/accounts"),
+        fetch("/api/transactions")
+      ]);
+      const accs = await accRes.json();
+      const txs = await txRes.json();
+      setAccounts(Array.isArray(accs) ? accs : []);
+      setTransactions(Array.isArray(txs) ? txs : []);
+    } catch (e) {
+      console.error("reloadCore error:", e);
+    }
+  }
+
   async function loadData() {
     setLoading(true);
     const nowD = new Date();
@@ -779,7 +794,7 @@ export default function Home() {
     }
     setEditing(null);
     pushToast("success", "Transaksi diperbarui", `${payload.title} • ${rupiah(amount)}`);
-    await loadData();
+    await reloadCore();
   }
 
   const trend30 = useMemo(() => {
@@ -1794,7 +1809,7 @@ export default function Home() {
     setScanPreview("");
     scanRef.current = null;
     pushToast("success", "Transaksi tersimpan", `${title} • ${rupiah(amount)}`);
-    await loadData();
+    await reloadCore();
   }
 
   function openTransactionDialog() {
@@ -2910,7 +2925,7 @@ export default function Home() {
       setEditingTransfer(null);
       setTransferModal(false);
       pushToast("success", "Transfer diperbarui", `${from.name} → ${to.name} • ${rupiah(amount)}`);
-      await loadData();
+      await reloadCore();
       return;
     }
     const response = await fetch("/api/transfers", {
@@ -2928,7 +2943,7 @@ export default function Home() {
     setTransferNote("");
     setTransferDate(todayStr());
     pushToast("success", "Transfer berhasil", `${from.name} → ${to.name} • ${rupiah(amount)}`);
-    await loadData();
+    await reloadCore();
   }
 
   function deleteTransaction(id: string, title?: string) {
@@ -2940,7 +2955,7 @@ export default function Home() {
       onConfirm: async () => {
         await fetch(`/api/transactions?id=${id}`, { method: "DELETE" });
         pushToast("success", "Transaksi dihapus");
-        await loadData();
+        await reloadCore();
       }
     });
   }
@@ -2997,7 +3012,7 @@ export default function Home() {
           return;
         }
         pushToast("success", "Transfer dihapus");
-        await loadData();
+        await reloadCore();
       }
     });
   }
@@ -3681,6 +3696,7 @@ export default function Home() {
           <div className="section-title">
             <div><h2>Aktivitas terbaru</h2><p>Transaksi yang baru kamu lakukan</p></div>
             <div className="section-actions">
+              <button type="button" className="export-button add-tx-btn" onClick={openTransactionDialog} title="Catat transaksi baru">＋ Catat</button>
               <button type="button" className="export-button" onClick={openImportModal} title="Impor CSV mutasi">⭳ Impor</button>
               <button type="button" className="export-button" onClick={exportCsv} title="Unduh CSV">⭳ CSV</button>
             </div>

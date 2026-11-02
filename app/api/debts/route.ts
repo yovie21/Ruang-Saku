@@ -2,7 +2,9 @@ import { NextResponse } from "next/server";
 import { query, execute, uuid } from "@/lib/db";
 import { requireUser } from "@/lib/session";
 
+let debtsTableEnsured = false;
 async function ensureTable() {
+  if (debtsTableEnsured) return;
   await execute(
     `CREATE TABLE IF NOT EXISTS debts (
       id CHAR(36) NOT NULL PRIMARY KEY,
@@ -34,6 +36,7 @@ async function ensureTable() {
   } catch {
     /* kolom sudah ada — abaikan */
   }
+  debtsTableEnsured = true;
 }
 
 export async function GET(req: Request) {
