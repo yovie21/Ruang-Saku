@@ -604,6 +604,9 @@ export default function Home() {
       setCategories(Array.isArray(cats) ? cats : []);
     } catch (e) {
       console.error("Tier 1 load error:", e);
+    } finally {
+      // Buka blokir UI segera setelah data utama (saldo & mutasi) selesai dimuat!
+      setLoading(false);
     }
     
     // Tier 2: Background data (budgets, goals, recurring, splits, debts, bills)
@@ -635,10 +638,8 @@ export default function Home() {
         setDebts(Array.isArray(dbs) ? dbs : []);
         setDebtHistory(Array.isArray(dhist) ? dhist : []);
         setBills(Array.isArray(bls) ? bls : []);
-        setLoading(false);
       } catch (e) {
         console.error("Tier 2 load error:", e);
-        setLoading(false);
       }
     })();
   }
