@@ -2174,13 +2174,13 @@ header .eyebrow{font-size:10px;letter-spacing:.12em;color:#718178}
 
 /* Installed PWA uses the mobile layout even when Android reports a desktop-sized viewport. */
 @media (display-mode: standalone) {
-  body{min-width:0;background:#f6f8f5}
-  main{width:100%;max-width:480px;margin:0 auto}
-  .workspace{width:100%;max-width:480px;margin:0 auto!important;padding-bottom:calc(104px + env(safe-area-inset-bottom))!important}
+  body{min-width:0;width:100%;overflow-x:hidden;background:#f6f8f5}
+  main{width:100%;max-width:none;margin:0}
+  .workspace{width:100%;max-width:none;margin:0!important;padding-bottom:calc(104px + env(safe-area-inset-bottom))!important}
   .sidebar{transform:translateX(-101%)}
   .sidebar.open{transform:translateX(0)}
   .mobile-menu{display:none!important}
-  .mobile-nav{left:50%;right:auto;width:100%;max-width:480px;transform:translateX(-50%)}
+  .mobile-nav{left:0;right:0;width:100%;max-width:none;transform:none}
 }
 
 @media (display-mode: standalone) and (min-width: 641px) {
