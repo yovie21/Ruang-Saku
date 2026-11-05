@@ -62,6 +62,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="id" suppressHydrationWarning>
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <script dangerouslySetInnerHTML={{__html:`(()=>{const fit=()=>{if(matchMedia('(display-mode: standalone)').matches||navigator.standalone){const v=document.querySelector('meta[name="viewport"]');if(v)v.content='width='+screen.width+', initial-scale=1, viewport-fit=cover'}};fit();addEventListener('pageshow',fit);addEventListener('resize',fit)})()`}} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
